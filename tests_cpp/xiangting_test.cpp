@@ -31,6 +31,9 @@ TEST(XiangtingTest, xiangting_yiban) {
     EXPECT_EQ(2, xiangting_yiban(Shoupai("p2234556788z123")));
     // 副露直後の牌姿が和了形
     EXPECT_EQ(0, xiangting_yiban(Shoupai("m11122,p123-,s12-3,z111=,")));
+}
+
+TEST(XiangtingTest, xiangting_yiban_json) {
     // 一般手: 10000パターン
     {
         std::ifstream ifs("../../tests_cpp/data/xiangting_1.json");
@@ -90,6 +93,9 @@ TEST(XiangtingTest, xiangting_guoshi) {
     EXPECT_EQ(-1, xiangting_guoshi(Shoupai("m19p19s19z12345677").zimo("m1", false)));
     // 少牌
     EXPECT_EQ(1, xiangting_guoshi(Shoupai("m119p19s19z12345")));
+}
+
+TEST(XiangtingTest, xiangting_guoshi_json) {
     // 一般手: 10000パターン
     {
         std::ifstream ifs("../../tests_cpp/data/xiangting_1.json");
@@ -149,6 +155,9 @@ TEST(XiangtingTest, xiangting_qidui) {
     EXPECT_EQ(-1, xiangting_qidui(Shoupai("m1188p2288s05z1122").zimo("z7", false).zimo("z7", false)));
     // 少牌
     EXPECT_EQ(3, xiangting_qidui(Shoupai("m1188s05z1122")));
+}
+
+TEST(XiangtingTest, xiangting_qidui_json) {
     // 一般手: 10000パターン
     {
         std::ifstream ifs("../../tests_cpp/data/xiangting_1.json");
@@ -194,6 +203,9 @@ TEST(XiangtingTest, xiangting) {
     EXPECT_EQ(0, xiangting(Shoupai("m19p19s19z1234567")));
     // 七対子形聴牌
     EXPECT_EQ(0, xiangting(Shoupai("m1188p288s05z1177")));
+}
+
+TEST(XiangtingTest, xiangting_json) {
     // 一般手: 10000パターン
     {
         std::ifstream ifs("../../tests_cpp/data/xiangting_1.json");
