@@ -433,7 +433,7 @@ std::vector<Hupai> get_hupai(const std::vector<std::string>& mianzi, const Hudi&
     const auto duanyaojiu = [&hudi, &rule]() {
         if (hudi.n_yaojiu > 0) return std::vector<Hupai>{};
         // クイタンあり
-        if (rule.kuitanAllowed || hudi.menqian)
+        if (rule.canduan || hudi.menqian)
             return std::vector<Hupai>{ Hupai{ Hupai::DUANYAOJIU, 1 } };
         return std::vector<Hupai>{};
         };
@@ -638,9 +638,9 @@ std::vector<Hupai> get_hupai(const std::vector<std::string>& mianzi, const Hudi&
 
     for (auto& hupai : damanguan) {
         // ダブル役満あり
-        if (!rule.doubleYakumanAllowed) hupai.fanshu = -1;
+        if (!rule.doubleDamanguan) hupai.fanshu = -1;
         // 役満パオあり
-        if (!rule.yakumanPaoAllowed) hupai.baojia = 0;
+        if (!rule.damanguanPao) hupai.baojia = 0;
     }
     if (damanguan.size() > 0) return damanguan;
 
@@ -737,7 +737,7 @@ Defen get_defen(int fu, std::vector<Hupai>& hupai, const std::string& rongpai, c
     if (hupai[0].fanshu < 0) {
         fu = 0;
         // 役満の複合あり
-        damanguan = !param.rule.yakumanCombinationAllowed ? 1
+        damanguan = !param.rule.damanguanCombination ? 1
             : std::accumulate(hupai.begin(), hupai.end(), 0, [](const int acc, const auto& h) { return acc - h.fanshu; });
         base = 8000 * damanguan;
 
@@ -749,12 +749,12 @@ Defen get_defen(int fu, std::vector<Hupai>& hupai, const std::string& rongpai, c
     }
     else {
         fanshu = std::accumulate(hupai.begin(), hupai.end(), 0, [](const int acc, const auto& h) { return acc + h.fanshu; });
-        base = (fanshu >= 13 && param.rule.countedYakumanAllowed) // 数え役満あり
+        base = (fanshu >= 13 && param.rule.countedDamanguan) // 数え役満あり
             ? 8000
             : (fanshu >= 11) ? 6000
             : (fanshu >= 8) ? 4000
             : (fanshu >= 6) ? 3000
-            : param.rule.roundUpManganAllowed && fu << (2 + fanshu) == 1920
+            : param.rule.roundUpManguan && fu << (2 + fanshu) == 1920
             ? 2000
             : std::min(fu << (2 + fanshu), 2000);
     }
