@@ -134,6 +134,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="he.h" />
     <ClInclude Include="hule.h" />
     <ClInclude Include="rule.h" />
     <ClInclude Include="shan.h" />
@@ -141,6 +142,7 @@
     <ClInclude Include="xiangting.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="he.cpp" />
     <ClCompile Include="hule.cpp" />
     <ClCompile Include="shan.cpp" />
     <ClCompile Include="shoupai.cpp" />
