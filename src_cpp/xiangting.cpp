@@ -1,7 +1,7 @@
 ﻿#include "xiangting.h"
 
-static const std::vector<int> guoshi_zipai_n = { 1, 2, 3, 4, 5, 6, 7 };
-static const std::vector<int> guoshi_yaojiu_n = { 1, 9 };
+static const std::vector<int> zipai_n = { 1, 2, 3, 4, 5, 6, 7 };
+static const std::vector<int> yaojiu_n = { 1, 9 };
 
 // 面子数、搭子数、孤立牌数からシャンテン数を計算する
 int _xiangting(int m, int d, int g, const bool j) {
@@ -132,7 +132,7 @@ int xiangting_guoshi(const Shoupai& shoupai) {
 
     for (const auto s : { 'm', 'p', 's', 'z' }) {
         const auto& bingpai = shoupai.bingpai(s);
-        for (const auto n : (s == 'z') ? guoshi_zipai_n : guoshi_yaojiu_n) {
+        for (const auto n : (s == 'z') ? zipai_n : yaojiu_n) {
             if (bingpai[n] >= 1) n_yaojiu++;
             if (bingpai[n] >= 2) n_duizi++;
         }

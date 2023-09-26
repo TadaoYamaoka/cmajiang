@@ -104,7 +104,7 @@ Shoupai::Shoupai() :
 {}
 
 Shoupai::Shoupai(const std::vector<std::string>& qipai) :
-    __{}, _m(10), _p(10), _s(10), _z(8)
+    __{}, _m(10), _p(10), _s(10), _z(8), _lizhi{ false }
 {
     _set(qipai);
 }

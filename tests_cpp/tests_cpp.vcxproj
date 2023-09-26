@@ -101,6 +101,7 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="game_test.cpp" />
     <ClCompile Include="he_test.cpp" />
     <ClCompile Include="hule_test.cpp" />
     <ClCompile Include="shan_test.cpp" />

@@ -1,13 +1,14 @@
 ﻿#pragma once
 
 #include <array>
+#include <sstream>
 
 struct Rule {
     /* 点数関連 */
     // 配給原点
     int startingPoints = 25000;
     // 順位点
-    std::array<int, 4> rankPoints = { 20, 10, -10, -20 };
+    std::array<std::string, 4> rankPoints = { "20.0", "10.0", "-10.0", "-20.0" };
     // 連風牌は2符
     bool doubleWindTileScore = false;
 
@@ -82,3 +83,35 @@ struct Rule {
     // 切り上げ満貫あり
     bool roundUpManguan = false;
 };
+
+inline std::ostream& operator<<(std::ostream& os, const Rule& rule) {
+    os << rule.startingPoints << " ";
+    for (const auto& point : rule.rankPoints) os << point << " ";
+    os << rule.doubleWindTileScore << " ";
+    for (const auto& honpai_ : rule.hongpai) os << honpai_ << " ";
+    os << rule.canduan << " "
+        << rule.canChangePermissionLevel << " "
+        << rule.roundsType << " "
+        << rule.abortiveDraw << " "
+        << rule.liujumanguan << " "
+        << rule.notenDeclaration << " "
+        << rule.notenPenalty << " "
+        << rule.maxSimultaneousWinners << " "
+        << rule.dealerContinuationType << " "
+        << rule.bankruptcyEndAll << " "
+        << rule.lastRoundStop << " "
+        << rule.overtimeType << " "
+        << rule.yifa << " "
+        << rule.fubaopai << " "
+        << rule.gangbaopai << " "
+        << rule.ganglibaopai << " "
+        << rule.gangbaopaiPostAddition << " "
+        << rule.lizhiWithoutTsumoBonus << " "
+        << rule.lizhiPostClosedGangPermissionLevel << " "
+        << rule.damanguanCombination << " "
+        << rule.doubleDamanguan << " "
+        << rule.countedDamanguan << " "
+        << rule.damanguanPao << " "
+        << rule.roundUpManguan;
+    return os;
+}

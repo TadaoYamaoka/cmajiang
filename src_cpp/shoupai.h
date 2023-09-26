@@ -23,7 +23,7 @@ public:
         return toString();
     }
 
-    Shoupai clone() {
+    Shoupai clone() const {
         return Shoupai(*this);
     }
 

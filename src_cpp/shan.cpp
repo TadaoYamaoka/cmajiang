@@ -1,7 +1,6 @@
 ﻿#include "shan.h"
 
 #include <algorithm>
-#include <random>
 
 std::random_device seed_gen;
 std::mt19937_64 engine(seed_gen());

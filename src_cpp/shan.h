@@ -3,6 +3,10 @@
 #include "shoupai.h"
 #include "rule.h"
 
+#include <random>
+
+extern std::mt19937_64 engine;
+
 // 山
 class Shan {
 public:
@@ -18,11 +22,12 @@ public:
     Shan();
     Shan(const Rule& rule);
 
-    const std::vector<std::string>& pai() { return _pai; }
+    const std::vector<std::string>& pai() const { return _pai; }
+    std::vector<std::string>& pai() { return _pai; }
     // 牌数
-    int paishu() { return (int)_pai.size() - 14; }
+    int paishu() const { return (int)_pai.size() - 14; }
     // 宝牌(ドラ)
-    std::vector<std::string> baopai() {
+    std::vector<std::string> baopai() const {
         std::vector<std::string> baopai_;
         for (const auto& p : _baopai) {
             if (!p.empty())
@@ -30,8 +35,9 @@ public:
         }
         return baopai_;
     }
+    void set_baopai(const std::vector<std::string>& baopai) { _baopai = baopai; }
     // 副宝牌(裏ドラ)
-    std::vector<std::string> fubaopai() {
+    std::vector<std::string> fubaopai() const {
         if (!_closed) return {};
         if (!_fubaopai.empty()) return _fubaopai;
         return {};
