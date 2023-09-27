@@ -115,7 +115,7 @@
     <ClCompile Include="xiangting_test.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\src_cpp\cmajiang.vcxproj">
+    <ProjectReference Include="..\src_cpp\src_cpp.vcxproj">
       <Project>{ce5137f2-e7dd-4207-a986-189d65f905f0}</Project>
     </ProjectReference>
   </ItemGroup>
