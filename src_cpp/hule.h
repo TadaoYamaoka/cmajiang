@@ -20,7 +20,7 @@ struct Param {
         int tianhu = 0;
     } hupai;
     std::vector<std::string> baopai;
-    std::vector<std::string> fubaopai;
+    std::vector<std::string> libaopai;
     struct Jicun {
         int changbang = 0;
         int lizhibang = 0;

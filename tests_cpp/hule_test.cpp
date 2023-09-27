@@ -717,7 +717,7 @@ TEST(HuleTest, hule) {
         Param param;
         param.hupai.lizhi = 1;
         param.baopai = { "s9" };
-        param.fubaopai = { "s9" };
+        param.libaopai = { "s9" };
         auto hule_ = hule(Shoupai("m344556s24678z66*"), "s3=", param);
         EXPECT_EQ((std::vector<Hupai>{ Hupai{ Hupai::LIZHI, 1 } }), hule_.hupai);
     }
@@ -726,7 +726,7 @@ TEST(HuleTest, hule) {
         Param param;
         param.hupai.lizhi = 1;
         param.baopai = { "s9" };
-        param.fubaopai = { "m2" };
+        param.libaopai = { "m2" };
         auto hule_ = hule(Shoupai("m344556s24678z66*"), "s3=", param);
         EXPECT_EQ((std::vector<Hupai>{
             Hupai{ Hupai::LIZHI, 1 },
@@ -737,7 +737,7 @@ TEST(HuleTest, hule) {
         Param param;
         param.hupai.lizhi = 1;
         param.baopai = { "m2" };
-        param.fubaopai = { "m2" };
+        param.libaopai = { "m2" };
         auto hule_ = hule(Shoupai("m344556s24678z66*"), "s3=", param);
         EXPECT_EQ((std::vector<Hupai>{
             Hupai{ Hupai::LIZHI, 1 },
@@ -1457,7 +1457,7 @@ TEST(HuleTest, hule_json) {
         if (in_hupai.contains("lingshang")) param.hupai.lingshang = in_hupai["lingshang"].get<bool>();
         if (in_hupai.contains("haidi")) param.hupai.haidi = in_hupai["haidi"].get<int>();
         param.baopai = in_param["baopai"].get<std::vector<std::string>>();
-        param.fubaopai = in_param["fubaopai"].get<std::vector<std::string>>();
+        param.libaopai = in_param["libaopai"].get<std::vector<std::string>>();
         const auto& in_jicun = in_param["jicun"];
         if (in_jicun.contains("changbang")) param.jicun.changbang = in_jicun["changbang"].get<int>();
         if (in_jicun.contains("lizhibang")) param.jicun.lizhibang = in_jicun["lizhibang"].get<int>();

@@ -36,10 +36,10 @@ public:
         return baopai_;
     }
     void set_baopai(const std::vector<std::string>& baopai) { _baopai = baopai; }
-    // 副宝牌(裏ドラ)
-    std::vector<std::string> fubaopai() const {
+    // 里宝牌(裏ドラ)
+    std::vector<std::string> libaopai() const {
         if (!_closed) return {};
-        if (!_fubaopai.empty()) return _fubaopai;
+        if (!_libaopai.empty()) return _libaopai;
         return {};
     }
 
@@ -56,7 +56,7 @@ private:
     Rule _rule;
     std::vector<std::string> _pai;
     std::vector<std::string> _baopai;   // 宝牌(ドラ)
-    std::vector<std::string> _fubaopai; // 副宝牌(裏ドラ)
+    std::vector<std::string> _libaopai; // 里宝牌(裏ドラ)
     bool _weikaigang;                   // 未开杠(未開槓)
     bool _closed;
 };

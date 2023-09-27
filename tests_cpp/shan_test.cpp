@@ -81,16 +81,16 @@ TEST(ShanTest, baopai) {
     EXPECT_EQ(1, Shan().baopai().size());
 }
 
-TEST(ShanTest, fubaopai) {
+TEST(ShanTest, libaopai) {
     // 牌山生成直後は 0 を返す
-    EXPECT_EQ(0, Shan().fubaopai().size());
+    EXPECT_EQ(0, Shan().libaopai().size());
     // 牌山固定後は裏ドラを返す
-    EXPECT_EQ(1, Shan().close().fubaopai().size());
+    EXPECT_EQ(1, Shan().close().libaopai().size());
     // 裏ドラなしの場合は牌山固定後も 0 を返す
     {
         Rule rule;
-        rule.fubaopai = false;
-        EXPECT_EQ(0, Shan(rule).close().fubaopai().size());
+        rule.libaopai = false;
+        EXPECT_EQ(0, Shan(rule).close().libaopai().size());
     }
 }
 
@@ -186,7 +186,7 @@ TEST(ShanTest, kaigang) {
     {
         Shan shan;
         shan.gangzimo();
-        EXPECT_EQ(2, shan.kaigang().close().fubaopai().size());
+        EXPECT_EQ(2, shan.kaigang().close().libaopai().size());
     }
     // 開槓後はツモできること
     {
@@ -227,14 +227,14 @@ TEST(ShanTest, kaigang) {
         rule.ganglibaopai = false;
         Shan shan(rule);
         shan.gangzimo();
-        EXPECT_EQ(1, shan.kaigang().close().fubaopai().size());
+        EXPECT_EQ(1, shan.kaigang().close().libaopai().size());
     }
     // 裏ドラなしの場合は開槓で裏ドラ発生しないこと
     {
         Rule rule;
-        rule.fubaopai = false;
+        rule.libaopai = false;
         Shan shan(rule);
         shan.gangzimo();
-        EXPECT_EQ(0, shan.kaigang().close().fubaopai().size());
+        EXPECT_EQ(0, shan.kaigang().close().libaopai().size());
     }
 }

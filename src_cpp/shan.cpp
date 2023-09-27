@@ -23,8 +23,8 @@ Shan::Shan(const Rule& rule) : _rule(rule), _weikaigang(false), _closed(false) {
 
     _baopai.emplace_back(_pai[4]);
     // 裏ドラあり
-    if (rule.fubaopai)
-        _fubaopai.emplace_back(_pai[9]);
+    if (rule.libaopai)
+        _libaopai.emplace_back(_pai[9]);
 }
 
 // 自摸
@@ -57,8 +57,8 @@ Shan& Shan::kaigang() {
     if (!_weikaigang)        throw std::runtime_error("weikaigang");
     _baopai.emplace_back(_pai[4]);
     // カン裏あり
-    if (!_fubaopai.empty() && _rule.ganglibaopai)
-        _fubaopai.emplace_back(_pai[9]);
+    if (!_libaopai.empty() && _rule.ganglibaopai)
+        _libaopai.emplace_back(_pai[9]);
     _weikaigang = false;
     return *this;
 }

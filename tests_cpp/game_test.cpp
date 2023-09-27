@@ -94,7 +94,7 @@ TEST(GameTest, qipai) {
 		const auto& shan = game.shan();
 		EXPECT_EQ(70, shan.paishu());
 		EXPECT_EQ(1, shan.baopai().size());
-		EXPECT_TRUE(shan.fubaopai().empty());
+		EXPECT_TRUE(shan.libaopai().empty());
 	}
 	// 配牌されること
 	{

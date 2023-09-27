@@ -59,7 +59,7 @@ struct Rule {
     // 一発あり
     bool yifa = true;
     // 裏ドラあり
-    bool fubaopai = true;
+    bool libaopai = true;
     // カンドラあり
     bool gangbaopai = true;
     // カン裏あり
@@ -102,7 +102,7 @@ inline std::ostream& operator<<(std::ostream& os, const Rule& rule) {
         << rule.lastRoundStop << " "
         << rule.overtimeType << " "
         << rule.yifa << " "
-        << rule.fubaopai << " "
+        << rule.libaopai << " "
         << rule.gangbaopai << " "
         << rule.ganglibaopai << " "
         << rule.gangbaopaiPostAddition << " "

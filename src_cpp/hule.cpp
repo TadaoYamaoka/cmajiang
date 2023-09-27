@@ -671,7 +671,7 @@ std::vector<Hupai> get_hupai(const std::vector<std::string>& mianzi, const Hudi&
     return hupai;
 }
 
-std::vector<Hupai> get_post_hupai(const Shoupai& shoupai, const std::string& rongpai, const std::vector<std::string>& baopai, const std::vector<std::string>& fubaopai) {
+std::vector<Hupai> get_post_hupai(const Shoupai& shoupai, const std::string& rongpai, const std::vector<std::string>& baopai, const std::vector<std::string>& libaopai) {
 
     auto new_shoupai = shoupai;
     if (!rongpai.empty()) new_shoupai.zimo(rongpai);
@@ -709,8 +709,8 @@ std::vector<Hupai> get_post_hupai(const Shoupai& shoupai, const std::string& ron
     if (n_hongpai) post_hupai.emplace_back(Hupai::CHIBAOPAI, n_hongpai);
 
     // 裏ドラ
-    int n_fubaopai = 0;
-    for (const auto& p : fubaopai) {
+    int n_libaopai = 0;
+    for (const auto& p : libaopai) {
         const auto p_ = Shan::zhenbaopai(p);
         const std::regex regexp{ p_.substr(1, 1) };
         for (const auto& m : suitstr) {
@@ -719,10 +719,10 @@ std::vector<Hupai> get_post_hupai(const Shoupai& shoupai, const std::string& ron
             int nn = 0;
             for (std::sregex_iterator it(m_.begin(), m_.end(), regexp), end; it != end; ++it)
                 nn++;
-            if (nn) n_fubaopai += nn;
+            if (nn) n_libaopai += nn;
         }
     }
-    if (n_fubaopai) post_hupai.emplace_back(Hupai::LIBAOPAI, n_fubaopai);
+    if (n_libaopai) post_hupai.emplace_back(Hupai::LIBAOPAI, n_libaopai);
 
     return post_hupai;
 }
@@ -823,7 +823,7 @@ Defen hule(const Shoupai& shoupai, std::string rongpai, const Param& param) {
 
     const auto& pre_hupai = get_pre_hupai(param.hupai);
     const auto& post_hupai = get_post_hupai(shoupai, rongpai,
-        param.baopai, param.fubaopai);
+        param.baopai, param.libaopai);
 
     for (const auto& mianzi : hule_mianzi(shoupai, rongpai)) {
         const auto& hudi = get_hudi(mianzi, param.zhuangfeng, param.menfeng,

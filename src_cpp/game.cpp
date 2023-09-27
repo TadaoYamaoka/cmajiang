@@ -245,7 +245,7 @@ void Game::hule() {
             : _dapai.substr(0, 2)
             ) + "_+=-"[(4 + _model.lunban - menfeng) % 4];
     auto shoupai = _model.shoupai[menfeng];
-    auto fubaopai = shoupai.lizhi() ? _model.shan.fubaopai() : std::vector<std::string>{};
+    auto libaopai = shoupai.lizhi() ? _model.shan.libaopai() : std::vector<std::string>{};
 
     Param param = {
         _rule,
@@ -260,7 +260,7 @@ void Game::hule() {
             !(_diyizimo && rongpai.empty()) ? 0 : menfeng == 0 ? 1 : 2
         },
         _model.shan.baopai(),
-        fubaopai,
+        libaopai,
         Param::Jicun{
             _model.changbang,
             _model.lizhibang
