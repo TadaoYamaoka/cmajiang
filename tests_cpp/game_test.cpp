@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "../src_cpp/game.h"
 
 #include <sstream>
@@ -67,14 +67,14 @@ void set_reply(Game& game, const int l, const std::string& msg, const std::strin
 TEST(GameTest, kaiju) {
 	Game game;
 
-	// ‹N‰Æ‚ªİ’è‚³‚ê‚é‚±‚Æ
+	// èµ·å®¶ãŒè¨­å®šã•ã‚Œã‚‹ã“ã¨
 	{
 		game.kaiju(0);
 		EXPECT_EQ(game.qijia(), 0);
 	}
-	// ’Ê’m‚ª“`‚í‚é‚±‚Æ
+	// é€šçŸ¥ãŒä¼ã‚ã‚‹ã“ã¨
 	EXPECT_EQ("kaiju", game.status());
-	// ‹N‰Æ‚ğ—”‚Åİ’è‚Å‚«‚é‚±‚Æ
+	// èµ·å®¶ã‚’ä¹±æ•°ã§è¨­å®šã§ãã‚‹ã“ã¨
 	{
 		game.kaiju();
 		EXPECT_TRUE(game.qijia() == 0 ||
@@ -88,7 +88,7 @@ TEST(GameTest, qipai) {
 	Game game;
 	game.kaiju();
 
-	// ”vR‚ª¶¬‚³‚ê‚é‚±‚Æ
+	// ç‰Œå±±ãŒç”Ÿæˆã•ã‚Œã‚‹ã“ã¨
 	{
 		game.qipai();
 		const auto& shan = game.shan();
@@ -96,27 +96,27 @@ TEST(GameTest, qipai) {
 		EXPECT_EQ(1, shan.baopai().size());
 		EXPECT_TRUE(shan.fubaopai().empty());
 	}
-	// ”z”v‚³‚ê‚é‚±‚Æ
+	// é…ç‰Œã•ã‚Œã‚‹ã“ã¨
 	{
 		std::regex regex(R"([mpsz])");
 		for (int l = 0; l < 4; l++) {
 			EXPECT_EQ(13, std::regex_replace(game.shoupai(l).toString(), regex, "").size());
 		}
 	}
-	// ‰Í‚ª‰Šú‰»‚³‚ê‚é‚±‚Æ
+	// æ²³ãŒåˆæœŸåŒ–ã•ã‚Œã‚‹ã“ã¨
 	{
 		for (int l = 0; l < 4; l++) {
 			EXPECT_EQ(0, game.he(l).pai().size());
 		}
 	}
-	// ‘æˆêƒcƒ‚„‚Å‚ ‚é‚±‚Æ
+	// ç¬¬ä¸€ãƒ„ãƒ¢å·¡ã§ã‚ã‚‹ã“ã¨
 	EXPECT_TRUE(game.diyizimo());
-	// l•—˜A‘Å’†‚Å‚ ‚é‚±‚Æ
+	// å››é¢¨é€£æ‰“ä¸­ã§ã‚ã‚‹ã“ã¨
 	EXPECT_TRUE(game.fengpai());
-	// ’Ê’m‚ª“`‚í‚é‚±‚Æ
+	// é€šçŸ¥ãŒä¼ã‚ã‚‹ã“ã¨
 	EXPECT_EQ("qipai", game.status());
 
-	// g—p‚·‚é”vR‚ğw’è‚Å‚«‚é‚±‚Æ
+	// ä½¿ç”¨ã™ã‚‹ç‰Œå±±ã‚’æŒ‡å®šã§ãã‚‹ã“ã¨
 	{
 		auto game = init_game();
 		Shan shan(game.rule());
@@ -126,10 +126,10 @@ TEST(GameTest, qipai) {
 		game.qipai(shan);
 		EXPECT_EQ(shoupai.toString(), game.model().shoupai[0].toString());
 	}
-	// “r’†—¬‹Ç‚È‚µ‚Ìê‡AÅ‰‚©‚çl•—˜A‘Å’†‚Å‚È‚¢‚±‚Æ
+	// é€”ä¸­æµå±€ãªã—ã®å ´åˆã€æœ€åˆã‹ã‚‰å››é¢¨é€£æ‰“ä¸­ã§ãªã„ã“ã¨
 	{
 		Rule rule;
-		rule.abortiveDraw/*“r’†—¬‹Ç‚ ‚è*/ = false;
+		rule.abortiveDraw/*é€”ä¸­æµå±€ã‚ã‚Š*/ = false;
 		auto game = init_game(rule);
 		game.qipai();
 		EXPECT_FALSE(game.fengpai());
@@ -139,16 +139,16 @@ TEST(GameTest, qipai) {
 TEST(GameTest, zimo) {
 	auto game = init_game();
 
-	// è”Ô‚ªXV‚³‚ê‚é‚±‚Æ
+	// æ‰‹ç•ªãŒæ›´æ–°ã•ã‚Œã‚‹ã“ã¨
 	{
 		game.zimo();
 		EXPECT_EQ(0, game.model().lunban);
 	}
-	// ”vR‚©‚çƒcƒ‚‚ç‚ê‚é‚±‚Æ
+	// ç‰Œå±±ã‹ã‚‰ãƒ„ãƒ¢ã‚‰ã‚Œã‚‹ã“ã¨
 	EXPECT_EQ(69, game.model().shan.paishu());
-	// è”v‚Éƒcƒ‚”v‚ª‰Á‚¦‚ç‚ê‚é‚±‚Æ
+	// æ‰‹ç‰Œã«ãƒ„ãƒ¢ç‰ŒãŒåŠ ãˆã‚‰ã‚Œã‚‹ã“ã¨
 	EXPECT_TRUE(game.model().shoupai[0].get_dapai().size());
-	// ’Ê’m‚ª“`‚í‚é‚±‚Æ
+	// é€šçŸ¥ãŒä¼ã‚ã‚‹ã“ã¨
 	EXPECT_EQ("zimo", game.status());
 }
 
@@ -156,19 +156,19 @@ TEST(GameTest, dapai) {
 	auto game = init_game();
 	std::string dapai;
 
-	// è”v‚©‚ç‘Å”v‚ªØ‚èo‚³‚ê‚é‚±‚Æ
+	// æ‰‹ç‰Œã‹ã‚‰æ‰“ç‰ŒãŒåˆ‡ã‚Šå‡ºã•ã‚Œã‚‹ã“ã¨
 	{
 		game.zimo();
 		dapai = game.model().shoupai[0].get_dapai()[0];
 		game.dapai(dapai);
 		EXPECT_THROW(game.model().shoupai[0].get_dapai(), std::runtime_error);
 	}
-	// ‰Í‚É‘Å”v‚³‚ê‚é‚±‚Æ
+	// æ²³ã«æ‰“ç‰Œã•ã‚Œã‚‹ã“ã¨
 	EXPECT_EQ(dapai, game.model().he[0].pai()[0]);
-	// ’Ê’m‚ª“`‚í‚é‚±‚Æ
+	// é€šçŸ¥ãŒä¼ã‚ã‚‹ã“ã¨
 	EXPECT_EQ("dapai", game.status());
 
-	// •—”vˆÈŠO‚Ì‘Å”v‚Ål•—˜A‘Å’†‚Å‚È‚­‚È‚é‚±‚Æ
+	// é¢¨ç‰Œä»¥å¤–ã®æ‰“ç‰Œã§å››é¢¨é€£æ‰“ä¸­ã§ãªããªã‚‹ã“ã¨
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "", "", "" });
 		EXPECT_TRUE(game.fengpai());
@@ -176,7 +176,7 @@ TEST(GameTest, dapai) {
 		game.dapai("m1");
 		EXPECT_FALSE(game.fengpai());
 	}
-	// ˆÙ‚È‚é•—”v‚Ì‘Å”v‚Ål•—˜A‘Å’†‚Å‚È‚­‚È‚é‚±‚Æ
+	// ç•°ãªã‚‹é¢¨ç‰Œã®æ‰“ç‰Œã§å››é¢¨é€£æ‰“ä¸­ã§ãªããªã‚‹ã“ã¨
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "_", "", "" });
 		EXPECT_TRUE(game.fengpai());
@@ -186,7 +186,7 @@ TEST(GameTest, dapai) {
 		game.dapai("z2");
 		EXPECT_FALSE(game.fengpai());
 	}
-	// ‘æˆêƒcƒ‚„I—¹‚Ål•—˜A‘Å’†‚Å‚È‚­‚È‚é‚±‚Æ
+	// ç¬¬ä¸€ãƒ„ãƒ¢å·¡çµ‚äº†ã§å››é¢¨é€£æ‰“ä¸­ã§ãªããªã‚‹ã“ã¨
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "_", "", "" });
 		EXPECT_TRUE(game.fengpai());
@@ -197,7 +197,7 @@ TEST(GameTest, dapai) {
 		game.dapai("z1");
 		EXPECT_FALSE(game.fengpai());
 	}
-	// ƒ_ƒuƒ‹ƒŠ[ƒ`
+	// ãƒ€ãƒ–ãƒ«ãƒªãƒ¼ãƒ
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "", "", "" });
 		game.zimo();
@@ -205,7 +205,7 @@ TEST(GameTest, dapai) {
 		EXPECT_EQ(2, game.lizhi(game.model().lunban));
 		EXPECT_TRUE(game.yifa(game.model().lunban));
 	}
-	// ƒŠ[ƒ`Œã‚Ì‘Å”v‚Åˆê”­‚ÌŒ —˜‚ğ¸‚¤‚±‚Æ
+	// ãƒªãƒ¼ãƒå¾Œã®æ‰“ç‰Œã§ä¸€ç™ºã®æ¨©åˆ©ã‚’å¤±ã†ã“ã¨
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "", "", "" });
 		game.set_yifa(0, true);
@@ -213,7 +213,7 @@ TEST(GameTest, dapai) {
 		game.dapai("m1");
 		EXPECT_FALSE(game.yifa(game.model().lunban));
 	}
-	// ƒeƒ“ƒpƒC‚É˜a—¹”v‚ª‰Í‚É‚ ‚éê‡AƒtƒŠƒeƒ“‚Æ‚È‚é‚±‚Æ
+	// ãƒ†ãƒ³ãƒ‘ã‚¤æ™‚ã«å’Œäº†ç‰ŒãŒæ²³ã«ã‚ã‚‹å ´åˆã€ãƒ•ãƒªãƒ†ãƒ³ã¨ãªã‚‹ã“ã¨
 	{
 		auto game = init_game({}, -1, 0, 0, { "m123p456s789z11122", "", "", "" });
 		game.model().lunban = 0;
@@ -221,7 +221,7 @@ TEST(GameTest, dapai) {
 		game.dapai("m1");
 		EXPECT_FALSE(game.neng_rong(game.model().lunban));
 	}
-	// ƒŠ[ƒ`Œã‚ÍƒtƒŠƒeƒ“‚ª‰ğœ‚³‚ê‚È‚¢‚±‚Æ
+	// ãƒªãƒ¼ãƒå¾Œã¯ãƒ•ãƒªãƒ†ãƒ³ãŒè§£é™¤ã•ã‚Œãªã„ã“ã¨
 	{
 		auto game = init_game({}, -1, 0, 0, { "_____________*", "", "", "" });
 		game.set_neng_rong(0, false);
@@ -230,7 +230,7 @@ TEST(GameTest, dapai) {
 		game.dapai(dapai);
 		EXPECT_FALSE(game.neng_rong(game.model().lunban));
 	}
-	// ‰ÁÈŒã‚Ì‘Å”v‚ÅŠJÈ‚³‚ê‚é‚±‚Æ
+	// åŠ æ§“å¾Œã®æ‰“ç‰Œã§é–‹æ§“ã•ã‚Œã‚‹ã“ã¨
 	{
 		auto game = init_game({}, -1, 0, 0, { "__________,s333=", "", "", "" });
 		game.zimo();
@@ -244,21 +244,21 @@ TEST(GameTest, dapai) {
 TEST(GameTest, fulou) {
 	auto game = init_game({}, -1, 0, 0, { "_", "_", "", "" });
 
-	// ‰Í‚©‚ç•›˜I”v‚ªE‚í‚ê‚é‚±‚Æ
+	// æ²³ã‹ã‚‰å‰¯éœ²ç‰ŒãŒæ‹¾ã‚ã‚Œã‚‹ã“ã¨
 	{
 		game.zimo();
 		game.dapai("m2_");
 		game.fulou("m12-3");
 		EXPECT_EQ("m2_-", game.model().he[0].pai()[0]);
 	}
-	// è”Ô‚ªXV‚³‚ê‚é‚±‚Æ(ã‰Æ‚©‚ç‚Ìƒ`[)
+	// æ‰‹ç•ªãŒæ›´æ–°ã•ã‚Œã‚‹ã“ã¨(ä¸Šå®¶ã‹ã‚‰ã®ãƒãƒ¼)
 	EXPECT_EQ(1, game.model().lunban);
-	// è”v‚ª•›˜I‚³‚ê‚é‚±‚Æ
+	// æ‰‹ç‰ŒãŒå‰¯éœ²ã•ã‚Œã‚‹ã“ã¨
 	EXPECT_EQ("m12-3", game.model().shoupai[1].fulou()[0]);
-	// ’Ê’m‚ª“`‚í‚é‚±‚Æ
+	// é€šçŸ¥ãŒä¼ã‚ã‚‹ã“ã¨
 	EXPECT_EQ("fulou", game.status());
 
-	// ‘å–¾È‚ª•›˜I‚³‚ê‚é‚±‚Æ
+	// å¤§æ˜æ§“ãŒå‰¯éœ²ã•ã‚Œã‚‹ã“ã¨
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "", "", "_" });
 		game.zimo();
@@ -266,7 +266,7 @@ TEST(GameTest, fulou) {
 		game.fulou("m2222+");
 		EXPECT_EQ("m2222+", game.model().shoupai[3].fulou()[0]);
 	}
-	// ‘æˆêƒcƒ‚„‚Å‚È‚­‚È‚é‚±‚Æ
+	// ç¬¬ä¸€ãƒ„ãƒ¢å·¡ã§ãªããªã‚‹ã“ã¨
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "_", "", "_" });
 		game.zimo();
@@ -274,7 +274,7 @@ TEST(GameTest, fulou) {
 		game.fulou("m123-");
 		EXPECT_FALSE(game.diyizimo());
 	}
-	// ˆê”­‚ª‚È‚­‚È‚é‚±‚Æ
+	// ä¸€ç™ºãŒãªããªã‚‹ã“ã¨
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "_", "", "_" });
 		game.zimo();
@@ -287,23 +287,23 @@ TEST(GameTest, fulou) {
 TEST(GameTest, gang) {
 	auto game = init_game({}, -1, 0, 0, { "__________,s555+", "", "", "" });
 
-	// ‰ÁÈ‚ª•›˜I‚³‚ê‚é‚±‚Æ
+	// åŠ æ§“ãŒå‰¯éœ²ã•ã‚Œã‚‹ã“ã¨
 	{
 		game.zimo();
 		game.gang("s555+0");
 		EXPECT_EQ("s555+0", game.model().shoupai[0].fulou()[0]);
 	}
-	// ’Ê’m‚ª“`‚í‚é‚±‚Æ
+	// é€šçŸ¥ãŒä¼ã‚ã‚‹ã“ã¨
 	EXPECT_EQ("gang", game.status());
 
-	// ˆÃÈ‚ª•›˜I‚³‚ê‚é‚±‚Æ
+	// æš—æ§“ãŒå‰¯éœ²ã•ã‚Œã‚‹ã“ã¨
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "", "", "" });
 		game.zimo();
 		game.gang("s5550");
 		EXPECT_EQ("s5550", game.model().shoupai[0].fulou()[0]);
 	}
-	// Œãæ‚¹‚ÌÈ‚ªŠJÈ‚³‚ê‚é‚±‚Æ
+	// å¾Œä¹—ã›ã®æ§“ãŒé–‹æ§“ã•ã‚Œã‚‹ã“ã¨
 	{
 		auto game = init_game({}, -1, 0, 0, { "_______,s222+,z111=", "", "", "" });
 		game.zimo();
@@ -317,19 +317,19 @@ TEST(GameTest, gang) {
 TEST(GameTest, gangzimo) {
 	auto game = init_game({}, -1, 0, 0, { "_", "", "", "" });
 
-	// ”vR‚©‚çƒcƒ‚‚ç‚ê‚é‚±‚Æ
+	// ç‰Œå±±ã‹ã‚‰ãƒ„ãƒ¢ã‚‰ã‚Œã‚‹ã“ã¨
 	{
 		game.zimo();
 		game.gang("m5550");
 		game.gangzimo();
 		EXPECT_EQ(68, game.model().shan.paishu());
 	}
-	// è”v‚Éƒcƒ‚”v‚ª‰Á‚¦‚ç‚ê‚é‚±‚Æ
+	// æ‰‹ç‰Œã«ãƒ„ãƒ¢ç‰ŒãŒåŠ ãˆã‚‰ã‚Œã‚‹ã“ã¨
 	EXPECT_TRUE(game.model().shoupai[0].get_dapai().size());
-	// ’Ê’m‚ª“`‚í‚é‚±‚Æ
+	// é€šçŸ¥ãŒä¼ã‚ã‚‹ã“ã¨
 	EXPECT_EQ("gangzimo", game.status());
 
-	// ‘æˆêƒcƒ‚„‚Å‚È‚­‚È‚é‚±‚Æ
+	// ç¬¬ä¸€ãƒ„ãƒ¢å·¡ã§ãªããªã‚‹ã“ã¨
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "_", "", "_" });
 		game.zimo();
@@ -337,7 +337,7 @@ TEST(GameTest, gangzimo) {
 		game.gangzimo();
 		EXPECT_FALSE(game.diyizimo());
 	}
-	// ˆê”­‚ª‚È‚­‚È‚é‚±‚Æ
+	// ä¸€ç™ºãŒãªããªã‚‹ã“ã¨
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "_", "", "_" });
 		game.zimo();
@@ -347,7 +347,7 @@ TEST(GameTest, gangzimo) {
 		game.gangzimo();
 		EXPECT_FALSE(find(game.yifa(), true));
 	}
-	// ‰ÁÈ‚Ìê‡A‘¦À‚É‚ÍŠJÈ‚³‚ê‚È‚¢‚±‚Æ
+	// åŠ æ§“ã®å ´åˆã€å³åº§ã«ã¯é–‹æ§“ã•ã‚Œãªã„ã“ã¨
 	{
 		auto game = init_game({}, -1, 0, 0, { "__________,s333=", "", "", "" });
 		game.zimo();
@@ -355,17 +355,17 @@ TEST(GameTest, gangzimo) {
 		game.gangzimo();
 		EXPECT_EQ(1, game.model().shan.baopai().size());
 	}
-	// ƒJƒ“ƒhƒ‰Œãæ‚¹‚Å‚Í‚È‚¢ê‡A‰ÁÈ‚à‘¦À‚ÉŠJÈ‚³‚ê‚é‚±‚Æ
+	// ã‚«ãƒ³ãƒ‰ãƒ©å¾Œä¹—ã›ã§ã¯ãªã„å ´åˆã€åŠ æ§“ã‚‚å³åº§ã«é–‹æ§“ã•ã‚Œã‚‹ã“ã¨
 	{
 		Rule rule;
-		rule.gangbaopaiPostAddition/*ƒJƒ“ƒhƒ‰Œãæ‚¹*/ = false;
+		rule.gangbaopaiPostAddition/*ã‚«ãƒ³ãƒ‰ãƒ©å¾Œä¹—ã›*/ = false;
 		auto game = init_game(rule, -1, 0, 0, { "__________,s333=", "", "", "" });
 		game.zimo();
 		game.gang("s333=3");
 		game.gangzimo();
 		EXPECT_EQ(2, game.model().shan.baopai().size());
 	}
-	// ‘å–¾È‚Ìê‡A‘¦À‚É‚ÍŠJÈ‚³‚ê‚È‚¢‚±‚Æ
+	// å¤§æ˜æ§“ã®å ´åˆã€å³åº§ã«ã¯é–‹æ§“ã•ã‚Œãªã„ã“ã¨
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "", "_", "" });
 		game.zimo();
@@ -374,10 +374,10 @@ TEST(GameTest, gangzimo) {
 		game.gangzimo();
 		EXPECT_EQ(1, game.model().shan.baopai().size());
 	}
-	// ƒJƒ“ƒhƒ‰Œãæ‚¹‚Å‚Í‚È‚¢ê‡A‘å–¾È‚à‘¦À‚ÉŠJÈ‚³‚ê‚é‚±‚Æ
+	// ã‚«ãƒ³ãƒ‰ãƒ©å¾Œä¹—ã›ã§ã¯ãªã„å ´åˆã€å¤§æ˜æ§“ã‚‚å³åº§ã«é–‹æ§“ã•ã‚Œã‚‹ã“ã¨
 	{
 		Rule rule;
-		rule.gangbaopaiPostAddition/*ƒJƒ“ƒhƒ‰Œãæ‚¹*/ = false;
+		rule.gangbaopaiPostAddition/*ã‚«ãƒ³ãƒ‰ãƒ©å¾Œä¹—ã›*/ = false;
 		auto game = init_game(rule, -1, 0, 0, { "_", "", "_", "" });
 		game.zimo();
 		game.dapai("s3");
@@ -390,7 +390,7 @@ TEST(GameTest, gangzimo) {
 TEST(GameTest, kakigang) {
 	auto game = init_game({}, -1, 0, 0, { "__________,s555+", "", "", "" });
 
-	// Èƒhƒ‰‚ª‘‚¦‚é‚±‚Æ
+	// æ§“ãƒ‰ãƒ©ãŒå¢—ãˆã‚‹ã“ã¨
 	{
 		game.zimo();
 		game.gang("s555+0");
@@ -399,13 +399,13 @@ TEST(GameTest, kakigang) {
 		EXPECT_EQ(2, game.model().shan.baopai().size());
 		EXPECT_TRUE(game.gang().empty());
 	}
-	// ’Ê’m‚ª“`‚í‚é‚±‚Æ
+	// é€šçŸ¥ãŒä¼ã‚ã‚‹ã“ã¨
 	EXPECT_EQ("gangzimo", game.status());
 
-	// ƒJƒ“ƒhƒ‰‚È‚µ‚Ìê‡AŠJÈ‚µ‚È‚¢‚±‚Æ
+	// ã‚«ãƒ³ãƒ‰ãƒ©ãªã—ã®å ´åˆã€é–‹æ§“ã—ãªã„ã“ã¨
 	{
 		Rule rule;
-		rule.gangbaopai/*ƒJƒ“ƒhƒ‰‚ ‚è*/ = false;
+		rule.gangbaopai/*ã‚«ãƒ³ãƒ‰ãƒ©ã‚ã‚Š*/ = false;
 		auto game = init_game(rule, -1, 0, 0, { "_", "", "", "" });
 		game.zimo();
 		game.gang("m1111");
@@ -418,7 +418,7 @@ TEST(GameTest, kakigang) {
 TEST(GameTest, hule) {
 	auto game = init_game({}, -1, 0, 0, { "_", "", "m123p456s789z1122", "" });
 
-	// ˜a—¹‚ª‹L˜^‚³‚ê‚é‚±‚Æ
+	// å’Œäº†ãŒè¨˜éŒ²ã•ã‚Œã‚‹ã“ã¨
 	{
 		game.zimo();
 		game.dapai("z1");
@@ -426,10 +426,10 @@ TEST(GameTest, hule) {
 		game.hule();
 		EXPECT_TRUE(game.defen().hupai.size());
 	}
-	// ’Ê’m‚ª“`‚í‚é‚±‚Æ
+	// é€šçŸ¥ãŒä¼ã‚ã‚‹ã“ã¨
 	EXPECT_EQ("hule", game.status());
 
-	// —§’¼Eˆê”­
+	// ç«‹ç›´ãƒ»ä¸€ç™º
 	{
 		auto game = init_game({}, -1, 0, 0, { "m123p456s789z1122", "_", "", "" });
 		game.set_diyizimo(false);
@@ -442,7 +442,7 @@ TEST(GameTest, hule) {
 		EXPECT_TRUE(find_if(game.defen().hupai, [](const auto& h) { return h.name == Hupai::LIZHI; }));
 		EXPECT_TRUE(find_if(game.defen().hupai, [](const auto& h) { return h.name == Hupai::YIPA; }));
 	}
-	// ƒ_ƒuƒ‹—§’¼
+	// ãƒ€ãƒ–ãƒ«ç«‹ç›´
 	{
 		auto game = init_game({}, -1, 0, 0, { "m123p456s789z1122", "_", "", "" });
 		game.zimo();
@@ -453,7 +453,7 @@ TEST(GameTest, hule) {
 		game.hule();
 		EXPECT_TRUE(find_if(game.defen().hupai, [](const auto& h) { return h.name == Hupai::DABULIZHI; }));
 	}
-	// ‘„È
+	// æ§æ§“
 	{
 		auto game = init_game({}, -1, 0, 0, { "_________m1,m111=", "_", "m23p456s789z11222", "" });
 		game.zimo();
@@ -462,7 +462,7 @@ TEST(GameTest, hule) {
 		game.hule();
 		EXPECT_TRUE(find_if(game.defen().hupai, [](const auto& h) { return h.name == Hupai::QIANGGANG; }));
 	}
-	// —äãŠJ‰Ô
+	// å¶ºä¸Šé–‹èŠ±
 	{
 		auto game = init_game({}, -1, 0, 0, { "m123p456s78z11,m111=", "", "", "" }, { "m4" }, { "s9" });
 		game.zimo();
@@ -471,7 +471,7 @@ TEST(GameTest, hule) {
 		game.hule();
 		EXPECT_TRUE(find_if(game.defen().hupai, [](const auto& h) { return h.name == Hupai::LINGSHANGKAIHUA; }));
 	}
-	// ÅI”v‚Å—äãŠJ‰Ô
+	// æœ€çµ‚ç‰Œã§å¶ºä¸Šé–‹èŠ±
 	{
 		auto game = init_game({}, -1, 0, 0, { "m123p456s78z11,m111=", "", "", "" }, { "m4" }, { "s9" });
 		game.set_diyizimo(false);
@@ -483,7 +483,7 @@ TEST(GameTest, hule) {
 		EXPECT_TRUE(find_if(game.defen().hupai, [](const auto& h) { return h.name == Hupai::LINGSHANGKAIHUA; }));
 		EXPECT_FALSE(find_if(game.defen().hupai, [](const auto& h) { return h.name == Hupai::HAIDIMOYUE; }));
 	}
-	// ŠC’ê–ÌŒ
+	// æµ·åº•æ‘¸æœˆ
 	{
 		auto game = init_game({}, -1, 0, 0, { "m123p456s789z1122", "", "", "" }, { "z2" });
 		game.set_diyizimo(false);
@@ -492,7 +492,7 @@ TEST(GameTest, hule) {
 		game.hule();
 		EXPECT_TRUE(find_if(game.defen().hupai, [](const auto& h) { return h.name == Hupai::HAIDIMOYUE; }));
 	}
-	// ‰Í’ê‹›
+	// æ²³åº•æ’ˆé­š
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "", "m123p456s789z1122", "" });
 		game.set_diyizimo(false);
@@ -503,14 +503,14 @@ TEST(GameTest, hule) {
 		game.hule();
 		EXPECT_TRUE(find_if(game.defen().hupai, [](const auto& h) { return h.name == Hupai::HEDILAOYU; }));
 	}
-	// “V˜a
+	// å¤©å’Œ
 	{
 		auto game = init_game({}, -1, 0, 0, { "m123p456s789z1122", "", "", "" }, { "z2" });
 		game.zimo();
 		game.hule();
 		EXPECT_TRUE(find_if(game.defen().hupai, [](const auto& h) { return h.name == Hupai::TIANHE; }));
 	}
-	// ’n˜a
+	// åœ°å’Œ
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "m123p456s789z1122", "", "" }, { "m1", "z2" });
 		game.zimo();
@@ -519,7 +519,7 @@ TEST(GameTest, hule) {
 		game.hule();
 		EXPECT_TRUE(find_if(game.defen().hupai, [](const auto& h) { return h.name == Hupai::DIHE; }));
 	}
-	// ‘„È‚Åƒ_ƒuƒƒ“
+	// æ§æ§“ã§ãƒ€ãƒ–ãƒ­ãƒ³
 	{
 		auto game = init_game({}, -1, 0, 0, { "__________,m111=", "m23p456s789z11122", "m23p789s456z33344", "" });
 		game.zimo();
@@ -529,7 +529,7 @@ TEST(GameTest, hule) {
 		game.hule();
 		EXPECT_TRUE(find_if(game.defen().hupai, [](const auto& h) { return h.name == Hupai::QIANGGANG; }));
 	}
-	// q‚Ì˜a—¹‚Í—Ö‘‘
+	// å­ã®å’Œäº†ã¯è¼ªè˜
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "m123p456s789z1122", "", "" });
 		game.zimo();
@@ -538,14 +538,14 @@ TEST(GameTest, hule) {
 		game.hule();
 		EXPECT_FALSE(game.lianzhuang());
 	}
-	// e‚Ì˜a—¹‚Í˜A‘‘
+	// è¦ªã®å’Œäº†ã¯é€£è˜
 	{
 		auto game = init_game({}, -1, 0, 0, { "m123p456s789z1122", "", "", "" }, { "z1" });
 		game.zimo();
 		game.hule();
 		EXPECT_TRUE(game.lianzhuang());
 	}
-	// ƒ_ƒuƒƒ“‚Íe‚Ì˜a—¹‚ª‚ ‚ê‚Î˜A‘‘
+	// ãƒ€ãƒ–ãƒ­ãƒ³ã¯è¦ªã®å’Œäº†ãŒã‚ã‚Œã°é€£è˜
 	{
 		auto game = init_game({}, -1, 0, 0, { "m23p456s789z11122", "", "m23p789s546z33344", "" }, { "m2", "m1" });
 		game.zimo();
@@ -557,19 +557,19 @@ TEST(GameTest, hule) {
 		game.hule();
 		EXPECT_TRUE(game.lianzhuang());
 	}
-	// ˜A‘‘‚È‚µ‚Ìê‡‚Íe‚Ì˜a—¹‚ª‚ ‚Á‚Ä‚à—Ö‘‘
+	// é€£è˜ãªã—ã®å ´åˆã¯è¦ªã®å’Œäº†ãŒã‚ã£ã¦ã‚‚è¼ªè˜
 	{
 		Rule rule;
-		rule.dealerContinuationType/*˜A‘‘•û®*/ = 0;
+		rule.dealerContinuationType/*é€£è˜æ–¹å¼*/ = 0;
 		auto game = init_game(rule, -1, 0, 0, { "m123p456s789z1122", "", "", "" }, { "z1" });
 		game.zimo();
 		game.hule();
 		EXPECT_FALSE(game.lianzhuang());
 	}
-	// ˆê‹Çí‚Ìê‡‚Íe‚Ì˜a—¹‚Å‚à—Ö‘‘
+	// ä¸€å±€æˆ¦ã®å ´åˆã¯è¦ªã®å’Œäº†ã§ã‚‚è¼ªè˜
 	{
 		Rule rule;
-		rule.roundsType/*ê”*/ = 0;
+		rule.roundsType/*å ´æ•°*/ = 0;
 		auto game = init_game(rule, -1, 0, 0, { "m123p456s789z1122", "", "", "" }, { "z1" });
 		game.zimo();
 		game.hule();
@@ -580,131 +580,131 @@ TEST(GameTest, hule) {
 TEST(GameTest, pingju) {
 	auto game = init_game();
 
-	// “r’†—¬‹Ç
+	// é€”ä¸­æµå±€
 	{
-		game.pingju("yao9"); // ‹ãí‹ã”v
+		game.pingju("yao9"); // ä¹ç¨®ä¹ç‰Œ
 		EXPECT_TRUE(game.no_game());
 		EXPECT_TRUE(game.lianzhuang());
 	}
-	// ’Ê’m‚ª“`‚í‚é‚±‚Æ
+	// é€šçŸ¥ãŒä¼ã‚ã‚‹ã“ã¨
 	EXPECT_EQ("pingju", game.status());
 
-	// ‘Sˆõƒeƒ“ƒpƒC
+	// å…¨å“¡ãƒ†ãƒ³ãƒ‘ã‚¤
 	{
 		Rule rule;
-		rule.liujumanguan/*—¬‚µ–ŠÑ‚ ‚è*/ = false;
+		rule.liujumanguan/*æµã—æº€è²«ã‚ã‚Š*/ = false;
 		auto game = init_game(rule, -1, 0, 0, { "m22p12366s406789", "m55p40s123,z111-,p678-", "m67p678s22,s56-7,p444-", "m12345p33s333,m406-" });
 		game.pingju();
 		EXPECT_EQ("", game.get_pingju().name);
 		EXPECT_EQ(4, count_if(game.get_pingju().shoupai, [](const auto& s) { return !s.empty(); }));
 		EXPECT_EQ((std::array<int, 4>{}), game.fenpei());
 	}
-	// ‘Sˆõƒm[ƒeƒ“
+	// å…¨å“¡ãƒãƒ¼ãƒ†ãƒ³
 	{
 		Rule rule;
-		rule.liujumanguan/*—¬‚µ–ŠÑ‚ ‚è*/ = false;
+		rule.liujumanguan/*æµã—æº€è²«ã‚ã‚Š*/ = false;
 		auto game = init_game(rule, -1, 0, 0, { "m40789p4667s8z577", "m99p12306z277,m345-", "m3p1234689z55,s7-89", "m2233467p234555" });
 		game.pingju();
 		EXPECT_EQ("", game.get_pingju().name);
 		EXPECT_EQ(0, count_if(game.get_pingju().shoupai, [](const auto& s) { return !s.empty(); }));
 		EXPECT_EQ((std::array<int, 4>{}), game.fenpei());
 	}
-	// 2lƒeƒ“ƒpƒC
+	// 2äººãƒ†ãƒ³ãƒ‘ã‚¤
 	{
 		Rule rule;
-		rule.liujumanguan/*—¬‚µ–ŠÑ‚ ‚è*/ = false;
+		rule.liujumanguan/*æµã—æº€è²«ã‚ã‚Š*/ = false;
 		auto game = init_game(rule, -1, 0, 0, { "m22p12366s406789", "m99p12306z277,m345-", "m3p1234689z55,s7-89", "m12345p33s333,m406-" });
 		game.pingju();
 		EXPECT_EQ("", game.get_pingju().name);
 		EXPECT_EQ(2, count_if(game.get_pingju().shoupai, [](const auto& s) { return !s.empty(); }));
 		EXPECT_EQ((std::array<int, 4>{ 1500, -1500, -1500, 1500 }), game.fenpei());
 	}
-	// Œ`®ƒeƒ“ƒpƒC‚Æ‚È‚ç‚È‚¢”vp
+	// å½¢å¼ãƒ†ãƒ³ãƒ‘ã‚¤ã¨ãªã‚‰ãªã„ç‰Œå§¿
 	{
 		Rule rule;
-		rule.liujumanguan/*—¬‚µ–ŠÑ‚ ‚è*/ = false;
+		rule.liujumanguan/*æµã—æº€è²«ã‚ã‚Š*/ = false;
 		auto game = init_game(rule, -1, 0, 0, { "m123p456s789z1111", "m99p12306z277,m345-", "m3p1234689z55,s7-89", "m12345p33s333,m406-" });
 		game.pingju();
 		EXPECT_EQ("", game.get_pingju().name);
 		EXPECT_EQ(1, count_if(game.get_pingju().shoupai, [](const auto& s) { return !s.empty(); }));
 		EXPECT_EQ((std::array<int, 4>{ -1000, -1000, -1000, 3000 }), game.fenpei());
 	}
-	// ƒm[ƒeƒ“éŒ¾‚ ‚è‚Ìê‡AéŒ¾‚È‚µ‚ğƒm[ƒeƒ“‚Æ‚İ‚È‚·‚±‚Æ
+	// ãƒãƒ¼ãƒ†ãƒ³å®£è¨€ã‚ã‚Šã®å ´åˆã€å®£è¨€ãªã—ã‚’ãƒãƒ¼ãƒ†ãƒ³ã¨ã¿ãªã™ã“ã¨
 	{
 		Rule rule;
-		rule.liujumanguan/*—¬‚µ–ŠÑ‚ ‚è*/ = false;
-		rule.notenDeclaration/*ƒm[ƒeƒ“éŒ¾‚ ‚è*/ = true;
+		rule.liujumanguan/*æµã—æº€è²«ã‚ã‚Š*/ = false;
+		rule.notenDeclaration/*ãƒãƒ¼ãƒ†ãƒ³å®£è¨€ã‚ã‚Š*/ = true;
 		auto game = init_game(rule, -1, 0, 0, { "m22p12366s406789", "m55p40s123,z111-,p678-", "m67p678s22,s56-7,p444-", "m12345p33s333,m406-" });
 		game.pingju("", { "", "_", "_", "_" });
 		EXPECT_EQ("", game.get_pingju().name);
 		EXPECT_EQ(3, count_if(game.get_pingju().shoupai, [](const auto& s) { return !s.empty(); }));
 		EXPECT_EQ((std::array<int, 4>{ -3000, 1000, 1000, 1000 }), game.fenpei());
 	}
-	// ƒm[ƒeƒ“éŒ¾‚Å‚ ‚Á‚Ä‚àƒŠ[ƒ`Ò‚Ìè”v‚ÍŒöŠJ‚·‚é‚±‚Æ
+	// ãƒãƒ¼ãƒ†ãƒ³å®£è¨€ã§ã‚ã£ã¦ã‚‚ãƒªãƒ¼ãƒè€…ã®æ‰‹ç‰Œã¯å…¬é–‹ã™ã‚‹ã“ã¨
 	{
 		Rule rule;
-		rule.liujumanguan/*—¬‚µ–ŠÑ‚ ‚è*/ = false;
-		rule.notenDeclaration/*ƒm[ƒeƒ“éŒ¾‚ ‚è*/ = true;
+		rule.liujumanguan/*æµã—æº€è²«ã‚ã‚Š*/ = false;
+		rule.notenDeclaration/*ãƒãƒ¼ãƒ†ãƒ³å®£è¨€ã‚ã‚Š*/ = true;
 		auto game = init_game(rule, -1, 0, 0, { "m22p12366s406789*", "", "", "" });
 		game.pingju();
 		EXPECT_EQ("", game.get_pingju().name);
 		EXPECT_FALSE(game.get_pingju().shoupai[0].empty());
 	}
-	// ƒm[ƒeƒ“”±‚È‚µ
+	// ãƒãƒ¼ãƒ†ãƒ³ç½°ãªã—
 	{
 		Rule rule;
-		rule.liujumanguan/*—¬‚µ–ŠÑ‚ ‚è*/ = false;
-		rule.notenPenalty/*ƒm[ƒeƒ“”±‚ ‚è*/ = false;
+		rule.liujumanguan/*æµã—æº€è²«ã‚ã‚Š*/ = false;
+		rule.notenPenalty/*ãƒãƒ¼ãƒ†ãƒ³ç½°ã‚ã‚Š*/ = false;
 		auto game = init_game(rule, -1, 0, 0, { "m22p12366s406789", "m99p12306z277,m345-", "m3p1234689z55,s7-89", "m12345p33s333,m406-" });
 		game.pingju();
 		EXPECT_EQ("", game.get_pingju().name);
 		EXPECT_EQ(1, count_if(game.get_pingju().shoupai, [](const auto& s) { return !s.empty(); }));
 		EXPECT_EQ((std::array<int, 4>{ 0, 0, 0, 0 }), game.fenpei());
 	}
-	// ƒeƒ“ƒpƒC˜A‘‘
+	// ãƒ†ãƒ³ãƒ‘ã‚¤é€£è˜
 	{
 		Rule rule;
-		rule.liujumanguan/*—¬‚µ–ŠÑ‚ ‚è*/ = false;
+		rule.liujumanguan/*æµã—æº€è²«ã‚ã‚Š*/ = false;
 		auto game = init_game(rule, -1, 0, 0, { "m22p12366s406789", "m99p12306z277,m345-", "m3p1234689z55,s7-89", "m12345p33s333,m406-" });
 		game.pingju();
 		EXPECT_TRUE(game.lianzhuang());
 	}
-	// ƒm[ƒeƒ“e—¬‚ê
+	// ãƒãƒ¼ãƒ†ãƒ³è¦ªæµã‚Œ
 	{
 		Rule rule;
-		rule.liujumanguan/*—¬‚µ–ŠÑ‚ ‚è*/ = false;
+		rule.liujumanguan/*æµã—æº€è²«ã‚ã‚Š*/ = false;
 		auto game = init_game(rule, -1, 0, 0, { "m40789p4667s8z577", "m99p12306z277,m345-", "m3p1234689z55,s7-89", "m12345p33s333,m406-" });
 		game.pingju();
 		EXPECT_FALSE(game.lianzhuang());
 	}
-	// ˜a—¹˜A‘‘‚Ìê‡Ae‚Ìƒeƒ“ƒpƒC‚Å‚à—Ö‘‘‚·‚é‚±‚Æ
+	// å’Œäº†é€£è˜ã®å ´åˆã€è¦ªã®ãƒ†ãƒ³ãƒ‘ã‚¤ã§ã‚‚è¼ªè˜ã™ã‚‹ã“ã¨
 	{
 		Rule rule;
-		rule.liujumanguan/*—¬‚µ–ŠÑ‚ ‚è*/ = false;
-		rule.dealerContinuationType/*˜A‘‘•û®*/ = 1;
+		rule.liujumanguan/*æµã—æº€è²«ã‚ã‚Š*/ = false;
+		rule.dealerContinuationType/*é€£è˜æ–¹å¼*/ = 1;
 		auto game = init_game(rule, -1, 0, 0, { "m22p12366s406789", "m99p12306z277,m345-", "m3p1234689z55,s7-89", "m12345p33s333,m406-" });
 		game.pingju();
 		EXPECT_FALSE(game.lianzhuang());
 	}
-	// ƒm[ƒeƒ“˜A‘‘‚Ìê‡Ae‚ªƒm[ƒeƒ“‚Å‚à˜A‘‘‚·‚é‚±‚Æ
+	// ãƒãƒ¼ãƒ†ãƒ³é€£è˜ã®å ´åˆã€è¦ªãŒãƒãƒ¼ãƒ†ãƒ³ã§ã‚‚é€£è˜ã™ã‚‹ã“ã¨
 	{
 		Rule rule;
-		rule.liujumanguan/*—¬‚µ–ŠÑ‚ ‚è*/ = false;
-		rule.dealerContinuationType/*˜A‘‘•û®*/ = 3;
+		rule.liujumanguan/*æµã—æº€è²«ã‚ã‚Š*/ = false;
+		rule.dealerContinuationType/*é€£è˜æ–¹å¼*/ = 3;
 		auto game = init_game(rule, -1, 0, 0, { "m40789p4667s8z577", "m99p12306z277,m345-", "m3p1234689z55,s7-89", "m12345p33s333,m406-" });
 		game.pingju();
 		EXPECT_TRUE(game.lianzhuang());
 	}
-	// ˆê‹Çí‚Ìê‡Ae‚ªƒm[ƒeƒ“‚Å‚à˜A‘‘‚·‚é‚±‚Æ
+	// ä¸€å±€æˆ¦ã®å ´åˆã€è¦ªãŒãƒãƒ¼ãƒ†ãƒ³ã§ã‚‚é€£è˜ã™ã‚‹ã“ã¨
 	{
 		Rule rule;
-		rule.liujumanguan/*—¬‚µ–ŠÑ‚ ‚è*/ = false;
-		rule.roundsType/*ê”*/ = 0;
+		rule.liujumanguan/*æµã—æº€è²«ã‚ã‚Š*/ = false;
+		rule.roundsType/*å ´æ•°*/ = 0;
 		auto game = init_game(rule, -1, 0, 0, { "m40789p4667s8z577", "m99p12306z277,m345-", "m3p1234689z55,s7-89", "m12345p33s333,m406-" });
 		game.pingju();
 		EXPECT_TRUE(game.lianzhuang());
 	}
-	// —¬‚µ–ŠÑ
+	// æµã—æº€è²«
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "_", "_", "_" });
 		game.zimo(); game.dapai("z1");
@@ -715,7 +715,7 @@ TEST(GameTest, pingju) {
 		EXPECT_EQ("nm", game.get_pingju().name);
 		EXPECT_EQ((std::array<int, 4>{ 12000, -4000, -4000, -4000 }), game.fenpei());
 	}
-	// –Â‚©‚ê‚½ê‡A—¬‚µ–ŠÑ‚Í¬—§‚µ‚È‚¢
+	// é³´ã‹ã‚ŒãŸå ´åˆã€æµã—æº€è²«ã¯æˆç«‹ã—ãªã„
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "_", "_", "_" });
 		game.zimo(); game.dapai("z1");
@@ -725,7 +725,7 @@ TEST(GameTest, pingju) {
 		game.pingju();
 		EXPECT_EQ("", game.get_pingju().name);
 	}
-	// 2l‚ª—¬‚µ–ŠÑ
+	// 2äººãŒæµã—æº€è²«
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "_", "_", "_" });
 		game.zimo(); game.dapai("z1");
@@ -736,22 +736,22 @@ TEST(GameTest, pingju) {
 		EXPECT_EQ("nm", game.get_pingju().name);
 		EXPECT_EQ((std::array<int, 4>{ 8000, 4000, -6000, -6000 }), game.fenpei());
 	}
-	// ƒm[ƒeƒ“”±‚È‚µ‚Ìƒ‹[ƒ‹‚Ìê‡AƒŠ[ƒ`Ò‚ÆeˆÈŠO‚Íè”v‚ğŠJ‚©‚È‚¢‚±‚Æ
+	// ãƒãƒ¼ãƒ†ãƒ³ç½°ãªã—ã®ãƒ«ãƒ¼ãƒ«ã®å ´åˆã€ãƒªãƒ¼ãƒè€…ã¨è¦ªä»¥å¤–ã¯æ‰‹ç‰Œã‚’é–‹ã‹ãªã„ã“ã¨
 	{
 		Rule rule;
-		rule.liujumanguan/*—¬‚µ–ŠÑ‚ ‚è*/ = false;
-		rule.notenPenalty/*ƒm[ƒeƒ“”±‚ ‚è*/ = false;
+		rule.liujumanguan/*æµã—æº€è²«ã‚ã‚Š*/ = false;
+		rule.notenPenalty/*ãƒãƒ¼ãƒ†ãƒ³ç½°ã‚ã‚Š*/ = false;
 		auto game = init_game(rule, -1, 0, 0, { "m567999s4466777", "m05p123s56z333*,s8888", "m11p789s06,z555-,p406-", "" });
 		game.pingju();
 		EXPECT_EQ((std::array<std::string, 4>{ "m567999s4466777", "m05p123s56z333*,s8888", "", "" }),
 			game.get_pingju().shoupai);
 	}
-	// ƒm[ƒeƒ“”±‚È‚µ‚Å˜a—¹˜A‘‘‚Ìƒ‹[ƒ‹‚Ìê‡AƒŠ[ƒ`ÒˆÈŠO‚Íè”v‚ğŠJ‚©‚È‚¢‚±‚Æ
+	// ãƒãƒ¼ãƒ†ãƒ³ç½°ãªã—ã§å’Œäº†é€£è˜ã®ãƒ«ãƒ¼ãƒ«ã®å ´åˆã€ãƒªãƒ¼ãƒè€…ä»¥å¤–ã¯æ‰‹ç‰Œã‚’é–‹ã‹ãªã„ã“ã¨
 	{
 		Rule rule;
-		rule.liujumanguan/*—¬‚µ–ŠÑ‚ ‚è*/ = false;
-		rule.notenPenalty/*ƒm[ƒeƒ“”±‚ ‚è*/ = false;
-		rule.dealerContinuationType/*˜A‘‘•û®*/ = 1;
+		rule.liujumanguan/*æµã—æº€è²«ã‚ã‚Š*/ = false;
+		rule.notenPenalty/*ãƒãƒ¼ãƒ†ãƒ³ç½°ã‚ã‚Š*/ = false;
+		rule.dealerContinuationType/*é€£è˜æ–¹å¼*/ = 1;
 		auto game = init_game(rule, -1, 0, 0, { "m567999s4466777", "m05p123s56z333*,s8888", "m11p789s06,z555-,p406-", "" });
 		game.pingju();
 		EXPECT_EQ((std::array<std::string, 4>{ "", "m05p123s56z333*,s8888", "", "" }),
@@ -760,7 +760,7 @@ TEST(GameTest, pingju) {
 }
 
 TEST(GameTest, last) {
-	// ˜A‘‘‚É‹Ç‚ªi‚Ü‚È‚¢‚±‚Æ
+	// é€£è˜æ™‚ã«å±€ãŒé€²ã¾ãªã„ã“ã¨
 	{
 		auto game = init_game();
 		game.set_lianzhuang(true);
@@ -768,7 +768,7 @@ TEST(GameTest, last) {
 		EXPECT_EQ(0, game.model().zhuangfeng);
 		EXPECT_EQ(0, game.model().jushu);
 	}
-	// —Ö‘‘‚É‹Ç‚ªi‚Ş‚±‚Æ
+	// è¼ªè˜æ™‚ã«å±€ãŒé€²ã‚€ã“ã¨
 	{
 		auto game = init_game();
 		game.model().zhuangfeng = 0;
@@ -777,57 +777,57 @@ TEST(GameTest, last) {
 		EXPECT_EQ(1, game.model().zhuangfeng);
 		EXPECT_EQ(0, game.model().jushu);
 	}
-	// “Œ•—í‚Í“Œl‹Ç‚ÅI‹Ç‚·‚é‚±‚Æ
+	// æ±é¢¨æˆ¦ã¯æ±å››å±€ã§çµ‚å±€ã™ã‚‹ã“ã¨
 	{
 		Rule rule;
-		rule.roundsType/*ê”*/ = 1;
+		rule.roundsType/*å ´æ•°*/ = 1;
 		auto game = init_game(rule, -1, 0, 0, {}, {}, {}, {}, { 10000, 20000, 30000, 40000 });
 		game.model().zhuangfeng = 0;
 		game.model().jushu = 3;
 		game.last();
 		EXPECT_EQ("jieju", game.status());
 	}
-	// “Œ“ìí‚Í“ìl‹Ç‚ÅI‹Ç‚·‚é‚±‚Æ
+	// æ±å—æˆ¦ã¯å—å››å±€ã§çµ‚å±€ã™ã‚‹ã“ã¨
 	{
 		Rule rule;
-		rule.roundsType/*ê”*/ = 2;
+		rule.roundsType/*å ´æ•°*/ = 2;
 		auto game = init_game(rule, -1, 0, 0, {}, {}, {}, {}, { 10000, 20000, 30000, 40000 });
 		game.model().zhuangfeng = 1;
 		game.model().jushu = 3;
 		game.last();
 		EXPECT_EQ("jieju", game.status());
 	}
-	// ˆê‘‘í‚Í–kl‹Ç‚ÅI‹Ç‚·‚é‚±‚Æ
+	// ä¸€è˜æˆ¦ã¯åŒ—å››å±€ã§çµ‚å±€ã™ã‚‹ã“ã¨
 	{
 		Rule rule;
-		rule.roundsType/*ê”*/ = 4;
+		rule.roundsType/*å ´æ•°*/ = 4;
 		auto game = init_game(rule, -1, 0, 0, {}, {}, {}, {}, { 10000, 20000, 30000, 40000 });
 		game.model().zhuangfeng = 3;
 		game.model().jushu = 3;
 		game.last();
 		EXPECT_EQ("jieju", game.status());
 	}
-	// ˜A‘‘’†‚Å‚àƒgƒrI—¹‚·‚é‚±‚Æ
+	// é€£è˜ä¸­ã§ã‚‚ãƒˆãƒ“çµ‚äº†ã™ã‚‹ã“ã¨
 	{
 		Rule rule;
-		rule.roundsType/*ê”*/ = 4;
+		rule.roundsType/*å ´æ•°*/ = 4;
 		auto game = init_game(rule, -1, 0, 0, {}, {}, {}, {}, { 50100, 30000, 20000, -100 });
 		game.set_lianzhuang(true);
 		game.last();
 		EXPECT_EQ("jieju", game.status());
 	}
-	// ƒgƒrI—¹‚È‚µ
+	// ãƒˆãƒ“çµ‚äº†ãªã—
 	{
 		Rule rule;
-		rule.bankruptcyEndAll/*ƒgƒrI—¹‚ ‚è*/ = false;
+		rule.bankruptcyEndAll/*ãƒˆãƒ“çµ‚äº†ã‚ã‚Š*/ = false;
 		auto game = init_game(rule, -1, 0, 0, {}, {}, {}, {}, { 50100, 30000, 20000, -100 });
 		game.last();
 		EXPECT_EQ("qipai", game.status());
 	}
-	// ƒI[ƒ‰ƒX~‚ß(“Œ•—í)
+	// ã‚ªãƒ¼ãƒ©ã‚¹æ­¢ã‚(æ±é¢¨æˆ¦)
 	{
 		Rule rule;
-		rule.roundsType/*ê”*/ = 1;
+		rule.roundsType/*å ´æ•°*/ = 1;
 		auto game = init_game(rule, -1, 0, 0, {}, {}, {}, {}, { 40000, 30000, 20000, 10000 });
 		game.model().zhuangfeng = 0;
 		game.model().jushu = 3;
@@ -835,7 +835,7 @@ TEST(GameTest, last) {
 		game.last();
 		EXPECT_EQ("jieju", game.status());
 	}
-	// ƒI[ƒ‰ƒX~‚ß(“Œ“ìí)
+	// ã‚ªãƒ¼ãƒ©ã‚¹æ­¢ã‚(æ±å—æˆ¦)
 	{
 		auto game = init_game({}, -1, 0, 0, {}, {}, {}, {}, { 40000, 30000, 20000, 10000 });
 		game.model().zhuangfeng = 1;
@@ -844,7 +844,7 @@ TEST(GameTest, last) {
 		game.last();
 		EXPECT_EQ("jieju", game.status());
 	}
-	// “r’†—¬‹Ç‚Å‚ÍƒI[ƒ‰ƒX~‚ß‚µ‚È‚¢‚±‚Æ
+	// é€”ä¸­æµå±€ã§ã¯ã‚ªãƒ¼ãƒ©ã‚¹æ­¢ã‚ã—ãªã„ã“ã¨
 	{
 		auto game = init_game({}, -1, 0, 0, {}, {}, {}, {}, { 40000, 30000, 20000, 10000 });
 		game.model().zhuangfeng = 1;
@@ -854,10 +854,10 @@ TEST(GameTest, last) {
 		game.last();
 		EXPECT_EQ("qipai", game.status());
 	}
-	// ƒI[ƒ‰ƒX~‚ß‚È‚µ
+	// ã‚ªãƒ¼ãƒ©ã‚¹æ­¢ã‚ãªã—
 	{
 		Rule rule;
-		rule.lastRoundStop/*ƒI[ƒ‰ƒX~‚ß‚ ‚è*/ = false;
+		rule.lastRoundStop/*ã‚ªãƒ¼ãƒ©ã‚¹æ­¢ã‚ã‚ã‚Š*/ = false;
 		auto game = init_game(rule, -1, 0, 0, {}, {}, {}, {}, { 40000, 30000, 20000, 10000 });
 		game.model().zhuangfeng = 1;
 		game.model().jushu = 3;
@@ -865,27 +865,27 @@ TEST(GameTest, last) {
 		game.last();
 		EXPECT_EQ("qipai", game.status());
 	}
-	// ˆê‘‘í‚Å‚Í‰„’·í‚ª‚È‚¢‚±‚Æ
+	// ä¸€è˜æˆ¦ã§ã¯å»¶é•·æˆ¦ãŒãªã„ã“ã¨
 	{
 		Rule rule;
-		rule.roundsType/*ê”*/ = 4;
+		rule.roundsType/*å ´æ•°*/ = 4;
 		auto game = init_game(rule);
 		game.model().zhuangfeng = 3;
 		game.model().jushu = 3;
 		game.last();
 		EXPECT_EQ("jieju", game.status());
 	}
-	// ‰„’·í‚È‚µ
+	// å»¶é•·æˆ¦ãªã—
 	{
 		Rule rule;
-		rule.overtimeType/*‰„’·í•û®*/ = 0;
+		rule.overtimeType/*å»¶é•·æˆ¦æ–¹å¼*/ = 0;
 		auto game = init_game(rule);
 		game.model().zhuangfeng = 1;
 		game.model().jushu = 3;
 		game.last();
 		EXPECT_EQ("jieju", game.status());
 	}
-	// ‰„’·í“Ë“ü
+	// å»¶é•·æˆ¦çªå…¥
 	{
 		auto game = init_game();
 		game.model().zhuangfeng = 1;
@@ -893,7 +893,7 @@ TEST(GameTest, last) {
 		game.last();
 		EXPECT_EQ("qipai", game.status());
 	}
-	// ‰„’·íƒTƒhƒ“ƒfƒX
+	// å»¶é•·æˆ¦ã‚µãƒ‰ãƒ³ãƒ‡ã‚¹
 	{
 		auto game = init_game({}, -1, 0, 0, {}, {}, {}, {}, { 10000, 20000, 30000, 40000 });
 		game.model().zhuangfeng = 2;
@@ -902,10 +902,10 @@ TEST(GameTest, last) {
 		EXPECT_EQ(7, game.max_jushu());
 		EXPECT_EQ("jieju", game.status());
 	}
-	// ˜A‘‘—DæƒTƒhƒ“ƒfƒX
+	// é€£è˜å„ªå…ˆã‚µãƒ‰ãƒ³ãƒ‡ã‚¹
 	{
 		Rule rule;
-		rule.overtimeType/*‰„’·í•û®*/ = 2;
+		rule.overtimeType/*å»¶é•·æˆ¦æ–¹å¼*/ = 2;
 		auto game = init_game(rule);
 		game.model().zhuangfeng = 1;
 		game.model().jushu = 3;
@@ -913,10 +913,10 @@ TEST(GameTest, last) {
 		EXPECT_EQ(8, game.max_jushu());
 		EXPECT_EQ("qipai", game.status());
 	}
-	// 4‹ÇŒÅ’è‰„’·íƒI[ƒ‰ƒX~‚ß
+	// 4å±€å›ºå®šå»¶é•·æˆ¦ã‚ªãƒ¼ãƒ©ã‚¹æ­¢ã‚
 	{
 		Rule rule;
-		rule.overtimeType/*‰„’·í•û®*/ = 3;
+		rule.overtimeType/*å»¶é•·æˆ¦æ–¹å¼*/ = 3;
 		auto game = init_game(rule);
 		game.model().zhuangfeng = 1;
 		game.model().jushu = 3;
@@ -924,7 +924,7 @@ TEST(GameTest, last) {
 		EXPECT_EQ(11, game.max_jushu());
 		EXPECT_EQ("qipai", game.status());
 	}
-	// ‰„’·í‚ÍÅ‘ål‹Ç‚ÅI—¹‚·‚é‚±‚Æ
+	// å»¶é•·æˆ¦ã¯æœ€å¤§å››å±€ã§çµ‚äº†ã™ã‚‹ã“ã¨
 	{
 		auto game = init_game();
 		game.model().zhuangfeng = 2;
@@ -932,10 +932,10 @@ TEST(GameTest, last) {
 		game.last();
 		EXPECT_EQ("jieju", game.status());
 	}
-	// ˆê‹Çí‚É‚Í‰„’·í‚Í‚È‚¢
+	// ä¸€å±€æˆ¦ã«ã¯å»¶é•·æˆ¦ã¯ãªã„
 	{
 		Rule rule;
-		rule.roundsType/*ê”*/ = 0;
+		rule.roundsType/*å ´æ•°*/ = 0;
 		auto game = init_game(rule);
 		game.model().zhuangfeng = 0;
 		game.model().jushu = 0;
@@ -947,49 +947,49 @@ TEST(GameTest, last) {
 TEST(GameTest, jieju) {
 	auto game = init_game({}, 1, 0, 0, {}, {}, {}, {}, { 20400, 28500, 20500, 30600 });
 
-	// ”v•ˆ‚ª‹L˜^‚³‚ê‚é‚±‚Æ
+	// ç‰Œè­œãŒè¨˜éŒ²ã•ã‚Œã‚‹ã“ã¨
 	{
 		game.jieju();
 		EXPECT_EQ((std::array<int, 4>{ 30600, 20400, 28500, 20500 }), game.model().defen);
 		EXPECT_EQ((std::array<int, 4>{ 1, 4, 2, 3 }), game.rank());
 		EXPECT_EQ((std::array<float, 4>{ 40.6f, -29.6f, 8.5f, -19.5f }), game.point());
 	}
-	// ’Ê’m‚ª“`‚í‚é‚±‚Æ
+	// é€šçŸ¥ãŒä¼ã‚ã‚‹ã“ã¨
 	EXPECT_EQ("jieju", game.status());
 
-	// “¯“_‚Ìê‡‚Í‹N‰Æ‚É‹ß‚¢•û‚ğãˆÊ‚Æ‚·‚é
+	// åŒç‚¹ã®å ´åˆã¯èµ·å®¶ã«è¿‘ã„æ–¹ã‚’ä¸Šä½ã¨ã™ã‚‹
 	{
 		auto game = init_game({}, 2);
 		game.jieju();
 		EXPECT_EQ((std::array<int, 4>{ 3, 4, 1, 2 }), game.rank());
 		EXPECT_EQ((std::array<float, 4>{ -15.0f, - 25.0f, 35.0f, 5.0f }), game.point());
 	}
-	// I‹Ç‚Éc‚Á‚½‹Ÿ‘õƒŠ[ƒ`–_‚Íƒgƒbƒv‚Ì“¾“_‚É‰ÁZ
+	// çµ‚å±€æ™‚ã«æ®‹ã£ãŸä¾›è¨—ãƒªãƒ¼ãƒæ£’ã¯ãƒˆãƒƒãƒ—ã®å¾—ç‚¹ã«åŠ ç®—
 	{
 		auto game = init_game({}, 3, 3, 0, {}, {}, {}, {}, { 9000, 19000, 29000, 40000 });
 		game.jieju();
 		EXPECT_EQ((std::array<int, 4>{ 19000, 29000, 43000, 9000 }), game.model().defen);
 	}
-	// 1000“_–¢–‚Ìƒ|ƒCƒ“ƒg‚ÍlÌŒÜ“ü‚·‚é
+	// 1000ç‚¹æœªæº€ã®ãƒã‚¤ãƒ³ãƒˆã¯å››æ¨äº”å…¥ã™ã‚‹
 	{
 		Rule rule;
-		rule.rankPoints/*‡ˆÊ“_*/ = { "20","10","-10","-20" };
+		rule.rankPoints/*é †ä½ç‚¹*/ = { "20","10","-10","-20" };
 		auto game = init_game(rule, 0, 0, 0, {}, {}, {}, {}, { 20400, 28500, 20500, 30600 });
 		game.jieju();
 		EXPECT_EQ((std::array<float, 4>{ -30, 9, -19, 40 }), game.point());
 	}
-	// "1000“_–¢–‚Ìƒ|ƒCƒ“ƒg‚ÍlÌŒÜ“ü‚·‚é(•‰‚ÌƒP[ƒX)
+	// "1000ç‚¹æœªæº€ã®ãƒã‚¤ãƒ³ãƒˆã¯å››æ¨äº”å…¥ã™ã‚‹(è² ã®ã‚±ãƒ¼ã‚¹)
 	{
 		Rule rule;
-		rule.rankPoints/*‡ˆÊ“_*/ = { "20","10","-10","-20" };
+		rule.rankPoints/*é †ä½ç‚¹*/ = { "20","10","-10","-20" };
 		auto game = init_game(rule, 0, 0, 0, {}, {}, {}, {}, { -1500, 83800, 6000, 11700 });
 		game.jieju();
 		EXPECT_EQ((std::array<float, 4>{ -51, 93, -34, -8 }), game.point());
 	}
-	// ‡ˆÊ“_‚ğ•ÏX‚Å‚«‚é‚±‚Æ
+	// é †ä½ç‚¹ã‚’å¤‰æ›´ã§ãã‚‹ã“ã¨
 	{
 		Rule rule;
-		rule.rankPoints/*‡ˆÊ“_*/ = { "30","10","-10","-30" };
+		rule.rankPoints/*é †ä½ç‚¹*/ = { "30","10","-10","-30" };
 		auto game = init_game(rule, 2);
 		game.jieju();
 		EXPECT_EQ((std::array<int, 4>{ 3, 4, 1, 2 }), game.rank());
@@ -998,7 +998,7 @@ TEST(GameTest, jieju) {
 }
 
 TEST(GameTest, reply_kaiju) {
-	// ”z”v‚É‘JˆÚ‚·‚é‚±‚Æ
+	// é…ç‰Œã«é·ç§»ã™ã‚‹ã“ã¨
 	{
 		Game game;
 		game.kaiju();
@@ -1008,7 +1008,7 @@ TEST(GameTest, reply_kaiju) {
 }
 
 TEST(GameTest, reply_qipai) {
-	// ƒcƒ‚‚É‘JˆÚ‚·‚é‚±‚Æ
+	// ãƒ„ãƒ¢ã«é·ç§»ã™ã‚‹ã“ã¨
 	{
 		auto game = init_game();
 		game.qipai();
@@ -1018,7 +1018,7 @@ TEST(GameTest, reply_qipai) {
 }
 
 TEST(GameTest, reply_zimo) {
-	// ‘Å”v
+	// æ‰“ç‰Œ
 	{
 		auto game = init_game({}, -1, 0, 0, {}, { "m1" });
 		game.zimo();
@@ -1027,7 +1027,7 @@ TEST(GameTest, reply_zimo) {
 		EXPECT_EQ("dapai", game.status());
 		EXPECT_EQ("m1_", game.dapai());
 	}
-	// ƒŠ[ƒ`
+	// ãƒªãƒ¼ãƒ
 	{
 		auto game = init_game({}, -1, 0, 0, { "m123p456s789z1122", "", "", ""  }, { "m1" });
 		game.zimo();
@@ -1036,7 +1036,7 @@ TEST(GameTest, reply_zimo) {
 		EXPECT_EQ("dapai", game.status());
 		EXPECT_EQ("m1_*", game.dapai());
 	}
-	// ‘Å”v(•s³‰“š)
+	// æ‰“ç‰Œ(ä¸æ­£å¿œç­”)
 	{
 		auto game = init_game({}, -1, 0, 0, {}, { "m1" });
 		game.zimo();
@@ -1045,7 +1045,7 @@ TEST(GameTest, reply_zimo) {
 		EXPECT_EQ("dapai", game.status());
 		EXPECT_NE("m2_", game.dapai());
 	}
-	// ‹ãí‹ã”v
+	// ä¹ç¨®ä¹ç‰Œ
 	{
 		auto game = init_game({}, -1, 0, 0, { "m123459z1234567", "", "", "" });
 		game.zimo();
@@ -1053,7 +1053,7 @@ TEST(GameTest, reply_zimo) {
 		game.next();
 		EXPECT_EQ("yao9", game.get_pingju().name);
 	}
-	// ‹ãí‹ã”v(•s³‰“š)
+	// ä¹ç¨®ä¹ç‰Œ(ä¸æ­£å¿œç­”)
 	{
 		auto game = init_game({}, -1, 0, 0, { "m234567z1234567", "", "", "" });
 		game.zimo();
@@ -1061,17 +1061,17 @@ TEST(GameTest, reply_zimo) {
 		game.next();
 		EXPECT_EQ("dapai", game.status());
 	}
-	// “r’†—¬‹Ç‚È‚µ‚Ìê‡‚Í‹ãí‹ã”v‚É‚Å‚«‚È‚¢‚±‚Æ
+	// é€”ä¸­æµå±€ãªã—ã®å ´åˆã¯ä¹ç¨®ä¹ç‰Œã«ã§ããªã„ã“ã¨
 	{
 		Rule rule;
-		rule.abortiveDraw/*“r’†—¬‹Ç‚ ‚è*/ = false;
+		rule.abortiveDraw/*é€”ä¸­æµå±€ã‚ã‚Š*/ = false;
 		auto game = init_game(rule, -1, 0, 0, { "m123459z1234567", "", "", "" });
 		game.zimo();
 		set_reply(game, 0, "daopai", "-");
 		game.next();
 		EXPECT_EQ("dapai", game.status());
 	}
-	// ƒcƒ‚˜a—¹
+	// ãƒ„ãƒ¢å’Œäº†
 	{
 		auto game = init_game({}, -1, 0, 0, { "m123p456s789z1122", "", "", "" }, { "z1" });
 		game.zimo();
@@ -1079,7 +1079,7 @@ TEST(GameTest, reply_zimo) {
 		game.next();
 		EXPECT_EQ("hule", game.status());
 	}
-	// ƒcƒ‚˜a—¹(•s³‰“š)
+	// ãƒ„ãƒ¢å’Œäº†(ä¸æ­£å¿œç­”)
 	{
 		auto game = init_game({}, -1, 0, 0, { "m123p456s789z1122", "", "", "" }, { "z3" });
 		game.zimo();
@@ -1087,7 +1087,7 @@ TEST(GameTest, reply_zimo) {
 		game.next();
 		EXPECT_EQ("dapai", game.status());
 	}
-	// ƒJƒ“
+	// ã‚«ãƒ³
 	{
 		auto game = init_game({}, -1, 0, 0, { "m123p456z1122,s888+", "", "", "" }, { "s8" });
 		game.zimo();
@@ -1096,7 +1096,7 @@ TEST(GameTest, reply_zimo) {
 		EXPECT_EQ("gang", game.status());
 		EXPECT_EQ("s888+8", game.gang());
 	}
-	// ƒJƒ“(•s³‰“š)
+	// ã‚«ãƒ³(ä¸æ­£å¿œç­”)
 	{
 		auto game = init_game({}, -1, 0, 0, { "m123p456z1122,s888+", "", "", "" }, { "s7" });
 		game.zimo();
@@ -1104,7 +1104,7 @@ TEST(GameTest, reply_zimo) {
 		game.next();
 		EXPECT_EQ("dapai", game.status());
 	}
-	// 5‚Â‚ß‚ÌƒJƒ“‚ª‚Å‚«‚È‚¢‚±‚Æ
+	// 5ã¤ã‚ã®ã‚«ãƒ³ãŒã§ããªã„ã“ã¨
 	{
 		auto game = init_game({}, -1, 0, 0, { "m123p456z1122,s888+", "", "", "" }, { "s8" });
 		game.set_n_gang({ 0, 0, 0, 4 });
@@ -1113,7 +1113,7 @@ TEST(GameTest, reply_zimo) {
 		game.next();
 		EXPECT_EQ("dapai", game.status());
 	}
-	// –³‰“š‚Ì‚Æ‚«‚Éƒcƒ‚Ø‚è‚·‚é‚±‚Æ
+	// ç„¡å¿œç­”ã®ã¨ãã«ãƒ„ãƒ¢åˆ‡ã‚Šã™ã‚‹ã“ã¨
 	{
 		auto game = init_game({}, -1, 0, 0, {}, { "m1" });
 		game.zimo();
@@ -1122,7 +1122,7 @@ TEST(GameTest, reply_zimo) {
 		EXPECT_EQ("dapai", game.status());
 		EXPECT_EQ("m1_", game.dapai());
 	}
-	// Èƒcƒ‚
+	// æ§“ãƒ„ãƒ¢
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "", "", "" });
 		game.zimo();
@@ -1134,7 +1134,7 @@ TEST(GameTest, reply_zimo) {
 }
 
 TEST(GameTest, reply_dapai) {
-	// ‰“š‚È‚µ
+	// å¿œç­”ãªã—
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "", "", "" });
 		game.zimo();
@@ -1142,7 +1142,7 @@ TEST(GameTest, reply_dapai) {
 		game.next();
 		EXPECT_EQ("zimo", game.status());
 	}
-	// ƒƒ“˜a—¹
+	// ãƒ­ãƒ³å’Œäº†
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "m123p456s789z1122", "", "" });
 		game.zimo();
@@ -1152,7 +1152,7 @@ TEST(GameTest, reply_dapai) {
 		EXPECT_EQ("hule", game.status());
 		EXPECT_EQ(1, max_index(game.fenpei()));
 	}
-	// ˜a—¹Œ©“¦‚µ‚ÅƒtƒŠƒeƒ“‚É‚È‚é‚±‚Æ
+	// å’Œäº†è¦‹é€ƒã—ã§ãƒ•ãƒªãƒ†ãƒ³ã«ãªã‚‹ã“ã¨
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "m123p456s789z1122", "", "" });
 		game.zimo();
@@ -1160,7 +1160,7 @@ TEST(GameTest, reply_dapai) {
 		game.next();
 		EXPECT_FALSE(game.neng_rong(1));
 	}
-	// ƒ_ƒuƒƒ“
+	// ãƒ€ãƒ–ãƒ­ãƒ³
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "m23446p45688s345", "m34s33,s444-,s666+,p406-", "" });
 		game.zimo();
@@ -1171,10 +1171,10 @@ TEST(GameTest, reply_dapai) {
 		EXPECT_EQ(1, max_index(game.fenpei()));
 		EXPECT_EQ((std::vector<int>{2}), game.get_hule());
 	}
-	// ƒ_ƒuƒƒ“‚ğ“ªƒnƒl‚É•ÏX‚Å‚«‚é‚±‚Æ
+	// ãƒ€ãƒ–ãƒ­ãƒ³ã‚’é ­ãƒãƒã«å¤‰æ›´ã§ãã‚‹ã“ã¨
 	{
 		Rule rule;
-		rule.maxSimultaneousWinners/*Å‘å“¯˜a—¹”*/ = 1;
+		rule.maxSimultaneousWinners/*æœ€å¤§åŒæ™‚å’Œäº†æ•°*/ = 1;
 		auto game = init_game(rule, -1, 0, 0, { "_", "m23446p45688s345", "m34s33,s444-,s666+,p406-", "" });
 		game.zimo();
 		game.dapai("m5*");
@@ -1184,7 +1184,7 @@ TEST(GameTest, reply_dapai) {
 		EXPECT_EQ(1, max_index(game.fenpei()));
 		EXPECT_EQ((std::vector<int>{}), game.get_hule());
 	}
-	// O‰Æ˜a
+	// ä¸‰å®¶å’Œ
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "m23446p45688s345", "m34s33,s444-,s666+,p406-", "m23467s88,s222+,z666=" });
 		game.zimo();
@@ -1196,10 +1196,10 @@ TEST(GameTest, reply_dapai) {
 		EXPECT_EQ("ron3", game.get_pingju().name);
 		EXPECT_EQ((std::array<std::string, 4>{ "", "m23446p45688s345", "m34s33,s444-,s666+,p406-", "m23467s88,s222+,z666=" }), game.get_pingju().shoupai);
 	}
-	// ƒgƒŠƒƒ“‰Â‚É•ÏX‚Å‚«‚é‚±‚Æ
+	// ãƒˆãƒªãƒ­ãƒ³å¯ã«å¤‰æ›´ã§ãã‚‹ã“ã¨
 	{
 		Rule rule;
-		rule.maxSimultaneousWinners/*Å‘å“¯˜a—¹”*/ = 3;
+		rule.maxSimultaneousWinners/*æœ€å¤§åŒæ™‚å’Œäº†æ•°*/ = 3;
 		auto game = init_game(rule, -1, 0, 0, { "_", "m23446p45688s345", "m34s33,s444-,s666+,p406-", "m23467s88,s222+,z666=" });
 		game.zimo();
 		game.dapai("m5*");
@@ -1210,7 +1210,7 @@ TEST(GameTest, reply_dapai) {
 		EXPECT_EQ(1, max_index(game.fenpei()));
 		EXPECT_EQ((std::vector<int>{ 2, 3 }), game.get_hule());
 	}
-	// ƒŠ[ƒ`¬—§
+	// ãƒªãƒ¼ãƒæˆç«‹
 	{
 		auto game = init_game({}, 0, 0, 0, { "m55688p234567s06", "", "", "" }, { "s7" });
 		game.zimo();
@@ -1220,7 +1220,7 @@ TEST(GameTest, reply_dapai) {
 		EXPECT_EQ(1, game.model().lizhibang);
 		EXPECT_EQ("zimo", game.status());
 	}
-	// ƒŠ[ƒ`•s¬—§
+	// ãƒªãƒ¼ãƒä¸æˆç«‹
 	{
 		auto game = init_game({}, 0, 0, 0, { "m55688p234567s06", "m23446p45688s345", "", "" }, { "s7" });
 		game.zimo();
@@ -1231,7 +1231,7 @@ TEST(GameTest, reply_dapai) {
 		EXPECT_EQ(0, game.model().lizhibang);
 		EXPECT_EQ("hule", game.status());
 	}
-	// l‰Æ—§’¼
+	// å››å®¶ç«‹ç›´
 	{
 		auto game = init_game({}, 0, 0, 0, { "m11156p5688s2346", "m2227p11340s2356", "m2346789p345699", "m34056p4678s3456" }, { "p4","s1","m7","s6" });
 		for (const auto& p : { "s6*", "m7*", "p6*", "p4*" }) {
@@ -1242,10 +1242,10 @@ TEST(GameTest, reply_dapai) {
 		EXPECT_EQ("riichi4", game.get_pingju().name);
 		EXPECT_EQ((std::array<std::string, 4>{ "m11156p45688s234*", "m222p11340s12356*", "m23467789p34599*", "m34056p678s34566*" }), game.get_pingju().shoupai);
 	}
-	// “r’†—¬‹Ç‚È‚µ‚Ìê‡‚Íl‰Æ—§’¼‚Å‚à‘±s‚·‚é‚±‚Æ
+	// é€”ä¸­æµå±€ãªã—ã®å ´åˆã¯å››å®¶ç«‹ç›´ã§ã‚‚ç¶šè¡Œã™ã‚‹ã“ã¨
 	{
 		Rule rule;
-		rule.abortiveDraw/*“r’†—¬‹Ç‚ ‚è*/ = false;
+		rule.abortiveDraw/*é€”ä¸­æµå±€ã‚ã‚Š*/ = false;
 		auto game = init_game(rule, 0, 0, 0, { "m11156p5688s2346", "m2227p11340s2356", "m2346789p345699", "m34056p4678s3456" }, { "p4","s1","m7","s6" });
 		for (const auto& p : { "s6*", "m7*", "p6*", "p4*" }) {
 			game.zimo();
@@ -1254,7 +1254,7 @@ TEST(GameTest, reply_dapai) {
 		game.next();
 		EXPECT_EQ("zimo", game.status());
 	}
-	// l•—˜A‘Å
+	// å››é¢¨é€£æ‰“
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "_", "_", "_" });
 		for (int l = 0; l < 4; l++) {
@@ -1265,10 +1265,10 @@ TEST(GameTest, reply_dapai) {
 		EXPECT_EQ("kaze4", game.get_pingju().name);
 		EXPECT_EQ((std::array<std::string, 4>{ "", "", "", "" }), game.get_pingju().shoupai);
 	}
-	// “r’†—¬‹Ç‚È‚µ‚Ìê‡‚Íl•—˜A‘Å‚Æ‚È‚ç‚¸A‘æˆêƒcƒ‚„‚ªI—¹‚·‚é‚±‚Æ
+	// é€”ä¸­æµå±€ãªã—ã®å ´åˆã¯å››é¢¨é€£æ‰“ã¨ãªã‚‰ãšã€ç¬¬ä¸€ãƒ„ãƒ¢å·¡ãŒçµ‚äº†ã™ã‚‹ã“ã¨
 	{
 		Rule rule;
-		rule.abortiveDraw/*“r’†—¬‹Ç‚ ‚è*/ = false;
+		rule.abortiveDraw/*é€”ä¸­æµå±€ã‚ã‚Š*/ = false;
 		auto game = init_game(rule, -1, 0, 0, { "_", "_", "_", "_" });
 		for (int l = 0; l < 4; l++) {
 			game.zimo();
@@ -1278,7 +1278,7 @@ TEST(GameTest, reply_dapai) {
 		EXPECT_FALSE(game.diyizimo());
 		EXPECT_EQ("zimo", game.status());
 	}
-	 // lŠJÈ
+	 // å››é–‹æ§“
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "m111p22279s57,s333=", "m123p456s222789z2", "" }, { "m1" }, { "p2","s3","s2","z7" });
 		game.zimo();
@@ -1297,7 +1297,7 @@ TEST(GameTest, reply_dapai) {
 		EXPECT_EQ("kan4", game.get_pingju().name);
 		EXPECT_EQ((std::array<std::string, 4>{ "", "", "", "" }), game.get_pingju().shoupai);
 	}
-	// 1l‚ÅlŠJÈ
+	// 1äººã§å››é–‹æ§“
 	{
 		auto game = init_game({}, -1, 0, 0, { "m1112,p111+,s111=,z111-", "", "", "" }, { "m1" }, { "p1","s1","z1","z7" });
 		game.zimo();
@@ -1313,10 +1313,10 @@ TEST(GameTest, reply_dapai) {
 		game.next();
 		EXPECT_EQ("zimo", game.status());
 	}
-	// “r’†—¬‹Ç‚È‚µ‚Å‚ÍlŠJÈ‚Æ‚È‚ç‚È‚¢
+	// é€”ä¸­æµå±€ãªã—ã§ã¯å››é–‹æ§“ã¨ãªã‚‰ãªã„
 	{
 		Rule rule;
-		rule.abortiveDraw/*“r’†—¬‹Ç‚ ‚è*/ = false;
+		rule.abortiveDraw/*é€”ä¸­æµå±€ã‚ã‚Š*/ = false;
 		auto game = init_game(rule, -1, 0, 0, { "_", "m111p22279s57,s333=", "m123p456s222789z2", "" }, { "m1" }, { "p2","s3","s2","z7" });
 		game.zimo();
 		game.dapai("m1_");
@@ -1333,11 +1333,11 @@ TEST(GameTest, reply_dapai) {
 		game.next();
 		EXPECT_EQ("zimo", game.status());
 	}
-	// —¬‹Ç
+	// æµå±€
 	{
 		Rule rule;
-		rule.liujumanguan/*—¬‚µ–ŠÑ‚ ‚è*/ = false;
-		rule.notenDeclaration/*ƒm[ƒeƒ“éŒ¾‚ ‚è*/ = true;
+		rule.liujumanguan/*æµã—æº€è²«ã‚ã‚Š*/ = false;
+		rule.notenDeclaration/*ãƒãƒ¼ãƒ†ãƒ³å®£è¨€ã‚ã‚Š*/ = true;
 		auto game = init_game(rule, -1, 0, 0, { "_", "m222p11340s12356", "m23467789p34599", "_" });
 		game.zimo();
 		while (game.model().shan.paishu()) game.model().shan.zimo();
@@ -1348,7 +1348,7 @@ TEST(GameTest, reply_dapai) {
 		EXPECT_EQ("", game.get_pingju().name);
 		EXPECT_EQ((std::array<std::string, 4>{ "", "m222p11340s12356", "m23467789p34599", "" }), game.get_pingju().shoupai);
 	}
-	// ƒJƒ“
+	// ã‚«ãƒ³
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "", "", "m111234p567s3378" });
 		game.zimo();
@@ -1358,7 +1358,7 @@ TEST(GameTest, reply_dapai) {
 		EXPECT_EQ("fulou", game.status());
 		EXPECT_EQ("m1111+", game.fulou());
 	}
-	// ƒJƒ“(•s³‰“š)
+	// ã‚«ãƒ³(ä¸æ­£å¿œç­”)
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "", "", "m111234p567s3378" });
 		game.zimo();
@@ -1367,7 +1367,7 @@ TEST(GameTest, reply_dapai) {
 		game.next();
 		EXPECT_EQ("zimo", game.status());
 	}
-	// 5‚Â‚ß‚ÌƒJƒ“‚ª‚Å‚«‚È‚¢‚±‚Æ
+	// 5ã¤ã‚ã®ã‚«ãƒ³ãŒã§ããªã„ã“ã¨
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "", "", "m111234p567s3378" });
 		game.set_n_gang({ 4, 0, 0, 0 });
@@ -1377,7 +1377,7 @@ TEST(GameTest, reply_dapai) {
 		game.next();
 		EXPECT_EQ("zimo", game.status());
 	}
-	// ƒ|ƒ“
+	// ãƒãƒ³
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "", "m112345p567s3378", "" });
 		game.set_n_gang({ 4, 0, 0, 0 });
@@ -1388,7 +1388,7 @@ TEST(GameTest, reply_dapai) {
 		EXPECT_EQ("fulou", game.status());
 		EXPECT_EQ("m111=", game.fulou());
 	}
-	// ƒ|ƒ“(•s³‰“š)
+	// ãƒãƒ³(ä¸æ­£å¿œç­”)
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "", "m112345p567s3378", "" });
 		game.zimo();
@@ -1397,7 +1397,7 @@ TEST(GameTest, reply_dapai) {
 		game.next();
 		EXPECT_EQ("zimo", game.status());
 	}
-	// ƒ`[
+	// ãƒãƒ¼
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "m112345p567s3378", "", "" });
 		game.zimo();
@@ -1407,7 +1407,7 @@ TEST(GameTest, reply_dapai) {
 		EXPECT_EQ("fulou", game.status());
 		EXPECT_EQ("m456-", game.fulou());
 	}
-	// ƒ`[(•s³‰“š)
+	// ãƒãƒ¼(ä¸æ­£å¿œç­”)
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "m112345p567s3378", "", "" });
 		game.zimo();
@@ -1416,7 +1416,7 @@ TEST(GameTest, reply_dapai) {
 		game.next();
 		EXPECT_EQ("zimo", game.status());
 	}
-	// ƒ|ƒ“‚Æƒ`[‚Ì‹£‡‚Íƒ|ƒ“‚ğ—Dæ
+	// ãƒãƒ³ã¨ãƒãƒ¼ã®ç«¶åˆã¯ãƒãƒ³ã‚’å„ªå…ˆ
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "m23567p456s889z11", "m11789p123s11289", "" });
 		game.zimo();
@@ -1430,7 +1430,7 @@ TEST(GameTest, reply_dapai) {
 }
 
 TEST(GameTest, reply_fulou) {
-	// ‘å–¾È
+	// å¤§æ˜æ§“
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "m1112356p456s889", "", "" });
 		game.zimo();
@@ -1439,7 +1439,7 @@ TEST(GameTest, reply_fulou) {
 		game.next();
 		EXPECT_EQ("gangzimo", game.status());
 	}
-	// ƒ`[Eƒ|ƒ“ ¨ ‘Å”v
+	// ãƒãƒ¼ãƒ»ãƒãƒ³ â†’ æ‰“ç‰Œ
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "m23567p456s889z11", "", "" });
 		game.zimo();
@@ -1450,7 +1450,7 @@ TEST(GameTest, reply_fulou) {
 		EXPECT_EQ("dapai", game.status());
 		EXPECT_EQ("s9", game.dapai());
 	}
-	// ƒ`[Eƒ|ƒ“ ¨ ‘Å”v(•s³‰“š)
+	// ãƒãƒ¼ãƒ»ãƒãƒ³ â†’ æ‰“ç‰Œ(ä¸æ­£å¿œç­”)
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "m23456p456s889z11", "", "" });
 		game.zimo();
@@ -1461,7 +1461,7 @@ TEST(GameTest, reply_fulou) {
 		EXPECT_EQ("dapai", game.status());
 		EXPECT_EQ("z1", game.dapai());
 	}
-	// –³‰“š‚Ì‚Æ‚«‚É‰E’[‚Ì”v‚ğØ‚é‚±‚Æ
+	// ç„¡å¿œç­”ã®ã¨ãã«å³ç«¯ã®ç‰Œã‚’åˆ‡ã‚‹ã“ã¨
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "m23567p456s889z11", "", "" });
 		game.zimo();
@@ -1474,7 +1474,7 @@ TEST(GameTest, reply_fulou) {
 }
 
 TEST(GameTest, reply_gang) {
-	// ‰“š‚È‚µ
+	// å¿œç­”ãªã—
 	{
 		auto game = init_game({}, -1, 0, 0, { "m45p456s11789,m111+", "", "", "" }, { "m1" });
 		game.zimo();
@@ -1482,7 +1482,7 @@ TEST(GameTest, reply_gang) {
 		game.next();
 		EXPECT_EQ("gangzimo", game.status());
 	}
-	// ƒƒ“˜a—¹(‘„È)
+	// ãƒ­ãƒ³å’Œäº†(æ§æ§“)
 	{
 		auto game = init_game({}, -1, 0, 0, { "m45p456s11789,m111+", "", "", "m23456p123s67899" }, { "m1" });
 		game.zimo();
@@ -1492,7 +1492,7 @@ TEST(GameTest, reply_gang) {
 		EXPECT_EQ("hule", game.status());
 		EXPECT_EQ(3, max_index(game.fenpei()));
 	}
-	// ƒƒ“˜a—¹(•s³‰“š)
+	// ãƒ­ãƒ³å’Œäº†(ä¸æ­£å¿œç­”)
 	{
 		auto game = init_game({}, -1, 0, 0, { "m45p456s11789,m111+", "", "", "m33456p123s67899" }, { "m1" });
 		game.zimo();
@@ -1501,7 +1501,7 @@ TEST(GameTest, reply_gang) {
 		game.next();
 		EXPECT_EQ("gangzimo", game.status());
 	}
-	// ˆÃÈ‚Í‘„È‚Å‚«‚È‚¢
+	// æš—æ§“ã¯æ§æ§“ã§ããªã„
 	{
 		auto game = init_game({}, -1, 0, 0, { "m11145p456s11789", "", "", "m23456p123s67899" }, { "m1" });
 		game.zimo();
@@ -1510,7 +1510,7 @@ TEST(GameTest, reply_gang) {
 		game.next();
 		EXPECT_EQ("gangzimo", game.status());
 	}
-	// ˜a—¹Œ©“¦‚µ‚ÅƒtƒŠƒeƒ“‚É‚È‚é‚±‚Æ
+	// å’Œäº†è¦‹é€ƒã—ã§ãƒ•ãƒªãƒ†ãƒ³ã«ãªã‚‹ã“ã¨
 	{
 		auto game = init_game({}, -1, 0, 0, { "m45p456s11789,m111+", "", "", "m23456p123s67899" }, { "m1" });
 		game.zimo();
@@ -1518,7 +1518,7 @@ TEST(GameTest, reply_gang) {
 		game.next();
 		EXPECT_FALSE(game.neng_rong(3));
 	}
-	// ƒ_ƒuƒƒ“
+	// ãƒ€ãƒ–ãƒ­ãƒ³
 	{
 		auto game = init_game({}, -1, 0, 0, { "m11p222s88,z666=,m505-", "m23446p45688s345", "m34s33,s444-,s666+,p406-", "" }, { "m5" });
 		game.zimo();
@@ -1530,10 +1530,10 @@ TEST(GameTest, reply_gang) {
 		EXPECT_EQ(1, max_index(game.fenpei()));
 		EXPECT_EQ((std::vector<int>{2}), game.get_hule());
 	}
-	// ƒ_ƒuƒƒ“‚ğ“ªƒnƒl‚É•ÏX‚Å‚«‚é‚±‚Æ
+	// ãƒ€ãƒ–ãƒ­ãƒ³ã‚’é ­ãƒãƒã«å¤‰æ›´ã§ãã‚‹ã“ã¨
 	{
 		Rule rule;
-		rule.maxSimultaneousWinners/*Å‘å“¯˜a—¹”*/ = 1;
+		rule.maxSimultaneousWinners/*æœ€å¤§åŒæ™‚å’Œäº†æ•°*/ = 1;
 		auto game = init_game(rule, -1, 0, 0, { "m11p222s88,z666=,m505-", "m23446p45688s345", "m34s33,s444-,s666+,p406-", "" }, { "m5" });
 		game.zimo();
 		game.gang("m505-5");
@@ -1547,7 +1547,7 @@ TEST(GameTest, reply_gang) {
 }
 
 TEST(GameTest, reply_hule) {
-	// e‚Ìƒcƒ‚˜a—¹
+	// è¦ªã®ãƒ„ãƒ¢å’Œäº†
 	{
 		auto game = init_game({}, 0, 1, 1, { "m345567p111s3368", "", "", "" }, { "s7" }, {}, { "p2" }, { 25000, 25000, 25000, 24000 });
 		game.set_diyizimo(false);
@@ -1560,7 +1560,7 @@ TEST(GameTest, reply_hule) {
 		EXPECT_EQ(0, game.model().lizhibang);
 		EXPECT_EQ("qipai", game.status());
 	}
-	// q‚Ìƒƒ“˜a—¹
+	// å­ã®ãƒ­ãƒ³å’Œäº†
 	{
 		auto game = init_game({}, 0, 1, 1, { "_", "m345567p111s66z11", "", "" }, { "s7" }, {}, { "p2" }, { 25000, 25000, 25000, 24000 });
 		game.zimo();
@@ -1573,7 +1573,7 @@ TEST(GameTest, reply_hule) {
 		EXPECT_EQ(0, game.model().lizhibang);
 		EXPECT_EQ("qipai", game.status());
 	}
-	// ƒ_ƒuƒƒ“‚Å˜A‘‘
+	// ãƒ€ãƒ–ãƒ­ãƒ³ã§é€£è˜
 	{
 		auto game = init_game({}, 0, 1, 1, { "m23p456s789z11122", "_", "m23p789s546z33344", "" }, { "m2", "m1"}, {}, {"s9"}, { 25000, 25000, 25000, 24000 });
 		game.zimo();
@@ -1596,7 +1596,7 @@ TEST(GameTest, reply_hule) {
 }
 
 TEST(GameTest, reply_pingju) {
-	// —¬‹Ç
+	// æµå±€
 	{
 		auto game = init_game({}, 0, 1, 1, { "m123p456s789z1122", "_", "_", "_" }, { "m2", "m3", "m4", "m5" }, {}, {}, { 25000, 25000, 25000, 24000 });
 		for (const auto& p : { "m2", "m3", "m4", "m5" }) {
@@ -1613,16 +1613,16 @@ TEST(GameTest, reply_pingju) {
 }
 
 TEST(GameTest, get_dapai) {
-	// Œ»İ‚Ìè”Ô‚Ì‰Â”\‚È‘Å”v‚ğ•Ô‚·‚±‚Æ
+	// ç¾åœ¨ã®æ‰‹ç•ªã®å¯èƒ½ãªæ‰“ç‰Œã‚’è¿”ã™ã“ã¨
 	{
 		auto game = init_game({}, -1, 0, 0, { "m123,z111+,z222=,z333-", "", "", "" }, { "m1" });
 		game.zimo();
 		EXPECT_EQ((std::vector<std::string>{ "m1", "m2", "m3", "m1_" }), game.get_dapai());
 	}
-	// Œ»•¨‹ò‚¢‘Ö‚¦‚ ‚è‚É•ÏX‚Å‚«‚é‚±‚Æ
+	// ç¾ç‰©å–°ã„æ›¿ãˆã‚ã‚Šã«å¤‰æ›´ã§ãã‚‹ã“ã¨
 	{
 		Rule rule;
-		rule.canChangePermissionLevel/*‹ò‚¢‘Ö‚¦‹–‰ÂƒŒƒxƒ‹*/ = 2;
+		rule.canChangePermissionLevel/*å–°ã„æ›¿ãˆè¨±å¯ãƒ¬ãƒ™ãƒ«*/ = 2;
 		auto game = init_game(rule, -1, 0, 0, { "_", "m1234p567,z111=,s789-", "", "" });
 		game.zimo();
 		game.dapai("m1");
@@ -1632,7 +1632,7 @@ TEST(GameTest, get_dapai) {
 }
 
 TEST(GameTest, get_chi_mianzi) {
-	// Œ»İ‘Å‚½‚ê‚½”v‚Åƒ`[‚Å‚«‚é–Êq‚ğ•Ô‚·‚±‚Æ
+	// ç¾åœ¨æ‰“ãŸã‚ŒãŸç‰Œã§ãƒãƒ¼ã§ãã‚‹é¢å­ã‚’è¿”ã™ã“ã¨
 	{
 		auto game = init_game({}, -1, 0, 0, { "", "_", "m1234p456s789z111", "" });
 		game.zimo();
@@ -1641,21 +1641,21 @@ TEST(GameTest, get_chi_mianzi) {
 		game.dapai("m2");
 		EXPECT_EQ((std::vector<std::string>{ "m12-3", "m2-34" }), game.get_chi_mianzi(2));
 	}
-	// ©g‚Íƒ`[‚Å‚«‚È‚¢‚±‚Æ
+	// è‡ªèº«ã¯ãƒãƒ¼ã§ããªã„ã“ã¨
 	{
 		auto game = init_game({}, -1, 0, 0, { "m1234p456s789z111", "", "", "" });
 		game.zimo();
 		game.dapai(game.get_dapai().back());
 		EXPECT_THROW(game.get_chi_mianzi(0), std::invalid_argument);
 	}
-	// ‘Î–Ê‚Íƒ`[‚Å‚«‚È‚¢‚±‚Æ
+	// å¯¾é¢ã¯ãƒãƒ¼ã§ããªã„ã“ã¨
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "", "m1234p456s789z111", "" });
 		game.zimo();
 		game.dapai("m2");
 		EXPECT_EQ((std::vector<std::string>{}), game.get_chi_mianzi(2));
 	}
-	// ƒnƒCƒeƒC”v‚Íƒ`[‚Å‚«‚È‚¢‚±‚Æ
+	// ãƒã‚¤ãƒ†ã‚¤ç‰Œã¯ãƒãƒ¼ã§ããªã„ã“ã¨
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "m1234p456s789z111", "", "" });
 		game.zimo();
@@ -1663,10 +1663,10 @@ TEST(GameTest, get_chi_mianzi) {
 		game.dapai("m2");
 		EXPECT_EQ((std::vector<std::string>{}), game.get_chi_mianzi(1));
 	}
-	// Œ»•¨‹ò‚¢‘Ö‚¦‚ ‚è‚É•ÏX‚Å‚«‚é‚±‚Æ
+	// ç¾ç‰©å–°ã„æ›¿ãˆã‚ã‚Šã«å¤‰æ›´ã§ãã‚‹ã“ã¨
 	{
 		Rule rule;
-		rule.canChangePermissionLevel/*‹ò‚¢‘Ö‚¦‹–‰ÂƒŒƒxƒ‹*/ = 2;
+		rule.canChangePermissionLevel/*å–°ã„æ›¿ãˆè¨±å¯ãƒ¬ãƒ™ãƒ«*/ = 2;
 		auto game = init_game(rule, -1, 0, 0, { "_", "m1123,p456-,z111=,s789-", "", "" });
 		game.zimo();
 		game.dapai("m1");
@@ -1675,7 +1675,7 @@ TEST(GameTest, get_chi_mianzi) {
 }
 
 TEST(GameTest, get_peng_mianzi) {
-	// Œ»İ‘Å‚½‚ê‚½”v‚Åƒ|ƒ“‚Å‚«‚é–Êq‚ğ•Ô‚·‚±‚Æ
+	// ç¾åœ¨æ‰“ãŸã‚ŒãŸç‰Œã§ãƒãƒ³ã§ãã‚‹é¢å­ã‚’è¿”ã™ã“ã¨
 	{
 		auto game = init_game({}, -1, 0, 0, { "", "_", "", "m1123p456s789z111" });
 		game.zimo();
@@ -1684,14 +1684,14 @@ TEST(GameTest, get_peng_mianzi) {
 		game.dapai("m1");
 		EXPECT_EQ((std::vector<std::string>{ "m111=" }), game.get_peng_mianzi(3));
 	}
-	// ©g‚Íƒ|ƒ“‚Å‚«‚È‚¢‚±‚Æ
+	// è‡ªèº«ã¯ãƒãƒ³ã§ããªã„ã“ã¨
 	{
 		auto game = init_game({}, -1, 0, 0, { "m1123p456s789z111", "", "", "" });
 		game.zimo();
 		game.dapai(game.get_dapai().back());
 		EXPECT_THROW(game.get_peng_mianzi(0), std::invalid_argument);
 	}
-	// ƒnƒCƒeƒC”v‚Íƒ|ƒ“‚Å‚«‚È‚¢‚±‚Æ
+	// ãƒã‚¤ãƒ†ã‚¤ç‰Œã¯ãƒãƒ³ã§ããªã„ã“ã¨
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "m1123p456s789z111", "", "" });
 		game.zimo();
@@ -1702,7 +1702,7 @@ TEST(GameTest, get_peng_mianzi) {
 }
 
 TEST(GameTest, get_gang_mianzi) {
-	// Œ»İ‘Å‚½‚ê‚½”v‚Å‘å–¾È‚Å‚«‚é–Êq‚ğ•Ô‚·‚±‚Æ
+	// ç¾åœ¨æ‰“ãŸã‚ŒãŸç‰Œã§å¤§æ˜æ§“ã§ãã‚‹é¢å­ã‚’è¿”ã™ã“ã¨
 	{
 		auto game = init_game({}, -1, 0, 0, { "", "_", "", "m1112p456s789z111" });
 		game.zimo();
@@ -1711,14 +1711,14 @@ TEST(GameTest, get_gang_mianzi) {
 		game.dapai("m1");
 		EXPECT_EQ((std::vector<std::string>{ "m1111=" }), game.get_gang_mianzi(3));
 	}
-	// ©g‚Í‘å–¾È‚Å‚«‚È‚¢‚±‚Æ
+	// è‡ªèº«ã¯å¤§æ˜æ§“ã§ããªã„ã“ã¨
 	{
 		auto game = init_game({}, -1, 0, 0, { "m1112p456s789z111", "", "", "" });
 		game.zimo();
 		game.dapai(game.get_dapai().back());
 		EXPECT_THROW(game.get_gang_mianzi(0), std::invalid_argument);
 	}
-	// ƒnƒCƒeƒC”v‚Í‘å–¾È‚Å‚«‚È‚¢‚±‚Æ
+	// ãƒã‚¤ãƒ†ã‚¤ç‰Œã¯å¤§æ˜æ§“ã§ããªã„ã“ã¨
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "m1112p456s789z111", "", "" });
 		game.zimo();
@@ -1726,13 +1726,13 @@ TEST(GameTest, get_gang_mianzi) {
 		game.dapai("m1");
 		EXPECT_EQ((std::vector<std::string>{}), game.get_gang_mianzi(2));
 	}
-	// Œ»İ‚Ìè”Ô‚ªˆÃÈ‚à‚µ‚­‚Í‰ÁÈ‚Å‚«‚é–Êq‚ğ•Ô‚·‚±‚Æ
+	// ç¾åœ¨ã®æ‰‹ç•ªãŒæš—æ§“ã‚‚ã—ãã¯åŠ æ§“ã§ãã‚‹é¢å­ã‚’è¿”ã™ã“ã¨
 	{
 		auto game = init_game({}, -1, 0, 0, { "m1111p4569s78,z111=", "", "", "" }, {"z1"});
 		game.zimo();
 		EXPECT_EQ((std::vector<std::string>{ "m1111", "z111=1" }), game.get_gang_mianzi());
 	}
-	// ƒnƒCƒeƒC”v‚ÍˆÃÈ‚à‚µ‚­‚Í‰ÁÈ‚Å‚«‚È‚¢‚±‚Æ
+	// ãƒã‚¤ãƒ†ã‚¤ç‰Œã¯æš—æ§“ã‚‚ã—ãã¯åŠ æ§“ã§ããªã„ã“ã¨
 	{
 		auto game = init_game({}, -1, 0, 0, { "m1111p4567s78,z111=", "", "", "" }, { "z1" });
 		game.zimo();
@@ -1740,10 +1740,10 @@ TEST(GameTest, get_gang_mianzi) {
 		game.dapai("m1");
 		EXPECT_EQ((std::vector<std::string>{}), game.get_gang_mianzi(2));
 	}
-	// ƒŠ[ƒ`Œã‚ÌˆÃÈ‚È‚µ‚É•ÏX‚Å‚«‚é‚±‚Æ
+	// ãƒªãƒ¼ãƒå¾Œã®æš—æ§“ãªã—ã«å¤‰æ›´ã§ãã‚‹ã“ã¨
 	{
 		Rule rule;
-		rule.lizhiPostClosedGangPermissionLevel/*ƒŠ[ƒ`ŒãˆÃÈ‹–‰ÂƒŒƒxƒ‹*/ = 0;
+		rule.lizhiPostClosedGangPermissionLevel/*ãƒªãƒ¼ãƒå¾Œæš—æ§“è¨±å¯ãƒ¬ãƒ™ãƒ«*/ = 0;
 		auto game = init_game(rule, -1, 0, 0, { "m111p456s789z1122*", "", "", "" }, { "m1" });
 		game.zimo();
 		EXPECT_EQ((std::vector<std::string>{}), game.get_gang_mianzi());
@@ -1751,38 +1751,38 @@ TEST(GameTest, get_gang_mianzi) {
 }
 
 TEST(GameTest, allow_lizhi) {
-	// w’è‚³‚ê‚½‘Å”v‚ÅƒŠ[ƒ`‰Â”\‚Èê‡A^‚ğ•Ô‚·
+	// æŒ‡å®šã•ã‚ŒãŸæ‰“ç‰Œã§ãƒªãƒ¼ãƒå¯èƒ½ãªå ´åˆã€çœŸã‚’è¿”ã™
 	{
 		auto game = init_game({}, -1, 0, 0, { "m123p456s789z1123", "", "", "" }, { "z2" });
 		game.zimo();
 		EXPECT_TRUE(game.allow_lizhi("z3*"));
 	}
-	// ƒcƒ‚”Ô‚ª‚È‚¢ê‡AƒŠ[ƒ`‚Å‚«‚È‚¢
+	// ãƒ„ãƒ¢ç•ªãŒãªã„å ´åˆã€ãƒªãƒ¼ãƒã§ããªã„
 	{
 		auto game = init_game({}, -1, 0, 0, { "m123p456s789z1123", "", "", "" }, { "z2" });
 		game.zimo();
 		while (game.model().shan.paishu() >= 4) game.model().shan.zimo();
 		EXPECT_FALSE(game.allow_lizhi("z3*"));
 	}
-	// ‚¿“_‚ª1000“_‚É–‚½‚È‚¢ê‡AƒŠ[ƒ`‚Å‚«‚È‚¢
+	// æŒã¡ç‚¹ãŒ1000ç‚¹ã«æº€ãŸãªã„å ´åˆã€ãƒªãƒ¼ãƒã§ããªã„
 	{
 		auto game = init_game({}, -1, 0, 0, { "m123p456s789z1123", "", "", "" }, { "z2" }, {}, {}, { 900, 19100, 45000, 35000 });
 		game.zimo();
 		EXPECT_FALSE(game.allow_lizhi("z3*"));
 	}
-	// ƒcƒ‚”Ô‚È‚µ‚Å‚àƒŠ[ƒ`‚Å‚«‚é‚æ‚¤‚É•ÏX‚Å‚«‚é‚±‚Æ
+	// ãƒ„ãƒ¢ç•ªãªã—ã§ã‚‚ãƒªãƒ¼ãƒã§ãã‚‹ã‚ˆã†ã«å¤‰æ›´ã§ãã‚‹ã“ã¨
 	{
 		Rule rule;
-		rule.lizhiWithoutTsumoBonus/*ƒcƒ‚”Ô‚È‚µƒŠ[ƒ`‚ ‚è*/ = true;
+		rule.lizhiWithoutTsumoBonus/*ãƒ„ãƒ¢ç•ªãªã—ãƒªãƒ¼ãƒã‚ã‚Š*/ = true;
 		auto game = init_game(rule, -1, 0, 0, { "m123p456s789z1123", "", "", "" }, { "z2" });
 		game.zimo();
 		while (game.model().shan.paishu() >= 4) game.model().shan.zimo();
 		EXPECT_TRUE(game.allow_lizhi("z3*"));
 	}
-	// ‚¿“_‚ª1000“_‚É–‚½‚È‚­‚Ä‚àƒŠ[ƒ`‚Å‚«‚é‚æ‚¤‚É•ÏX‚Å‚«‚é‚±‚Æ
+	// æŒã¡ç‚¹ãŒ1000ç‚¹ã«æº€ãŸãªãã¦ã‚‚ãƒªãƒ¼ãƒã§ãã‚‹ã‚ˆã†ã«å¤‰æ›´ã§ãã‚‹ã“ã¨
 	{
 		Rule rule;
-		rule.bankruptcyEndAll/*ƒgƒrI—¹‚ ‚è*/ = false;
+		rule.bankruptcyEndAll/*ãƒˆãƒ“çµ‚äº†ã‚ã‚Š*/ = false;
 		auto game = init_game(rule, -1, 0, 0, { "m123p456s789z1123", "", "", "" }, { "z2" }, {}, {}, { 900, 19100, 45000, 35000 });
 		game.zimo();
 		EXPECT_TRUE(game.allow_lizhi("z3*"));
@@ -1790,19 +1790,19 @@ TEST(GameTest, allow_lizhi) {
 }
 
 TEST(GameTest, allow_hule) {
-	// ƒcƒ‚˜a—¹
+	// ãƒ„ãƒ¢å’Œäº†
 	{
 		auto game = init_game({}, -1, 0, 0, { "m123p456s789z3344", "", "", "" }, { "z4" });
 		game.zimo();
 		EXPECT_TRUE(game.allow_hule());
 	}
-	// ƒŠ[ƒ`Eƒcƒ‚
+	// ãƒªãƒ¼ãƒãƒ»ãƒ„ãƒ¢
 	{
 		auto game = init_game({}, -1, 0, 0, { "m123p456s789z4*,z333=", "", "", "" }, { "z4" });
 		game.zimo();
 		EXPECT_TRUE(game.allow_hule());
 	}
-	// —äãŠJ‰Ô
+	// å¶ºä¸Šé–‹èŠ±
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "", "m123p456s789z3334", "" }, {}, { "z4" });
 		game.zimo();
@@ -1811,14 +1811,14 @@ TEST(GameTest, allow_hule) {
 		game.gangzimo();
 		EXPECT_TRUE(game.allow_hule());
 	}
-	// ƒnƒCƒeƒCEƒcƒ‚
+	// ãƒã‚¤ãƒ†ã‚¤ãƒ»ãƒ„ãƒ¢
 	{
 		auto game = init_game({}, -1, 0, 0, { "m123p456s789z4,z333=", "", "", "" }, { "z4" });
 		game.zimo();
 		while (game.model().shan.paishu()) game.model().shan.zimo();
 		EXPECT_TRUE(game.allow_hule());
 	}
-	// ê•—‚Ì‚İEƒcƒ‚
+	// å ´é¢¨ã®ã¿ãƒ»ãƒ„ãƒ¢
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "m123p456s789z4,z111=", "", "" }, { "m1", "z4" });
 		game.zimo();
@@ -1826,7 +1826,7 @@ TEST(GameTest, allow_hule) {
 		game.zimo();
 		EXPECT_TRUE(game.allow_hule());
 	}
-	// ©•—‚Ì‚İEƒcƒ‚
+	// è‡ªé¢¨ã®ã¿ãƒ»ãƒ„ãƒ¢
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "m123p456s789z4,z222=", "", "" }, { "m1", "z4" });
 		game.zimo();
@@ -1834,21 +1834,21 @@ TEST(GameTest, allow_hule) {
 		game.zimo();
 		EXPECT_TRUE(game.allow_hule());
 	}
-	// ƒŠ[ƒ`Eƒƒ“
+	// ãƒªãƒ¼ãƒãƒ»ãƒ­ãƒ³
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "m123p456s789z3334*", "", "" });
 		game.zimo();
 		game.dapai("z4");
 		EXPECT_TRUE(game.allow_hule(1));
 	}
-	// ‘„È
+	// æ§æ§“
 	{
 		auto game = init_game({}, -1, 0, 0, { "m1234p567s789,m111=", "", "m23p123567s12377", "" });
 		game.zimo();
 		game.gang("m111=1");
 		EXPECT_TRUE(game.allow_hule(2));
 	}
-	// ƒnƒCƒeƒCEƒƒ“
+	// ãƒã‚¤ãƒ†ã‚¤ãƒ»ãƒ­ãƒ³
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "", "", "m123p456s789z4,z333=" });
 		game.zimo();
@@ -1856,21 +1856,21 @@ TEST(GameTest, allow_hule) {
 		game.dapai("z4");
 		EXPECT_TRUE(game.allow_hule(3));
 	}
-	// ê•—‚Ì‚İEƒƒ“
+	// å ´é¢¨ã®ã¿ãƒ»ãƒ­ãƒ³
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "m123p456s789z4,z111=", "", "" });
 		game.zimo();
 		game.dapai("z4");
 		EXPECT_TRUE(game.allow_hule(1));
 	}
-	// ©•—‚Ì‚İEƒƒ“
+	// è‡ªé¢¨ã®ã¿ãƒ»ãƒ­ãƒ³
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "m123p456s789z4,z222=", "", "" });
 		game.zimo();
 		game.dapai("z4");
 		EXPECT_TRUE(game.allow_hule(1));
 	}
-	// ƒtƒŠƒeƒ“‚Íƒƒ“˜a—¹‚Å‚«‚È‚¢‚±‚Æ
+	// ãƒ•ãƒªãƒ†ãƒ³ã¯ãƒ­ãƒ³å’Œäº†ã§ããªã„ã“ã¨
 	{
 		auto game = init_game({}, -1, 0, 0, { "m123p456s789z3344", "", "", "" }, { "z4", "z3" });
 		game.zimo();
@@ -1879,10 +1879,10 @@ TEST(GameTest, allow_hule) {
 		game.dapai("z3");
 		EXPECT_FALSE(game.allow_hule(0));
 	}
-	// ƒNƒCƒ^ƒ“‚È‚µ‚É‚Å‚«‚é‚±‚Æ
+	// ã‚¯ã‚¤ã‚¿ãƒ³ãªã—ã«ã§ãã‚‹ã“ã¨
 	{
 		Rule rule;
-		rule.canduan/*ƒNƒCƒ^ƒ“‚ ‚è*/ = false;
+		rule.canduan/*ã‚¯ã‚¤ã‚¿ãƒ³ã‚ã‚Š*/ = false;
 		auto game = init_game({}, -1, 0, 0, { "_", "m234p567s2244,m888-", "", "" });
 		game.zimo();
 		game.dapai("s4");
@@ -1891,13 +1891,13 @@ TEST(GameTest, allow_hule) {
 }
 
 TEST(GameTest, allow_pingju) {
-	// ‹ãí‹ã”v
+	// ä¹ç¨®ä¹ç‰Œ
 	{
 		auto game = init_game({}, -1, 0, 0, { "m123459z1234567", "", "", "" });
 		game.zimo();
 		EXPECT_TRUE(game.allow_pingju());
 	}
-	// ‘æˆêƒcƒ‚ˆÈ~‚Í‹ãí‹ã”v‚É‚È‚ç‚È‚¢
+	// ç¬¬ä¸€ãƒ„ãƒ¢ä»¥é™ã¯ä¹ç¨®ä¹ç‰Œã«ãªã‚‰ãªã„
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "_", "m123459z1234567", "" });
 		game.zimo();
@@ -1907,10 +1907,10 @@ TEST(GameTest, allow_pingju) {
 		game.zimo();
 		EXPECT_FALSE(game.allow_pingju());
 	}
-	// “r’†—¬‹Ç‚È‚µ‚Ìê‡‚Í‹ãí‹ã”v‚É‚Å‚«‚È‚¢
+	// é€”ä¸­æµå±€ãªã—ã®å ´åˆã¯ä¹ç¨®ä¹ç‰Œã«ã§ããªã„
 	{
 		Rule rule;
-		rule.abortiveDraw/*“r’†—¬‹Ç‚ ‚è*/ = false;
+		rule.abortiveDraw/*é€”ä¸­æµå±€ã‚ã‚Š*/ = false;
 		auto game = init_game(rule, -1, 0, 0, { "m123459z1234567", "", "", "" });
 		game.zimo();
 		EXPECT_FALSE(game.allow_pingju());
@@ -1921,22 +1921,22 @@ TEST(GameTest, static_get_dapai) {
 	Shoupai shoupai("m5678p567,z111=,s789-");
 	shoupai.fulou("m0-67");
 
-	// ‹ò‚¢‘Ö‚¦‚È‚µ
+	// å–°ã„æ›¿ãˆãªã—
 	{
 		Rule rule;
-		rule.canChangePermissionLevel/*‹ò‚¢‘Ö‚¦‹–‰ÂƒŒƒxƒ‹*/ = 0;
+		rule.canChangePermissionLevel/*å–°ã„æ›¿ãˆè¨±å¯ãƒ¬ãƒ™ãƒ«*/ = 0;
 		EXPECT_EQ((std::vector<std::string>{ "p5", "p6", "p7" }), Game::get_dapai(rule, shoupai));
 	}
-	// Œ»•¨ˆÈŠO‚Ì‹ò‚¢‘Ö‚¦‚ ‚è
+	// ç¾ç‰©ä»¥å¤–ã®å–°ã„æ›¿ãˆã‚ã‚Š
 	{
 		Rule rule;
-		rule.canChangePermissionLevel/*‹ò‚¢‘Ö‚¦‹–‰ÂƒŒƒxƒ‹*/ = 1;
+		rule.canChangePermissionLevel/*å–°ã„æ›¿ãˆè¨±å¯ãƒ¬ãƒ™ãƒ«*/ = 1;
 		EXPECT_EQ((std::vector<std::string>{ "m8", "p5", "p6", "p7" }), Game::get_dapai(rule, shoupai));
 	}
-	// Œ»•¨‹ò‚¢‘Ö‚¦‚à‚ ‚è
+	// ç¾ç‰©å–°ã„æ›¿ãˆã‚‚ã‚ã‚Š
 	{
 		Rule rule;
-		rule.canChangePermissionLevel/*‹ò‚¢‘Ö‚¦‹–‰ÂƒŒƒxƒ‹*/ = 2;
+		rule.canChangePermissionLevel/*å–°ã„æ›¿ãˆè¨±å¯ãƒ¬ãƒ™ãƒ«*/ = 2;
 		EXPECT_EQ((std::vector<std::string>{ "m5", "m8", "p5", "p6", "p7" }), Game::get_dapai(rule, shoupai));
 	}
 }
@@ -1945,34 +1945,34 @@ TEST(GameTest, static_get_chi_mianzi) {
 	Shoupai shoupai1("m1234,p456-,z111=,s789-");
 	Shoupai shoupai2("m1123,p456-,z111=,s789-");
 
-	// ‹ò‚¢‘Ö‚¦‚È‚µ
+	// å–°ã„æ›¿ãˆãªã—
 	{
 		Rule rule;
-		rule.canChangePermissionLevel/*‹ò‚¢‘Ö‚¦‹–‰ÂƒŒƒxƒ‹*/ = 0;
+		rule.canChangePermissionLevel/*å–°ã„æ›¿ãˆè¨±å¯ãƒ¬ãƒ™ãƒ«*/ = 0;
 		EXPECT_EQ((std::vector<std::string>{}), Game::get_chi_mianzi(rule, shoupai1, "m1-", 1));
 		EXPECT_EQ((std::vector<std::string>{}), Game::get_chi_mianzi(rule, shoupai2, "m1-", 1));
 	}
-	// Œ»•¨ˆÈŠO‚Ì‹ò‚¢‘Ö‚¦‚ ‚è
+	// ç¾ç‰©ä»¥å¤–ã®å–°ã„æ›¿ãˆã‚ã‚Š
 	{
 		Rule rule;
-		rule.canChangePermissionLevel/*‹ò‚¢‘Ö‚¦‹–‰ÂƒŒƒxƒ‹*/ = 1;
+		rule.canChangePermissionLevel/*å–°ã„æ›¿ãˆè¨±å¯ãƒ¬ãƒ™ãƒ«*/ = 1;
 		EXPECT_EQ((std::vector<std::string>{ "m1-23" }), Game::get_chi_mianzi(rule, shoupai1, "m1-", 1));
 		EXPECT_EQ((std::vector<std::string>{}), Game::get_chi_mianzi(rule, shoupai2, "m1-", 1));
 	}
-	// Œ»•¨‹ò‚¢‘Ö‚¦‚à‚ ‚è
+	// ç¾ç‰©å–°ã„æ›¿ãˆã‚‚ã‚ã‚Š
 	{
 		Rule rule;
-		rule.canChangePermissionLevel/*‹ò‚¢‘Ö‚¦‹–‰ÂƒŒƒxƒ‹*/ = 2;
+		rule.canChangePermissionLevel/*å–°ã„æ›¿ãˆè¨±å¯ãƒ¬ãƒ™ãƒ«*/ = 2;
 		EXPECT_EQ((std::vector<std::string>{ "m1-23" }), Game::get_chi_mianzi(rule, shoupai1, "m1-", 1));
 		EXPECT_EQ((std::vector<std::string>{ "m1-23" }), Game::get_chi_mianzi(rule, shoupai2, "m1-", 1));
 	}
-	// ƒnƒCƒeƒC‚Í–Â‚¯‚È‚¢
+	// ãƒã‚¤ãƒ†ã‚¤ã¯é³´ã‘ãªã„
 	{
 		Rule rule;
-		rule.canChangePermissionLevel/*‹ò‚¢‘Ö‚¦‹–‰ÂƒŒƒxƒ‹*/ = 2;
+		rule.canChangePermissionLevel/*å–°ã„æ›¿ãˆè¨±å¯ãƒ¬ãƒ™ãƒ«*/ = 2;
 		EXPECT_EQ((std::vector<std::string>{}), Game::get_chi_mianzi(rule, shoupai1, "m1-", 0));
 	}
-	// ƒcƒ‚‚µ‚½ó‘Ô‚Åƒ`[‚Å‚«‚È‚¢
+	// ãƒ„ãƒ¢ã—ãŸçŠ¶æ…‹ã§ãƒãƒ¼ã§ããªã„
 	{
 		EXPECT_EQ((std::vector<std::string>{}), Game::get_chi_mianzi({}, shoupai1, "s3-", 1));
 	}
@@ -1981,19 +1981,19 @@ TEST(GameTest, static_get_chi_mianzi) {
 TEST(GameTest, static_get_peng_mianzi) {
 	Shoupai shoupai("m1112,p456-,z111=,s789-");
 
-	// ‹ò‚¢‘Ö‚¦‚Ì‚½‚ß‚Éƒ|ƒ“‚Å‚«‚È‚¢ƒP[ƒX‚Í‚È‚¢
+	// å–°ã„æ›¿ãˆã®ãŸã‚ã«ãƒãƒ³ã§ããªã„ã‚±ãƒ¼ã‚¹ã¯ãªã„
 	{
 		Rule rule;
-		rule.canChangePermissionLevel/*‹ò‚¢‘Ö‚¦‹–‰ÂƒŒƒxƒ‹*/ = 0;
+		rule.canChangePermissionLevel/*å–°ã„æ›¿ãˆè¨±å¯ãƒ¬ãƒ™ãƒ«*/ = 0;
 		EXPECT_EQ((std::vector<std::string>{ "m111+" }), Game::get_peng_mianzi(rule, shoupai, "m1+", 1));
 	}
-	// ƒnƒCƒeƒC‚Í–Â‚¯‚È‚¢
+	// ãƒã‚¤ãƒ†ã‚¤ã¯é³´ã‘ãªã„
 	{
 		Rule rule;
-		rule.canChangePermissionLevel/*‹ò‚¢‘Ö‚¦‹–‰ÂƒŒƒxƒ‹*/ = 0;
+		rule.canChangePermissionLevel/*å–°ã„æ›¿ãˆè¨±å¯ãƒ¬ãƒ™ãƒ«*/ = 0;
 		EXPECT_EQ((std::vector<std::string>{}), Game::get_peng_mianzi(rule, shoupai, "m1+", 0));
 	}
-	// ƒcƒ‚‚µ‚½ó‘Ô‚Åƒ|ƒ“‚Å‚«‚È‚¢
+	// ãƒ„ãƒ¢ã—ãŸçŠ¶æ…‹ã§ãƒãƒ³ã§ããªã„
 	{
 		EXPECT_THROW(Game::get_peng_mianzi({}, Shoupai("m123p456s11789z123"), "s1-", 1), std::runtime_error);
 	}
@@ -2006,37 +2006,37 @@ TEST(GameTest, static_get_gang_mianzi) {
 	Shoupai shoupai4("s1113445678999s1*");
 	Shoupai shoupai5("m23s77789s7*,s5550,z6666");
 
-	// ƒŠ[ƒ`Œã‚ÌˆÃÈ‚È‚µ
+	// ãƒªãƒ¼ãƒå¾Œã®æš—æ§“ãªã—
 	{
 		Rule rule;
-		rule.lizhiPostClosedGangPermissionLevel/*ƒŠ[ƒ`ŒãˆÃÈ‹–‰ÂƒŒƒxƒ‹*/ = 0;
+		rule.lizhiPostClosedGangPermissionLevel/*ãƒªãƒ¼ãƒå¾Œæš—æ§“è¨±å¯ãƒ¬ãƒ™ãƒ«*/ = 0;
 		EXPECT_EQ((std::vector<std::string>{}), Game::get_gang_mianzi(rule, shoupai1, {}, 1));
 		EXPECT_EQ((std::vector<std::string>{}), Game::get_gang_mianzi(rule, shoupai2, {}, 1));
 		EXPECT_EQ((std::vector<std::string>{}), Game::get_gang_mianzi(rule, shoupai3, {}, 1));
 		EXPECT_EQ((std::vector<std::string>{}), Game::get_gang_mianzi(rule, shoupai4, {}, 1));
 		EXPECT_EQ((std::vector<std::string>{}), Game::get_gang_mianzi(rule, shoupai5, {}, 1));
 	}
-	// ƒŠ[ƒ`Œã‚Ì”vp‚Ì•Ï‚í‚éˆÃÈ‚È‚µ
+	// ãƒªãƒ¼ãƒå¾Œã®ç‰Œå§¿ã®å¤‰ã‚ã‚‹æš—æ§“ãªã—
 	{
 		Rule rule;
-		rule.lizhiPostClosedGangPermissionLevel/*ƒŠ[ƒ`ŒãˆÃÈ‹–‰ÂƒŒƒxƒ‹*/ = 1;
+		rule.lizhiPostClosedGangPermissionLevel/*ãƒªãƒ¼ãƒå¾Œæš—æ§“è¨±å¯ãƒ¬ãƒ™ãƒ«*/ = 1;
 		EXPECT_EQ((std::vector<std::string>{ "z1111" }), Game::get_gang_mianzi(rule, shoupai1, {}, 1));
 		EXPECT_EQ((std::vector<std::string>{}), Game::get_gang_mianzi(rule, shoupai2, {}, 1));
 		EXPECT_EQ((std::vector<std::string>{}), Game::get_gang_mianzi(rule, shoupai3, {}, 1));
 		EXPECT_EQ((std::vector<std::string>{}), Game::get_gang_mianzi(rule, shoupai4, {}, 1));
 		EXPECT_EQ((std::vector<std::string>{}), Game::get_gang_mianzi(rule, shoupai5, {}, 1));
 	}
-	// ƒŠ[ƒ`Œã‚Ì‘Ò‚¿‚Ì•Ï‚í‚éˆÃÈ‚È‚µ
+	// ãƒªãƒ¼ãƒå¾Œã®å¾…ã¡ã®å¤‰ã‚ã‚‹æš—æ§“ãªã—
 	{
 		Rule rule;
-		rule.lizhiPostClosedGangPermissionLevel/*ƒŠ[ƒ`ŒãˆÃÈ‹–‰ÂƒŒƒxƒ‹*/ = 2;
+		rule.lizhiPostClosedGangPermissionLevel/*ãƒªãƒ¼ãƒå¾Œæš—æ§“è¨±å¯ãƒ¬ãƒ™ãƒ«*/ = 2;
 		EXPECT_EQ((std::vector<std::string>{ "z1111" }), Game::get_gang_mianzi(rule, shoupai1, {}, 1));
 		EXPECT_EQ((std::vector<std::string>{}), Game::get_gang_mianzi(rule, shoupai2, {}, 1));
 		EXPECT_EQ((std::vector<std::string>{ "s3333" }), Game::get_gang_mianzi(rule, shoupai3, {}, 1));
 		EXPECT_EQ((std::vector<std::string>{ "s1111" }), Game::get_gang_mianzi(rule, shoupai4, {}, 1));
 		EXPECT_EQ((std::vector<std::string>{}), Game::get_gang_mianzi(rule, shoupai5, {}, 1));
 	}
-	// ƒnƒCƒeƒC‚ÍƒJƒ“‚Å‚«‚È‚¢
+	// ãƒã‚¤ãƒ†ã‚¤ã¯ã‚«ãƒ³ã§ããªã„
 	{
 		EXPECT_EQ((std::vector<std::string>{}), Game::get_gang_mianzi({}, Shoupai("m1112p456s789z111z1"), {}, 0));
 		EXPECT_EQ((std::vector<std::string>{}), Game::get_gang_mianzi({}, Shoupai("m1112p456s789z111"), "z1=", 0));
@@ -2044,114 +2044,114 @@ TEST(GameTest, static_get_gang_mianzi) {
 }
 
 TEST(GameTest, static_allow_lizhi) {
-	// ‘Å”v‚Å‚«‚È‚¢ê‡AƒŠ[ƒ`‚Í‚Å‚«‚È‚¢
+	// æ‰“ç‰Œã§ããªã„å ´åˆã€ãƒªãƒ¼ãƒã¯ã§ããªã„
 	{
 		EXPECT_FALSE(Game::allow_lizhi({}, Shoupai("m123p456s789z1122")).first);
 	}
-	// ‚·‚Å‚ÉƒŠ[ƒ`‚µ‚Ä‚¢‚éê‡AƒŠ[ƒ`‚Í‚Å‚«‚È‚¢
+	// ã™ã§ã«ãƒªãƒ¼ãƒã—ã¦ã„ã‚‹å ´åˆã€ãƒªãƒ¼ãƒã¯ã§ããªã„
 	{
 		EXPECT_FALSE(Game::allow_lizhi({}, Shoupai("m123p456s789z11223*")).first);
 	}
-	// ƒƒ“ƒ[ƒ“‚Å‚È‚¢ê‡AƒŠ[ƒ`‚Í‚Å‚«‚È‚¢
+	// ãƒ¡ãƒ³ã‚¼ãƒ³ã§ãªã„å ´åˆã€ãƒªãƒ¼ãƒã¯ã§ããªã„
 	{
 		EXPECT_FALSE(Game::allow_lizhi({}, Shoupai("m123p456s789z23,z111=")).first);
 	}
-	// ƒcƒ‚”Ô‚ª‚È‚¢ê‡AƒŠ[ƒ`‚Í‚Å‚«‚È‚¢
+	// ãƒ„ãƒ¢ç•ªãŒãªã„å ´åˆã€ãƒªãƒ¼ãƒã¯ã§ããªã„
 	{
 		EXPECT_FALSE(Game::allow_lizhi({}, Shoupai("m123p456s789z11223"), "z3", 3));
 	}
-	// ƒ‹[ƒ‹‚ª‹–‚¹‚Îƒcƒ‚”Ô‚ª‚È‚­‚Ä‚àƒŠ[ƒ`‚Í‰Â”\
+	// ãƒ«ãƒ¼ãƒ«ãŒè¨±ã›ã°ãƒ„ãƒ¢ç•ªãŒãªãã¦ã‚‚ãƒªãƒ¼ãƒã¯å¯èƒ½
 	{
 		Rule rule;
-		rule.lizhiWithoutTsumoBonus/*ƒcƒ‚”Ô‚È‚µƒŠ[ƒ`‚ ‚è*/ = true;
+		rule.lizhiWithoutTsumoBonus/*ãƒ„ãƒ¢ç•ªãªã—ãƒªãƒ¼ãƒã‚ã‚Š*/ = true;
 		EXPECT_TRUE(Game::allow_lizhi(rule, Shoupai("m123p456s789z11223"), "z3", 3));
 	}
-	// ‚¿“_‚ª1000“_‚É–‚½‚È‚¢ê‡AƒŠ[ƒ`‚Í‚Å‚«‚È‚¢
+	// æŒã¡ç‚¹ãŒ1000ç‚¹ã«æº€ãŸãªã„å ´åˆã€ãƒªãƒ¼ãƒã¯ã§ããªã„
 	{
 		EXPECT_FALSE(Game::allow_lizhi({}, Shoupai("m123p456s789z11223"), "z3", 3, 900));
 	}
-	// ƒgƒr‚È‚µ‚È‚ç‚¿“_‚ª1000“_‚É–‚½‚È‚­‚Ä‚àƒŠ[ƒ`‚Í‰Â”\
+	// ãƒˆãƒ“ãªã—ãªã‚‰æŒã¡ç‚¹ãŒ1000ç‚¹ã«æº€ãŸãªãã¦ã‚‚ãƒªãƒ¼ãƒã¯å¯èƒ½
 	{
 		Rule rule;
-		rule.bankruptcyEndAll/*ƒgƒrI—¹‚ ‚è*/ = false;
+		rule.bankruptcyEndAll/*ãƒˆãƒ“çµ‚äº†ã‚ã‚Š*/ = false;
 		EXPECT_FALSE(Game::allow_lizhi(rule, Shoupai("m123p456s789z11223"), "z3", 3, 900));
 	}
-	// ƒeƒ“ƒpƒC‚µ‚Ä‚¢‚È‚¢ê‡AƒŠ[ƒ`‚Í‚Å‚«‚È‚¢
+	// ãƒ†ãƒ³ãƒ‘ã‚¤ã—ã¦ã„ãªã„å ´åˆã€ãƒªãƒ¼ãƒã¯ã§ããªã„
 	{
 		EXPECT_FALSE(Game::allow_lizhi({}, Shoupai("m123p456s789z11234")).first);
 	}
-	// Œ`®ƒeƒ“ƒpƒC‚Æ”F‚ß‚ç‚ê‚È‚¢”vp‚ÅƒŠ[ƒ`‚Í‚Å‚«‚È‚¢
+	// å½¢å¼ãƒ†ãƒ³ãƒ‘ã‚¤ã¨èªã‚ã‚‰ã‚Œãªã„ç‰Œå§¿ã§ãƒªãƒ¼ãƒã¯ã§ããªã„
 	{
 		EXPECT_FALSE(Game::allow_lizhi({}, Shoupai("m123p456s789z11112"), "z2"));
 	}
-	// w’è‚³‚ê‚½‘Å”v‚ÅƒŠ[ƒ`‰Â”\‚Èê‡A^‚ğ•Ô‚·‚±‚Æ
+	// æŒ‡å®šã•ã‚ŒãŸæ‰“ç‰Œã§ãƒªãƒ¼ãƒå¯èƒ½ãªå ´åˆã€çœŸã‚’è¿”ã™ã“ã¨
 	{
 		EXPECT_TRUE(Game::allow_lizhi({}, Shoupai("m123p456s789z11112"), "z1"));
 	}
-	// ‘Å”v‚ªw’è‚³‚ê‚Ä‚¢‚È‚¢ê‡AƒŠ[ƒ`‰Â”\‚È‘Å”vˆê——‚ğ•Ô‚·
+	// æ‰“ç‰ŒãŒæŒ‡å®šã•ã‚Œã¦ã„ãªã„å ´åˆã€ãƒªãƒ¼ãƒå¯èƒ½ãªæ‰“ç‰Œä¸€è¦§ã‚’è¿”ã™
 	{
 		EXPECT_EQ((std::vector<std::string>{ "s7", "s8" }), Game::allow_lizhi({}, Shoupai("m123p456s788z11122")).second);
 		EXPECT_EQ((std::vector<std::string>{ "z3_" }), Game::allow_lizhi({}, Shoupai("m123p456s789z11223")).second);
 	}
-	// ƒŠ[ƒ`‰Â”\‚È‘Å”v‚ª‚È‚¢ê‡Afalse ‚ğ•Ô‚·
+	// ãƒªãƒ¼ãƒå¯èƒ½ãªæ‰“ç‰ŒãŒãªã„å ´åˆã€false ã‚’è¿”ã™
 	{
 		EXPECT_FALSE(Game::allow_lizhi({}, Shoupai("m11112344449999")).first);
 	}
 }
 
 TEST(GameTest, static_allow_hule) {
-	// ƒtƒŠƒeƒ“‚Ìê‡Aƒƒ“˜a—¹‚Å‚«‚È‚¢
+	// ãƒ•ãƒªãƒ†ãƒ³ã®å ´åˆã€ãƒ­ãƒ³å’Œäº†ã§ããªã„
 	{
 		EXPECT_FALSE(Game::allow_hule({}, Shoupai("m123p456z1122,s789-"), "z1=", 0, 1, false, false));
 	}
-	// ˜a—¹Œ`‚É‚È‚Á‚Ä‚¢‚È‚¢ê‡A˜a—¹‚Å‚«‚È‚¢
+	// å’Œäº†å½¢ã«ãªã£ã¦ã„ãªã„å ´åˆã€å’Œäº†ã§ããªã„
 	{
 		EXPECT_FALSE(Game::allow_hule({}, Shoupai("m123p456z11223,s789-"), {}, 0, 1, false, true));
 	}
-	// –ğ‚ ‚è˜a—¹Œ`‚Ìê‡A˜a—¹‚Å‚«‚é
+	// å½¹ã‚ã‚Šå’Œäº†å½¢ã®å ´åˆã€å’Œäº†ã§ãã‚‹
 	{
 		EXPECT_TRUE(Game::allow_hule({}, Shoupai("m123p456s789z3377"), "z3+", 0, 1, true, true));
 	}
-	// –ğ‚È‚µ˜a—¹Œ`‚Ìê‡A˜a—¹‚Å‚«‚È‚¢
+	// å½¹ãªã—å’Œäº†å½¢ã®å ´åˆã€å’Œäº†ã§ããªã„
 	{
 		EXPECT_FALSE(Game::allow_hule({}, Shoupai("m123p456s789z3377"), "z3+", 0, 1, false, true));
 	}
-	// ƒNƒCƒ^ƒ“‚È‚µ‚Ìê‡AƒNƒCƒ^ƒ“‚Å‚Í˜a—¹‚Å‚«‚È‚¢
+	// ã‚¯ã‚¤ã‚¿ãƒ³ãªã—ã®å ´åˆã€ã‚¯ã‚¤ã‚¿ãƒ³ã§ã¯å’Œäº†ã§ããªã„
 	{
 		Rule rule;
-		rule.canduan/*ƒNƒCƒ^ƒ“‚ ‚è*/ = false;
+		rule.canduan/*ã‚¯ã‚¤ã‚¿ãƒ³ã‚ã‚Š*/ = false;
 		EXPECT_FALSE(Game::allow_hule(rule, Shoupai("m22555p234s78,p777-"), "s6=", 0, 1, false, true));
 	}
-	// ƒcƒ‚˜a—¹
+	// ãƒ„ãƒ¢å’Œäº†
 	{
 		EXPECT_TRUE(Game::allow_hule({}, Shoupai("m123p456s789z33377"), {}, 0, 1, false, false));
 	}
-	// ƒƒ“˜a—¹
+	// ãƒ­ãƒ³å’Œäº†
 	{
 		EXPECT_TRUE(Game::allow_hule({}, Shoupai("m123p456z1122,s789-"), "z1=", 0, 1, false, true));
 	}
 }
 
 TEST(GameTest, static_allow_pingju) {
-	// ‘æˆê„‚Å‚È‚¢ê‡A‹ãí‹ã”v‚Æ‚È‚ç‚È‚¢
+	// ç¬¬ä¸€å·¡ã§ãªã„å ´åˆã€ä¹ç¨®ä¹ç‰Œã¨ãªã‚‰ãªã„
 	{
 		EXPECT_FALSE(Game::allow_pingju({}, Shoupai("m1234569z1234567"), false));
 	}
-	// ƒcƒ‚Œã‚Å‚È‚¢ê‡A‹ãí‹ã”v‚Æ‚È‚ç‚È‚¢
+	// ãƒ„ãƒ¢å¾Œã§ãªã„å ´åˆã€ä¹ç¨®ä¹ç‰Œã¨ãªã‚‰ãªã„
 	{
 		EXPECT_FALSE(Game::allow_pingju({}, Shoupai("m123459z1234567"), true));
 	}
-	// “r’†—¬‹Ç‚È‚µê‡A‹ãí‹ã”v‚Æ‚È‚ç‚È‚¢
+	// é€”ä¸­æµå±€ãªã—å ´åˆã€ä¹ç¨®ä¹ç‰Œã¨ãªã‚‰ãªã„
 	{
 		Rule rule;
-		rule.abortiveDraw/*“r’†—¬‹Ç‚ ‚è*/ = false;
+		rule.abortiveDraw/*é€”ä¸­æµå±€ã‚ã‚Š*/ = false;
 		EXPECT_FALSE(Game::allow_pingju(rule, Shoupai("m1234569z1234567"), true));
 	}
-	// ”ªí‹ã”v‚Í—¬‹Ç‚É‚Å‚«‚È‚¢
+	// å…«ç¨®ä¹ç‰Œã¯æµå±€ã«ã§ããªã„
 	{
 		EXPECT_FALSE(Game::allow_pingju({}, Shoupai("m1234567z1234567"), true));
 	}
-	// ‹ãí‹ã”v
+	// ä¹ç¨®ä¹ç‰Œ
 	{
 		EXPECT_TRUE(Game::allow_pingju({}, Shoupai("m1234569z1234567"), true));
 	}
@@ -2159,30 +2159,30 @@ TEST(GameTest, static_allow_pingju) {
 
 TEST(GameTest, static_allow_no_daopai) {
 	Rule rule;
-	rule.notenDeclaration/*ƒm[ƒeƒ“éŒ¾‚ ‚è*/ = true;
+	rule.notenDeclaration/*ãƒãƒ¼ãƒ†ãƒ³å®£è¨€ã‚ã‚Š*/ = true;
 
-	// ÅI‘Å”vˆÈŠO‚Íƒm[ƒeƒ“éŒ¾‚Å‚«‚È‚¢
+	// æœ€çµ‚æ‰“ç‰Œä»¥å¤–ã¯ãƒãƒ¼ãƒ†ãƒ³å®£è¨€ã§ããªã„
 	{
 		EXPECT_FALSE(Game::allow_no_daopai(rule, Shoupai("m123p456z1122,s789-"), 1));
 		EXPECT_FALSE(Game::allow_no_daopai(rule, Shoupai("m123p456z1122,s789-").zimo("z3"), 0));
 	}
-	// ƒm[ƒeƒ“éŒ¾‚ ‚è‚Ìƒ‹[ƒ‹‚Å‚È‚¢ê‡Aƒm[ƒeƒ“éŒ¾‚Å‚«‚È‚¢
+	// ãƒãƒ¼ãƒ†ãƒ³å®£è¨€ã‚ã‚Šã®ãƒ«ãƒ¼ãƒ«ã§ãªã„å ´åˆã€ãƒãƒ¼ãƒ†ãƒ³å®£è¨€ã§ããªã„
 	{
 		EXPECT_FALSE(Game::allow_no_daopai({}, Shoupai("m123p456z1122,s789-"), 0));
 	}
-	// ƒŠ[ƒ`‚µ‚Ä‚¢‚éê‡Aƒm[ƒeƒ“éŒ¾‚Å‚«‚È‚¢
+	// ãƒªãƒ¼ãƒã—ã¦ã„ã‚‹å ´åˆã€ãƒãƒ¼ãƒ†ãƒ³å®£è¨€ã§ããªã„
 	{
 		EXPECT_FALSE(Game::allow_no_daopai(rule, Shoupai("m123p456p789z1122*"), 0));
 	}
-	// ƒeƒ“ƒpƒC‚µ‚Ä‚¢‚È‚¢ê‡Aƒm[ƒeƒ“éŒ¾‚Å‚«‚È‚¢
+	// ãƒ†ãƒ³ãƒ‘ã‚¤ã—ã¦ã„ãªã„å ´åˆã€ãƒãƒ¼ãƒ†ãƒ³å®£è¨€ã§ããªã„
 	{
 		EXPECT_FALSE(Game::allow_no_daopai(rule, Shoupai("m123p456p789z1123"), 0));
 	}
-	// Œ`®ƒeƒ“ƒpƒC‚Æ”F‚ß‚ç‚ê‚È‚¢”vp‚Ìê‡Aƒm[ƒeƒ“éŒ¾‚Å‚«‚È‚¢
+	// å½¢å¼ãƒ†ãƒ³ãƒ‘ã‚¤ã¨èªã‚ã‚‰ã‚Œãªã„ç‰Œå§¿ã®å ´åˆã€ãƒãƒ¼ãƒ†ãƒ³å®£è¨€ã§ããªã„
 	{
 		EXPECT_FALSE(Game::allow_no_daopai(rule, Shoupai("m123p456p789z1111"), 0));
 	}
-	// ƒm[ƒeƒ“éŒ¾
+	// ãƒãƒ¼ãƒ†ãƒ³å®£è¨€
 	{
 		EXPECT_TRUE(Game::allow_no_daopai(rule, Shoupai("m123p456z1122,s789-"), 0));
 	}

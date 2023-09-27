@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "shoupai.h"
 
@@ -6,17 +6,17 @@
 
 class He {
 public:
-    // ‘Å”v
+    // æ‰“ç‰Œ
     He& dapai(const std::string& p);
-    // •›˜I
+    // å‰¯éœ²
     He& fulou(const std::string& m);
-    // ƒtƒŠƒeƒ“
+    // ãƒ•ãƒªãƒ†ãƒ³
     bool find(const std::string& p);
 
     const std::vector<std::string>& pai() const { return _pai; }
 
 private:
     std::vector<std::string> _pai;
-    // ƒtƒŠƒeƒ“
+    // ãƒ•ãƒªãƒ†ãƒ³
     std::unordered_set<std::string> _find;
 };

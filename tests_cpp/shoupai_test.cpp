@@ -1,226 +1,226 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "../src_cpp/shoupai.h"
 
 TEST(ShoupaiTest, valid_pai) {
-    // ³í
+    // æ­£å¸¸
     EXPECT_TRUE(Shoupai::valid_pai("m1"));
-    // ³í(ƒcƒ‚Ø‚è)
+    // æ­£å¸¸(ãƒ„ãƒ¢åˆ‡ã‚Š)
     EXPECT_TRUE(Shoupai::valid_pai("p2_"));
-    // ³í(ƒŠ[ƒ`)
+    // æ­£å¸¸(ãƒªãƒ¼ãƒ)
     EXPECT_TRUE(Shoupai::valid_pai("s3*"));
-    // ³í(ƒcƒ‚Ø‚èEƒŠ[ƒ`)
+    // æ­£å¸¸(ãƒ„ãƒ¢åˆ‡ã‚Šãƒ»ãƒªãƒ¼ãƒ)
     EXPECT_TRUE(Shoupai::valid_pai("z4_*"));
-    // ³í(”í•›˜I)
+    // æ­£å¸¸(è¢«å‰¯éœ²)
     EXPECT_TRUE(Shoupai::valid_pai("m0-"));
-    // ³í(ƒcƒ‚Ø‚èE”í•›˜I)
+    // æ­£å¸¸(ãƒ„ãƒ¢åˆ‡ã‚Šãƒ»è¢«å‰¯éœ²)
     EXPECT_TRUE(Shoupai::valid_pai("p5_+"));
-    // ³í(ƒŠ[ƒ`E”í•›˜I)
+    // æ­£å¸¸(ãƒªãƒ¼ãƒãƒ»è¢«å‰¯éœ²)
     EXPECT_TRUE(Shoupai::valid_pai("s6*="));
-    // ³í(ƒcƒ‚Ø‚èEƒŠ[ƒ`E”í•›˜I)
+    // æ­£å¸¸(ãƒ„ãƒ¢åˆ‡ã‚Šãƒ»ãƒªãƒ¼ãƒãƒ»è¢«å‰¯éœ²)
     EXPECT_TRUE(Shoupai::valid_pai("z7_*-"));
-    // •s³(— Œü‚«”v)
+    // ä¸æ­£(è£å‘ãç‰Œ)
     EXPECT_FALSE(Shoupai::valid_pai("_"));
-    // •s³
+    // ä¸æ­£
     EXPECT_FALSE(Shoupai::valid_pai("x"));
-    // •s³
+    // ä¸æ­£
     EXPECT_FALSE(Shoupai::valid_pai("mm"));
-    // •s³
+    // ä¸æ­£
     EXPECT_FALSE(Shoupai::valid_pai("z0"));
-    // •s³
+    // ä¸æ­£
     EXPECT_FALSE(Shoupai::valid_pai("z8"));
-    // •s³
+    // ä¸æ­£
     EXPECT_FALSE(Shoupai::valid_pai("m9x"));
-    // •s³
+    // ä¸æ­£
     EXPECT_FALSE(Shoupai::valid_pai("m9=*"));
-    // •s³
+    // ä¸æ­£
     EXPECT_FALSE(Shoupai::valid_pai("m9*_"));
-    // •s³
+    // ä¸æ­£
     EXPECT_FALSE(Shoupai::valid_pai("m9=_"));
 }
 
 TEST(ShoupaiTest, valid_mianzi) {
-    // ³í
+    // æ­£å¸¸
     EXPECT_EQ("m111+", Shoupai::valid_mianzi("m111+"));
-    // ³í
+    // æ­£å¸¸
     EXPECT_EQ("p555=", Shoupai::valid_mianzi("p555="));
-    // ³í
+    // æ­£å¸¸
     EXPECT_EQ("s999-", Shoupai::valid_mianzi("s999-"));
-    // ³í
+    // æ­£å¸¸
     EXPECT_EQ("z777+7", Shoupai::valid_mianzi("z777+7"));
-    // ³í
+    // æ­£å¸¸
     EXPECT_EQ("m2222", Shoupai::valid_mianzi("m2222"));
-    // ³í
+    // æ­£å¸¸
     EXPECT_EQ("p550=", Shoupai::valid_mianzi("p550="));
-    // ³í
+    // æ­£å¸¸
     EXPECT_EQ("p5550=", Shoupai::valid_mianzi("p5550="));
-    // ³í => p505=
+    // æ­£å¸¸ => p505=
     EXPECT_EQ("p505=", Shoupai::valid_mianzi("p055="));
-    // ³í => p505=0
+    // æ­£å¸¸ => p505=0
     EXPECT_EQ("p505=0", Shoupai::valid_mianzi("p055=0"));
-    // ³í
+    // æ­£å¸¸
     EXPECT_EQ("p000=0", Shoupai::valid_mianzi("p000=0"));
-    // ³í => s5505-
+    // æ­£å¸¸ => s5505-
     EXPECT_EQ("s5505-", Shoupai::valid_mianzi("s0555-"));
-    // ³í => s5005-
+    // æ­£å¸¸ => s5005-
     EXPECT_EQ("s5005-", Shoupai::valid_mianzi("s0055-"));
-    // ³í => s5000
+    // æ­£å¸¸ => s5000
     EXPECT_EQ("s5000", Shoupai::valid_mianzi("s0005"));
-    // ³í => s0000
+    // æ­£å¸¸ => s0000
     EXPECT_EQ("s0000", Shoupai::valid_mianzi("s0000"));
-    // ³í
+    // æ­£å¸¸
     EXPECT_EQ("m1-23", Shoupai::valid_mianzi("m1-23"));
-    // ³í
+    // æ­£å¸¸
     EXPECT_EQ("m12-3", Shoupai::valid_mianzi("m12-3"));
-    // ³í
+    // æ­£å¸¸
     EXPECT_EQ("m123-", Shoupai::valid_mianzi("m123-"));
-    // ³í => m1-23
+    // æ­£å¸¸ => m1-23
     EXPECT_EQ("m1-23", Shoupai::valid_mianzi("m231-"));
-    // ³í => m12-3
+    // æ­£å¸¸ => m12-3
     EXPECT_EQ("m12-3", Shoupai::valid_mianzi("m312-"));
-    // ³í => m123-
+    // æ­£å¸¸ => m123-
     EXPECT_EQ("m123-", Shoupai::valid_mianzi("m3-12"));
-    // ³í => m40-6
+    // æ­£å¸¸ => m40-6
     EXPECT_EQ("m40-6", Shoupai::valid_mianzi("m460-"));
-    // •s³
+    // ä¸æ­£
     EXPECT_EQ("", Shoupai::valid_mianzi("m1234-"));
-    // •s³
+    // ä¸æ­£
     EXPECT_EQ("", Shoupai::valid_mianzi("m135-"));
-    // •s³
+    // ä¸æ­£
     EXPECT_EQ("", Shoupai::valid_mianzi("m1234"));
-    // •s³
+    // ä¸æ­£
     EXPECT_EQ("", Shoupai::valid_mianzi("m123"));
-    // •s³
+    // ä¸æ­£
     EXPECT_EQ("", Shoupai::valid_mianzi("m111"));
-    // •s³
+    // ä¸æ­£
     EXPECT_EQ("", Shoupai::valid_mianzi("z111=0"));
 }
 
 TEST(ShoupaiTest, constructor_qipai) {
-    // ƒCƒ“ƒXƒ^ƒ“ƒX‚ª¶¬‚Å‚«‚é‚±‚Æ
+    // ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒç”Ÿæˆã§ãã‚‹ã“ã¨
     EXPECT_NO_THROW(Shoupai());
-    // ”z”v‚ğw’è‚µ‚ÄƒCƒ“ƒXƒ^ƒ“ƒX‚ª¶¬‚Å‚«‚é‚±‚Æ
+    // é…ç‰Œã‚’æŒ‡å®šã—ã¦ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒç”Ÿæˆã§ãã‚‹ã“ã¨
     EXPECT_NO_THROW(Shoupai(std::vector<std::string>{ "m0", "m1", "m9", "p0", "p1", "p9", "s0", "s1", "s9", "z1", "z2", "z6", "z7" }));
-    // — Œü‚«‚Ì”v‚ğw’è‚µ‚ÄƒCƒ“ƒXƒ^ƒ“ƒX‚ª¶¬‚Å‚«‚é‚±‚Æ
+    // è£å‘ãã®ç‰Œã‚’æŒ‡å®šã—ã¦ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒç”Ÿæˆã§ãã‚‹ã“ã¨
     EXPECT_NO_THROW(Shoupai(std::vector<std::string>{ "_" }));
-    // •s³‚È”v‚ğŠÜ‚Ş”z”v‚Å—áŠO‚ª”­¶‚·‚é‚±‚Æ
+    // ä¸æ­£ãªç‰Œã‚’å«ã‚€é…ç‰Œã§ä¾‹å¤–ãŒç™ºç”Ÿã™ã‚‹ã“ã¨
     EXPECT_THROW(Shoupai(std::vector<std::string>{ "z0" }), std::invalid_argument);
-    // 5–‡–Ú‚Ì”v‚ğŠÜ‚Ş”z”v‚Å—áŠO‚ª”­¶‚·‚é‚±‚Æ
+    // 5æšç›®ã®ç‰Œã‚’å«ã‚€é…ç‰Œã§ä¾‹å¤–ãŒç™ºç”Ÿã™ã‚‹ã“ã¨
     EXPECT_THROW(Shoupai(std::vector<std::string>{ "m1", "m1", "m1", "m1", "m1" }), std::invalid_argument);
 }
 
 TEST(ShoupaiTest, constructor_paistr) {
-    // ‹ó•¶š—ñ‚©‚ç‚Å‚àƒCƒ“ƒXƒ^ƒ“ƒX‚ª¶¬‚Å‚«‚é‚±‚Æ
+    // ç©ºæ–‡å­—åˆ—ã‹ã‚‰ã§ã‚‚ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒç”Ÿæˆã§ãã‚‹ã“ã¨
     EXPECT_EQ("", Shoupai("").toString());
-    // •›˜I‚È‚µ‚Ìê‡‚ÉƒCƒ“ƒXƒ^ƒ“ƒX‚ª¶¬‚Å‚«‚é‚±‚Æ
+    // å‰¯éœ²ãªã—ã®å ´åˆã«ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒç”Ÿæˆã§ãã‚‹ã“ã¨
     EXPECT_EQ("m123p456s789z4567", Shoupai("z7654s987p654m321").toString());
-    // •›˜I‚ ‚è‚Ìê‡‚Å‚àƒCƒ“ƒXƒ^ƒ“ƒX‚ª¶¬‚Å‚«‚é‚±‚Æ
+    // å‰¯éœ²ã‚ã‚Šã®å ´åˆã§ã‚‚ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒç”Ÿæˆã§ãã‚‹ã“ã¨
     EXPECT_EQ("m1,p123-,s555=,z777+7,m9999", Shoupai("m1,p123-,s555=,z777+7,m9999").toString());
-    // •š‚¹”v‚ª‚ ‚éê‡‚Å‚àƒCƒ“ƒXƒ^ƒ“ƒX‚ª¶¬‚Å‚«‚é‚±‚Æ
+    // ä¼ã›ç‰ŒãŒã‚ã‚‹å ´åˆã§ã‚‚ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒç”Ÿæˆã§ãã‚‹ã“ã¨
     EXPECT_EQ("____m123p456s789", Shoupai("m123p456s789____").toString());
-    // •š‚¹”v‚ª‚ ‚éê‡‚Å‚àƒCƒ“ƒXƒ^ƒ“ƒX‚ª¶¬‚Å‚«‚é‚±‚Æ(•›˜I‚ ‚è)
+    // ä¼ã›ç‰ŒãŒã‚ã‚‹å ´åˆã§ã‚‚ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒç”Ÿæˆã§ãã‚‹ã“ã¨(å‰¯éœ²ã‚ã‚Š)
     EXPECT_EQ("____m123p456,s789-", Shoupai("m123p456____,s789-").toString());
-    // ­”v‚Ìê‡‚Å‚àƒCƒ“ƒXƒ^ƒ“ƒX‚ª¶¬‚Å‚«‚é‚±‚Æ
+    // å°‘ç‰Œã®å ´åˆã§ã‚‚ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒç”Ÿæˆã§ãã‚‹ã“ã¨
     EXPECT_EQ("m111p222s333", Shoupai("m111p222s333").toString());
-    // ‘½”v‚Ìê‡A14–‡‚Æ‚µ‚Ä‚©‚çƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬‚·‚é‚±‚Æ
+    // å¤šç‰Œã®å ´åˆã€14æšã¨ã—ã¦ã‹ã‚‰ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆã™ã‚‹ã“ã¨
     EXPECT_EQ("m123456789p1234p5", Shoupai("m123456789p123456").toString());
-    // ‘½”v‚Ìê‡A14–‡‚Æ‚µ‚Ä‚©‚çƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬‚·‚é‚±‚Æ(•›˜I‚ ‚è)
+    // å¤šç‰Œã®å ´åˆã€14æšã¨ã—ã¦ã‹ã‚‰ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆã™ã‚‹ã“ã¨(å‰¯éœ²ã‚ã‚Š)
     EXPECT_EQ("m123456789p1p2,z111=", Shoupai("m123456789p123,z111=").toString());
     EXPECT_EQ("m1m2,z111=,p123-,s555=,z777+", Shoupai("m123,z111=,p123-,s555=,z777+").toString());
-    // ƒcƒ‚”v‚ğÄŒ»‚µ‚ÄƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬‚·‚é‚±‚Æ
+    // ãƒ„ãƒ¢ç‰Œã‚’å†ç¾ã—ã¦ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆã™ã‚‹ã“ã¨
     EXPECT_EQ("m1112345678999m1", Shoupai("m11123456789991").toString());
-    // ƒcƒ‚”v‚ğÄŒ»‚µ‚ÄƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬‚·‚é‚±‚Æ(Ô”v‚ğƒcƒ‚)
+    // ãƒ„ãƒ¢ç‰Œã‚’å†ç¾ã—ã¦ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆã™ã‚‹ã“ã¨(èµ¤ç‰Œã‚’ãƒ„ãƒ¢)
     EXPECT_EQ("m1112345678999m0", Shoupai("m11123456789990").toString());
-    // ƒcƒ‚”v‚ğÄŒ»‚µ‚ÄƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬‚·‚é‚±‚Æ(•›˜I‚ ‚è)
+    // ãƒ„ãƒ¢ç‰Œã‚’å†ç¾ã—ã¦ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆã™ã‚‹ã“ã¨(å‰¯éœ²ã‚ã‚Š)
     EXPECT_EQ("m12p345s678z23m3,z111=", Shoupai("m12p345s678z23m3,z111=").toString());
-    // è”v’†‚ÌÔ”v‚ğÄŒ»‚µ‚ÄƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬‚·‚é‚±‚Æ
+    // æ‰‹ç‰Œä¸­ã®èµ¤ç‰Œã‚’å†ç¾ã—ã¦ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆã™ã‚‹ã“ã¨
     EXPECT_EQ("m0555p0055s0000", Shoupai("m5550p5500s0000z00").toString());
-    // ƒŠ[ƒ`‚ğÄŒ»‚µ‚ÄƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬‚·‚é‚±‚Æ
+    // ãƒªãƒ¼ãƒã‚’å†ç¾ã—ã¦ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆã™ã‚‹ã“ã¨
     EXPECT_EQ("m123p456s789z1112*", Shoupai("m123p456s789z1112*").toString());
-    // ƒŠ[ƒ`‚ğÄŒ»‚µ‚ÄƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬‚·‚é‚±‚Æ(ˆÃÈ‚ ‚è)
+    // ãƒªãƒ¼ãƒã‚’å†ç¾ã—ã¦ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆã™ã‚‹ã“ã¨(æš—æ§“ã‚ã‚Š)
     EXPECT_EQ("m123p456s789z2*,z1111", Shoupai("m123p456s789z2*,z1111").toString());
-    // ƒŠ[ƒ`‚ğÄŒ»‚µ‚ÄƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬‚·‚é‚±‚Æ(•›˜I‚ ‚è)
+    // ãƒªãƒ¼ãƒã‚’å†ç¾ã—ã¦ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆã™ã‚‹ã“ã¨(å‰¯éœ²ã‚ã‚Š)
     EXPECT_EQ("m123p456s789z2*,z111+", Shoupai("m123p456s789z2*,z111+").toString());
-    // •›˜I–Êq‚ğ³‹K‰»‚µ‚ÄƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬‚·‚é‚±‚Æ(ƒ`[)
+    // å‰¯éœ²é¢å­ã‚’æ­£è¦åŒ–ã—ã¦ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆã™ã‚‹ã“ã¨(ãƒãƒ¼)
     EXPECT_EQ("m123p456s789z2,m3-40", Shoupai("m123p456s789z2,m403-").toString());
     EXPECT_EQ("m123p456s789z2,m34-0", Shoupai("m123p456s789z2,m304-").toString());
     EXPECT_EQ("m123p456s789z2,m345-", Shoupai("m123p456s789z2,m345-").toString());
-    // •›˜I–Êq‚ğ³‹K‰»‚µ‚ÄƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬‚·‚é‚±‚Æ(ƒ|ƒ“)
+    // å‰¯éœ²é¢å­ã‚’æ­£è¦åŒ–ã—ã¦ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆã™ã‚‹ã“ã¨(ãƒãƒ³)
     EXPECT_EQ("m123p456s789z2,p500+", Shoupai("m123p456s789z2,p050+").toString());
     EXPECT_EQ("m123p456s789z2,p505+", Shoupai("m123p456s789z2,p055+").toString());
     EXPECT_EQ("m123p456s789z2,p550+", Shoupai("m123p456s789z2,p550+").toString());
-    // •›˜I–Êq‚ğ³‹K‰»‚µ‚ÄƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬‚·‚é‚±‚Æ(ƒJƒ“)
+    // å‰¯éœ²é¢å­ã‚’æ­£è¦åŒ–ã—ã¦ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆã™ã‚‹ã“ã¨(ã‚«ãƒ³)
     EXPECT_EQ("m123p456s789z2,s5505=", Shoupai("m123p456s789z2,s0555=").toString());
     EXPECT_EQ("m123p456s789z2,s5000=", Shoupai("m123p456s789z2,s0050=").toString());
     EXPECT_EQ("m123p456s789z2,s5500", Shoupai("m123p456s789z2,s0505").toString());
-    // •s³‚È•›˜I–Êq‚ğ–³‹‚µ‚ÄƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬‚·‚é‚±‚Æ(•s³‚È”v)
+    // ä¸æ­£ãªå‰¯éœ²é¢å­ã‚’ç„¡è¦–ã—ã¦ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆã™ã‚‹ã“ã¨(ä¸æ­£ãªç‰Œ)
     EXPECT_EQ("m123p456s789z2", Shoupai("m123p456s789z2,z000+").toString());
     EXPECT_EQ("m123p456s789z2", Shoupai("m123p456s789z2,z888+").toString());
-    // •s³‚È•›˜I–Êq‚ğ–³‹‚µ‚ÄƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬‚·‚é‚±‚Æ(š”v‚Å‚Ìƒ`[)
+    // ä¸æ­£ãªå‰¯éœ²é¢å­ã‚’ç„¡è¦–ã—ã¦ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆã™ã‚‹ã“ã¨(å­—ç‰Œã§ã®ãƒãƒ¼)
     EXPECT_EQ("m123p456s789z2", Shoupai("m123p456s789z2,z1-23").toString());
-    // •s³‚È•›˜I–Êq‚ğ–³‹‚µ‚ÄƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬‚·‚é‚±‚Æ(‰º‰Æ‚©‚ç‚Ìƒ`[)
+    // ä¸æ­£ãªå‰¯éœ²é¢å­ã‚’ç„¡è¦–ã—ã¦ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆã™ã‚‹ã“ã¨(ä¸‹å®¶ã‹ã‚‰ã®ãƒãƒ¼)
     EXPECT_EQ("m123p456s789z2", Shoupai("m123p456s789z2,s1+23").toString());
-    // •s³‚È•›˜I–Êq‚ğ–³‹‚µ‚ÄƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬‚·‚é‚±‚Æ(‘Îq)
+    // ä¸æ­£ãªå‰¯éœ²é¢å­ã‚’ç„¡è¦–ã—ã¦ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆã™ã‚‹ã“ã¨(å¯¾å­)
     EXPECT_EQ("m123p456s789z2", Shoupai("m123p456s789z2,z11-").toString());
-    // •s³‚È•›˜I–Êq‚ğ–³‹‚µ‚ÄƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬‚·‚é‚±‚Æ(—¼›Æ)
+    // ä¸æ­£ãªå‰¯éœ²é¢å­ã‚’ç„¡è¦–ã—ã¦ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆã™ã‚‹ã“ã¨(ä¸¡åµŒ)
     EXPECT_EQ("m123p456s789z2", Shoupai("m123p456s789z2,s13-5").toString());
-    // •s³‚È•›˜I–Êq‚ğ–³‹‚µ‚ÄƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬‚·‚é‚±‚Æ(˜Aq)
+    // ä¸æ­£ãªå‰¯éœ²é¢å­ã‚’ç„¡è¦–ã—ã¦ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆã™ã‚‹ã“ã¨(é€£å­)
     EXPECT_EQ("m123p456s789z2", Shoupai("m123p456s789z2,m1p2s3-").toString());
-    // •›˜I’¼Œã‚Ìè”v‚ğÄŒ»‚µ‚ÄƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬‚·‚é‚±‚Æ
+    // å‰¯éœ²ç›´å¾Œã®æ‰‹ç‰Œã‚’å†ç¾ã—ã¦ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆã™ã‚‹ã“ã¨
     EXPECT_EQ("p456s789z1,m12-3,p999=,", Shoupai("p456s789z1,m12-3,p999=,").toString());
 }
 
 TEST(ShoupaiTest, clone) {
-    // ƒCƒ“ƒXƒ^ƒ“ƒX‚ğ•¡»‚·‚é‚±‚Æ
+    // ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’è¤‡è£½ã™ã‚‹ã“ã¨
     {
         auto shoupai = Shoupai("");
         EXPECT_EQ(shoupai.toString(), shoupai.clone().toString());
     }
-    // è”v‚ğÄŒ»‚µ‚ÄƒCƒ“ƒXƒ^ƒ“ƒX‚ğ•¡»‚·‚é‚±‚Æ
+    // æ‰‹ç‰Œã‚’å†ç¾ã—ã¦ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’è¤‡è£½ã™ã‚‹ã“ã¨
     {
         auto shoupai = Shoupai("m123p456s789z4567");
         EXPECT_EQ(shoupai.toString(), shoupai.clone().toString());
     }
-    // •›˜I‚ğÄŒ»‚µ‚ÄƒCƒ“ƒXƒ^ƒ“ƒX‚ğ•¡»‚·‚é‚±‚Æ
+    // å‰¯éœ²ã‚’å†ç¾ã—ã¦ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’è¤‡è£½ã™ã‚‹ã“ã¨
     {
         auto shoupai = Shoupai("m1,p123-,s555=,z777+7,m9999");
         EXPECT_EQ(shoupai.toString(), shoupai.clone().toString());
     }
-    // ƒcƒ‚”v‚ğÄŒ»‚µ‚ÄƒCƒ“ƒXƒ^ƒ“ƒX‚ğ•¡»‚·‚é‚±‚Æ
+    // ãƒ„ãƒ¢ç‰Œã‚’å†ç¾ã—ã¦ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’è¤‡è£½ã™ã‚‹ã“ã¨
     {
         auto shoupai = Shoupai("m11123456789991");
         EXPECT_EQ(shoupai.toString(), shoupai.clone().toString());
     }
-    // ƒŠ[ƒ`‚ğÄŒ»‚µ‚ÄƒCƒ“ƒXƒ^ƒ“ƒX‚ğ•¡»‚·‚é‚±‚Æ
+    // ãƒªãƒ¼ãƒã‚’å†ç¾ã—ã¦ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’è¤‡è£½ã™ã‚‹ã“ã¨
     {
         auto shoupai = Shoupai("m123p456s789z1112*");
         EXPECT_EQ(shoupai.toString(), shoupai.clone().toString());
     }
-    // •š‚¹”v‚ğÄŒ»‚µ‚ÄƒCƒ“ƒXƒ^ƒ“ƒX‚ğ•¡»‚·‚é‚±‚Æ
+    // ä¼ã›ç‰Œã‚’å†ç¾ã—ã¦ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’è¤‡è£½ã™ã‚‹ã“ã¨
     {
         auto shoupai = Shoupai("___________,m123-");
         EXPECT_EQ(shoupai.toString(), shoupai.clone().toString());
     }
-    // •¡»Œã‚Ìƒcƒ‚‚ª•¡»‘O‚Ìè”v‚É‰e‹¿‚µ‚È‚¢‚±‚Æ
+    // è¤‡è£½å¾Œã®ãƒ„ãƒ¢ãŒè¤‡è£½å‰ã®æ‰‹ç‰Œã«å½±éŸ¿ã—ãªã„ã“ã¨
     {
         auto shoupai = Shoupai("m123p456s789z4567");
         EXPECT_NE(shoupai.toString(), shoupai.clone().zimo("m1").toString());
     }
-    // •¡»Œã‚Ì‘Å”v‚ª•¡»‘O‚Ìè”v‚É‰e‹¿‚µ‚È‚¢‚±‚Æ
+    // è¤‡è£½å¾Œã®æ‰“ç‰ŒãŒè¤‡è£½å‰ã®æ‰‹ç‰Œã«å½±éŸ¿ã—ãªã„ã“ã¨
     {
         auto shoupai = Shoupai("m123p456s789z34567");
         EXPECT_NE(shoupai.toString(), shoupai.clone().dapai("m1").toString());
     }
-    // •¡»Œã‚Ì•›˜I‚ª•¡»‘O‚Ìè”v‚É‰e‹¿‚µ‚È‚¢‚±‚Æ
+    // è¤‡è£½å¾Œã®å‰¯éœ²ãŒè¤‡è£½å‰ã®æ‰‹ç‰Œã«å½±éŸ¿ã—ãªã„ã“ã¨
     {
         auto shoupai = Shoupai("m123p456s789z1167");
         EXPECT_NE(shoupai.toString(), shoupai.clone().fulou("z111=").toString());
     }
-    // •¡»Œã‚ÌƒJƒ“‚ª•¡»‘O‚Ìè”v‚É‰e‹¿‚µ‚È‚¢‚±‚Æ
+    // è¤‡è£½å¾Œã®ã‚«ãƒ³ãŒè¤‡è£½å‰ã®æ‰‹ç‰Œã«å½±éŸ¿ã—ãªã„ã“ã¨
     {
         auto shoupai = Shoupai("m123p456s789z11112");
         EXPECT_NE(shoupai.toString(), shoupai.clone().gang("z1111").toString());
     }
-    // •¡»Œã‚ÌƒŠ[ƒ`‚ª•¡»‘O‚Ìè”v‚É‰e‹¿‚µ‚È‚¢‚±‚Æ
+    // è¤‡è£½å¾Œã®ãƒªãƒ¼ãƒãŒè¤‡è£½å‰ã®æ‰‹ç‰Œã«å½±éŸ¿ã—ãªã„ã“ã¨
     {
         auto shoupai = Shoupai("m123p456s789z11223");
         EXPECT_NE(shoupai.toString(), shoupai.clone().dapai("z3*").toString());
@@ -228,246 +228,246 @@ TEST(ShoupaiTest, clone) {
 }
 
 TEST(ShoupaiTest, zimo) {
-    // äİq‚ğƒcƒ‚‚ê‚é‚±‚Æ
+    // è¬å­ã‚’ãƒ„ãƒ¢ã‚Œã‚‹ã“ã¨
     EXPECT_EQ("m123p456s789z4567m1", Shoupai("m123p456s789z4567").zimo("m1").toString());
-    // “›q‚ğƒcƒ‚‚ê‚é‚±‚Æ
+    // ç­’å­ã‚’ãƒ„ãƒ¢ã‚Œã‚‹ã“ã¨
     EXPECT_EQ("m123p456s789z4567p1", Shoupai("m123p456s789z4567").zimo("p1").toString());
-    // õq‚ğƒcƒ‚‚ê‚é‚±‚Æ
+    // ç´¢å­ã‚’ãƒ„ãƒ¢ã‚Œã‚‹ã“ã¨
     EXPECT_EQ("m123p456s789z4567s1", Shoupai("m123p456s789z4567").zimo("s1").toString());
-    // š”v‚ğƒcƒ‚‚ê‚é‚±‚Æ
+    // å­—ç‰Œã‚’ãƒ„ãƒ¢ã‚Œã‚‹ã“ã¨
     EXPECT_EQ("m123p456s789z4567z1", Shoupai("m123p456s789z4567").zimo("z1").toString());
-    // Ô”v‚ğƒcƒ‚‚ê‚é‚±‚Æ
+    // èµ¤ç‰Œã‚’ãƒ„ãƒ¢ã‚Œã‚‹ã“ã¨
     EXPECT_EQ("m123p456s789z4567m0", Shoupai("m123p456s789z4567").zimo("m0").toString());
-    // •š‚¹”v‚ğƒcƒ‚‚ê‚é‚±‚Æ
+    // ä¼ã›ç‰Œã‚’ãƒ„ãƒ¢ã‚Œã‚‹ã“ã¨
     EXPECT_EQ("m123p456s789z4567_", Shoupai("m123p456s789z4567").zimo("_").toString());
-    // •s³‚È”v‚Íƒcƒ‚‚ê‚È‚¢‚±‚Æ
+    // ä¸æ­£ãªç‰Œã¯ãƒ„ãƒ¢ã‚Œãªã„ã“ã¨
     EXPECT_THROW(Shoupai("m123p456s789z4567").zimo(""), std::invalid_argument);
     EXPECT_THROW(Shoupai("m123p456s789z4567").zimo("z0"), std::invalid_argument);
     EXPECT_THROW(Shoupai("m123p456s789z4567").zimo("z8"), std::invalid_argument);
     EXPECT_THROW(Shoupai("m123p456s789z4567").zimo("mm"), std::invalid_argument);
     EXPECT_THROW(Shoupai("m123p456s789z4567").zimo("xx"), std::invalid_argument);
-    // ƒcƒ‚‚Ì’¼Œã‚É‚Íƒcƒ‚‚ê‚È‚¢‚±‚Æ
+    // ãƒ„ãƒ¢ã®ç›´å¾Œã«ã¯ãƒ„ãƒ¢ã‚Œãªã„ã“ã¨
     EXPECT_THROW(Shoupai("m123p456s789z34567").zimo("m1"), std::runtime_error);
-    // •›˜I‚Ì’¼Œã‚É‚Íƒcƒ‚‚ê‚È‚¢‚±‚Æ
+    // å‰¯éœ²ã®ç›´å¾Œã«ã¯ãƒ„ãƒ¢ã‚Œãªã„ã“ã¨
     EXPECT_THROW(Shoupai("m123p456z34567,s789-,").zimo("m1"), std::runtime_error);
-    // ‘½”v‚Æ‚È‚é”v‚ğƒcƒ‚‚é‚±‚Æ‚à‚Å‚«‚é‚±‚Æ
+    // å¤šç‰Œã¨ãªã‚‹ç‰Œã‚’ãƒ„ãƒ¢ã‚‹ã“ã¨ã‚‚ã§ãã‚‹ã“ã¨
     EXPECT_EQ("m123p456s789z34567m1", Shoupai("m123p456s789z34567").zimo("m1", false).toString());
-    // 5–‡–Ú‚Ì”v‚Íƒcƒ‚‚ê‚È‚¢‚±‚Æ
+    // 5æšç›®ã®ç‰Œã¯ãƒ„ãƒ¢ã‚Œãªã„ã“ã¨
     EXPECT_THROW(Shoupai("m123p456s789z1111").zimo("z1"), std::invalid_argument);
     EXPECT_THROW(Shoupai("m455556s789z1111").zimo("m0"), std::invalid_argument);
 }
 
 TEST(ShoupaiTest, dapai) {
-    // äİq‚ğ‘Å”v‚Å‚«‚é‚±‚Æ
+    // è¬å­ã‚’æ‰“ç‰Œã§ãã‚‹ã“ã¨
     EXPECT_EQ("m23p456s789z34567", Shoupai("m123p456s789z34567").dapai("m1").toString());
-    // “›q‚ğ‘Å”v‚Å‚«‚é‚±‚Æ
+    // ç­’å­ã‚’æ‰“ç‰Œã§ãã‚‹ã“ã¨
     EXPECT_EQ("m123p56s789z34567", Shoupai("m123p456s789z34567").dapai("p4").toString());
-    // õq‚ğ‘Å”v‚Å‚«‚é‚±‚Æ
+    // ç´¢å­ã‚’æ‰“ç‰Œã§ãã‚‹ã“ã¨
     EXPECT_EQ("m123p456s89z34567", Shoupai("m123p456s789z34567").dapai("s7").toString());
-    // š”v‚ğ‘Å”v‚Å‚«‚é‚±‚Æ
+    // å­—ç‰Œã‚’æ‰“ç‰Œã§ãã‚‹ã“ã¨
     EXPECT_EQ("m123p456s789z4567", Shoupai("m123p456s789z34567").dapai("z3").toString());
-    // Ô”v‚ğ‘Å”v‚Å‚«‚é‚±‚Æ
+    // èµ¤ç‰Œã‚’æ‰“ç‰Œã§ãã‚‹ã“ã¨
     EXPECT_EQ("m123p46s789z34567", Shoupai("m123p406s789z34567").dapai("p0").toString());
-    // ƒŠ[ƒ`‚Å‚«‚é‚±‚Æ
+    // ãƒªãƒ¼ãƒã§ãã‚‹ã“ã¨
     EXPECT_EQ("m123p456s789z3456*", Shoupai("m123p456s789z34567").dapai("z7*").toString());
-    // ƒŠ[ƒ`Œã‚É‚àƒcƒ‚Ø‚èˆÈŠO‚Ì‘Å”v‚ª‚Å‚«‚é‚±‚Æ(ƒ`ƒFƒbƒN‚µ‚È‚¢)
+    // ãƒªãƒ¼ãƒå¾Œã«ã‚‚ãƒ„ãƒ¢åˆ‡ã‚Šä»¥å¤–ã®æ‰“ç‰ŒãŒã§ãã‚‹ã“ã¨(ãƒã‚§ãƒƒã‚¯ã—ãªã„)
     EXPECT_EQ("m123p456s789z1223*", Shoupai("m123p456s789z11223*").dapai("z1").toString());
-    // •š‚¹”v‚ª‚ ‚éê‡A”CˆÓ‚Ì”v‚ª‘Å”v‚Å‚«‚é‚±‚Æ
+    // ä¼ã›ç‰ŒãŒã‚ã‚‹å ´åˆã€ä»»æ„ã®ç‰ŒãŒæ‰“ç‰Œã§ãã‚‹ã“ã¨
     EXPECT_EQ("_____________", Shoupai("______________").dapai("m1").toString());
-    // •s³‚È”v‚Í‘Å”v‚Å‚«‚È‚¢‚±‚Æ
+    // ä¸æ­£ãªç‰Œã¯æ‰“ç‰Œã§ããªã„ã“ã¨
     EXPECT_THROW(Shoupai("m123p456s789z34567").dapai(""), std::invalid_argument);
     EXPECT_THROW(Shoupai("m123p456s789z34567").dapai("z0"), std::invalid_argument);
     EXPECT_THROW(Shoupai("m123p456s789z34567").dapai("z8"), std::invalid_argument);
     EXPECT_THROW(Shoupai("m123p456s789z34567").dapai("mm"), std::invalid_argument);
     EXPECT_THROW(Shoupai("m123p456s789z34567").dapai("xx"), std::invalid_argument);
-    // •š‚¹‚½”v‚Í‘Å”v‚Å‚«‚È‚¢‚±‚Æ
+    // ä¼ã›ãŸç‰Œã¯æ‰“ç‰Œã§ããªã„ã“ã¨
     EXPECT_THROW(Shoupai("m123p456s789z34567").dapai("_"), std::invalid_argument);
-    // ‘Å”v‚Ì’¼Œã‚É‚Í‘Å”v‚Å‚«‚È‚¢‚±‚Æ
+    // æ‰“ç‰Œã®ç›´å¾Œã«ã¯æ‰“ç‰Œã§ããªã„ã“ã¨
     EXPECT_THROW(Shoupai("m123p456s789z4567").dapai("m1"), std::runtime_error);
-    // ­”v‚Æ‚È‚é”v‚ğ‘Å”v‚·‚é‚±‚Æ‚à‚Å‚«‚é‚±‚Æ
+    // å°‘ç‰Œã¨ãªã‚‹ç‰Œã‚’æ‰“ç‰Œã™ã‚‹ã“ã¨ã‚‚ã§ãã‚‹ã“ã¨
     EXPECT_EQ("m23p456s789z4567", Shoupai("m123p456s789z4567").dapai("m1", false).toString());
-    // è”v‚É‚È‚¢”v‚Í‘Å”v‚Å‚«‚È‚¢‚±‚Æ
+    // æ‰‹ç‰Œã«ãªã„ç‰Œã¯æ‰“ç‰Œã§ããªã„ã“ã¨
     EXPECT_THROW(Shoupai("m123p456s789z34567").dapai("z1"), std::invalid_argument);
     EXPECT_THROW(Shoupai("m123p456s789z34567").dapai("p0"), std::invalid_argument);
     EXPECT_THROW(Shoupai("m123p406s789z34567").dapai("p5"), std::invalid_argument);
 }
 
 TEST(ShoupaiTest, gang) {
-    // äİq‚ÅˆÃÈ‚Å‚«‚é‚±‚Æ
+    // è¬å­ã§æš—æ§“ã§ãã‚‹ã“ã¨
     EXPECT_EQ("p456s789z4567,m1111", Shoupai("m1111p456s789z4567").gang("m1111").toString());
-    // äİq‚Å‰ÁÈ‚Å‚«‚é‚±‚Æ
+    // è¬å­ã§åŠ æ§“ã§ãã‚‹ã“ã¨
     EXPECT_EQ("p456s789z4567,m111+1", Shoupai("m1p456s789z4567,m111+").gang("m111+1").toString());
-    // “›q‚ÅˆÃÈ‚Å‚«‚é‚±‚Æ
+    // ç­’å­ã§æš—æ§“ã§ãã‚‹ã“ã¨
     EXPECT_EQ("m123s789z4567,p5555", Shoupai("m123p5555s789z4567").gang("p5555").toString());
-    // “›q‚Å‰ÁÈ‚Å‚«‚é‚±‚Æ
+    // ç­’å­ã§åŠ æ§“ã§ãã‚‹ã“ã¨
     EXPECT_EQ("m123s789z4567,p555=5", Shoupai("m123p5s789z4567,p555=").gang("p555=5").toString());
-    // õq‚ÅˆÃÈ‚Å‚«‚é‚±‚Æ
+    // ç´¢å­ã§æš—æ§“ã§ãã‚‹ã“ã¨
     EXPECT_EQ("m123p456z4567,s9999", Shoupai("m123p456s9999z4567").gang("s9999").toString());
-    // õq‚Å‰ÁÈ‚Å‚«‚é‚±‚Æ
+    // ç´¢å­ã§åŠ æ§“ã§ãã‚‹ã“ã¨
     EXPECT_EQ("m123p456z4567,s999-9", Shoupai("m123p456s9z4567,s999-").gang("s999-9").toString());
-    // š”v‚ÅˆÃÈ‚Å‚«‚é‚±‚Æ
+    // å­—ç‰Œã§æš—æ§“ã§ãã‚‹ã“ã¨
     EXPECT_EQ("m123p456s789z6,z7777", Shoupai("m123p456s789z67777").gang("z7777").toString());
-    // š”v‚Å‰ÁÈ‚Å‚«‚é‚±‚Æ
+    // å­—ç‰Œã§åŠ æ§“ã§ãã‚‹ã“ã¨
     EXPECT_EQ("m123p456s789z6,z777+7", Shoupai("m123p456s789z67,z777+").gang("z777+7").toString());
-    // Ô”v‚ğŠÜ‚ŞˆÃÈ‚ª‚Å‚«‚é‚±‚Æ
+    // èµ¤ç‰Œã‚’å«ã‚€æš—æ§“ãŒã§ãã‚‹ã“ã¨
     EXPECT_EQ("p456s789z4567,m5500", Shoupai("m0055p456s789z4567").gang("m5500").toString());
-    // Ô”v‚ğŠÜ‚Ş‰ÁÈ‚ª‚Å‚«‚é‚±‚Æ
+    // èµ¤ç‰Œã‚’å«ã‚€åŠ æ§“ãŒã§ãã‚‹ã“ã¨
     EXPECT_EQ("m123s789z4567,p505=5", Shoupai("m123p5s789z4567,p505=").gang("p505=5").toString());
-    // Ô”v‚Å‰ÁÈ‚Å‚«‚é‚±‚Æ
+    // èµ¤ç‰Œã§åŠ æ§“ã§ãã‚‹ã“ã¨
     EXPECT_EQ("m123s789z4567,p555=0", Shoupai("m123p0s789z4567,p555=").gang("p555=0").toString());
-    // ƒŠ[ƒ`Œã‚É‚àˆÃÈ‚Å‚«‚é‚±‚Æ(ƒ`ƒFƒbƒN‚µ‚È‚¢)
+    // ãƒªãƒ¼ãƒå¾Œã«ã‚‚æš—æ§“ã§ãã‚‹ã“ã¨(ãƒã‚§ãƒƒã‚¯ã—ãªã„)
     EXPECT_EQ("p456s789z4567*,m1111", Shoupai("m1111p456s789z4567*").gang("m1111").toString());
-    // ƒŠ[ƒ`Œã‚É‚à‰ÁÈ‚Å‚«‚é‚±‚Æ(ƒ`ƒFƒbƒN‚µ‚È‚¢)
+    // ãƒªãƒ¼ãƒå¾Œã«ã‚‚åŠ æ§“ã§ãã‚‹ã“ã¨(ãƒã‚§ãƒƒã‚¯ã—ãªã„)
     EXPECT_EQ("p456s789z4567*,m111+1", Shoupai("m1p456s789z4567*,m111+").gang("m111+1").toString());
-    // •š‚¹”v‚ª‚ ‚éê‡A‚»‚ê‚ğg‚Á‚ÄˆÃÈ‚Å‚«‚é‚±‚Æ
+    // ä¼ã›ç‰ŒãŒã‚ã‚‹å ´åˆã€ãã‚Œã‚’ä½¿ã£ã¦æš—æ§“ã§ãã‚‹ã“ã¨
     EXPECT_EQ("__________,m5550", Shoupai("______________").gang("m5550").toString());
-    // •š‚¹”v‚ª‚ ‚éê‡A‚»‚ê‚ğg‚Á‚Ä‰ÁÈ‚Å‚«‚é‚±‚Æ
+    // ä¼ã›ç‰ŒãŒã‚ã‚‹å ´åˆã€ãã‚Œã‚’ä½¿ã£ã¦åŠ æ§“ã§ãã‚‹ã“ã¨
     EXPECT_EQ("__________,m555=0", Shoupai("___________,m555=").gang("m555=0").toString());
-    // ‡q‚ÅÈ‚Å‚«‚È‚¢‚±‚Æ
+    // é †å­ã§æ§“ã§ããªã„ã“ã¨
     EXPECT_THROW(Shoupai("m1112456s789z4567").gang("m456-"), std::invalid_argument);
-    // q‚ÅÈ‚Å‚«‚È‚¢‚±‚Æ
+    // åˆ»å­ã§æ§“ã§ããªã„ã“ã¨
     EXPECT_THROW(Shoupai("m1112456s789z4567").gang("m111+"), std::invalid_argument);
-    // •s³‚È–Êq‚ÅÈ‚Å‚«‚È‚¢‚±‚Æ
+    // ä¸æ­£ãªé¢å­ã§æ§“ã§ããªã„ã“ã¨
     EXPECT_THROW(Shoupai("m1112456s789z4567").gang("m1112"), std::invalid_argument);
-    // •s³‚È–Êq‚ÅÈ‚Å‚«‚È‚¢‚±‚Æ
+    // ä¸æ­£ãªé¢å­ã§æ§“ã§ããªã„ã“ã¨
     EXPECT_THROW(Shoupai("m2456s789z4567,m111+").gang("m111+2"), std::invalid_argument);
-    // ‘Å”v‚Ì’¼Œã‚ÉÈ‚Å‚«‚È‚¢‚±‚Æ
+    // æ‰“ç‰Œã®ç›´å¾Œã«æ§“ã§ããªã„ã“ã¨
     EXPECT_THROW(Shoupai("m1111p456s789z456").gang("m1111"), std::runtime_error);
-    // •›˜I‚Ì’¼Œã‚ÉÈ‚Å‚«‚È‚¢‚±‚Æ
+    // å‰¯éœ²ã®ç›´å¾Œã«æ§“ã§ããªã„ã“ã¨
     EXPECT_THROW(Shoupai("m1111s789z4567,p456-,").gang("m1111"), std::runtime_error);
-    // È‚Ì’¼Œã‚ÉÈ‚Å‚«‚È‚¢‚±‚Æ
+    // æ§“ã®ç›´å¾Œã«æ§“ã§ããªã„ã“ã¨
     EXPECT_THROW(Shoupai("m1111p4444s789z567").gang("m1111").gang("p4444"), std::runtime_error);
-    // ­”v‚Æ‚È‚éÈ‚à‚Å‚«‚é‚±‚Æ
+    // å°‘ç‰Œã¨ãªã‚‹æ§“ã‚‚ã§ãã‚‹ã“ã¨
     EXPECT_EQ("p456s789z456,m1111", Shoupai("m1111p456s789z456").gang("m1111", false).toString());
     EXPECT_EQ("s789z4567,p456-,m1111", Shoupai("m1111s789z4567,p456-,").gang("m1111", false).toString());
     EXPECT_EQ("s789z567,m1111,p4444", Shoupai("m1111p4444s789z567").gang("m1111", false).gang("p4444", false).toString());
-    // è”v‚É4–‡‚È‚¢”v‚ÅˆÃÈ‚Å‚«‚È‚¢‚±‚Æ
+    // æ‰‹ç‰Œã«4æšãªã„ç‰Œã§æš—æ§“ã§ããªã„ã“ã¨
     EXPECT_THROW(Shoupai("m1112p456s789z4567").gang("m1111"), std::invalid_argument);
-    // è”v‚É‚È‚¢”v‚Å‰ÁÈ‚Å‚«‚È‚¢‚±‚Æ
+    // æ‰‹ç‰Œã«ãªã„ç‰Œã§åŠ æ§“ã§ããªã„ã“ã¨
     EXPECT_THROW(Shoupai("m13p456s789z567,m222=").gang("m2222"), std::invalid_argument);
     EXPECT_THROW(Shoupai("m10p456s789z567,m555=").gang("m5555"), std::invalid_argument);
     EXPECT_THROW(Shoupai("m15p456s789z567,m555=").gang("m5550"), std::invalid_argument);
-    // –¾‚ª‚È‚¢”v‚Å‰ÁÈ‚Å‚«‚È‚¢‚±‚Æ
+    // æ˜åˆ»ãŒãªã„ç‰Œã§åŠ æ§“ã§ããªã„ã“ã¨
     EXPECT_THROW(Shoupai("m12p456s789z567,m222=").gang("m111=1"), std::invalid_argument);
 }
 
 TEST(ShoupaiTest, menqian) {
-    // •›˜I‚ª‚È‚¢ê‡Aƒƒ“ƒ[ƒ“‚Æ”»’è‚·‚é‚±‚Æ
+    // å‰¯éœ²ãŒãªã„å ´åˆã€ãƒ¡ãƒ³ã‚¼ãƒ³ã¨åˆ¤å®šã™ã‚‹ã“ã¨
     EXPECT_TRUE(Shoupai("m123p0s789z4567").menqian());
-    // •›˜I‚ª‚ ‚éê‡Aƒƒ“ƒ[ƒ“‚Æ”»’è‚µ‚È‚¢‚±‚Æ
+    // å‰¯éœ²ãŒã‚ã‚‹å ´åˆã€ãƒ¡ãƒ³ã‚¼ãƒ³ã¨åˆ¤å®šã—ãªã„ã“ã¨
     EXPECT_FALSE(Shoupai("p0s789z4567,m123-").menqian());
-    // ˆÃƒJƒ“‚ğ•›˜I‚Æ”»’è‚µ‚È‚¢‚±‚Æ
+    // æš—ã‚«ãƒ³ã‚’å‰¯éœ²ã¨åˆ¤å®šã—ãªã„ã“ã¨
     EXPECT_TRUE(Shoupai("m123p0s789,z1111").menqian());
 }
 
 TEST(ShoupaiTest, lizhi) {
-    // ”z”v‚ÍƒŠ[ƒ`ó‘Ô‚Å‚È‚¢‚±‚Æ
+    // é…ç‰Œæ™‚ã¯ãƒªãƒ¼ãƒçŠ¶æ…‹ã§ãªã„ã“ã¨
     EXPECT_FALSE(Shoupai("_____________").lizhi());
-    // ƒŠ[ƒ`éŒ¾‚É‚æ‚èƒŠ[ƒ`ó‘Ô‚É‚È‚é‚±‚Æ
+    // ãƒªãƒ¼ãƒå®£è¨€ã«ã‚ˆã‚Šãƒªãƒ¼ãƒçŠ¶æ…‹ã«ãªã‚‹ã“ã¨
     EXPECT_TRUE(Shoupai("_____________").zimo("z7").dapai("z7_*").lizhi());
 }
 
 TEST(ShoupaiTest, get_dapai) {
-    // ƒcƒ‚’¼Œã‚Ü‚½‚Í•›˜I’¼ŒãˆÈŠO‚Í‘Å”v‚Å‚«‚È‚¢‚±‚Æ
+    // ãƒ„ãƒ¢ç›´å¾Œã¾ãŸã¯å‰¯éœ²ç›´å¾Œä»¥å¤–ã¯æ‰“ç‰Œã§ããªã„ã“ã¨
     EXPECT_THROW(Shoupai("m123p406s789z4567").get_dapai(), std::runtime_error);
     EXPECT_THROW(Shoupai("m123p406s789z2,z111+").get_dapai(), std::runtime_error);
     EXPECT_THROW(Shoupai("_____________").get_dapai(), std::runtime_error);
     EXPECT_THROW(Shoupai("__________,z111+").get_dapai(), std::runtime_error);
-    // ƒcƒ‚’¼Œã‚Í”CˆÓ‚Ìè”v‚ğ‘Å”v‚Å‚«‚é‚±‚Æ(ƒƒ“ƒ[ƒ“è)
+    // ãƒ„ãƒ¢ç›´å¾Œã¯ä»»æ„ã®æ‰‹ç‰Œã‚’æ‰“ç‰Œã§ãã‚‹ã“ã¨(ãƒ¡ãƒ³ã‚¼ãƒ³æ‰‹)
     EXPECT_EQ((std::vector<std::string>{
         "m1", "m2", "m3", "p4", "p0", "p6", "s7", "s8", "s9", "z1", "z2", "z3_" }),
         Shoupai("m123p406s789z11123").get_dapai());
-    // ƒcƒ‚’¼Œã‚Í”CˆÓ‚Ìè”v‚ğ‘Å”v‚Å‚«‚é‚±‚Æ(•›˜Iè)
+    // ãƒ„ãƒ¢ç›´å¾Œã¯ä»»æ„ã®æ‰‹ç‰Œã‚’æ‰“ç‰Œã§ãã‚‹ã“ã¨(å‰¯éœ²æ‰‹)
     EXPECT_EQ((std::vector<std::string>{
         "m1", "m2", "m3", "p4", "p0", "p6", "s7", "s8", "s9", "z1", "z2_" }),
         Shoupai("m123p406s789z12,z111+").get_dapai());
-    // ƒŠ[ƒ`Œã‚Íƒcƒ‚Ø‚è‚µ‚©‚Å‚«‚È‚¢‚±‚Æ
+    // ãƒªãƒ¼ãƒå¾Œã¯ãƒ„ãƒ¢åˆ‡ã‚Šã—ã‹ã§ããªã„ã“ã¨
     EXPECT_EQ((std::vector<std::string>{
         "m1_" }),
         Shoupai("m123p456s789z1234m1*").get_dapai());
-    // Ô”v‚ğ’P“Æ‚Ì”v‚Æ‚µ‚Ä‹æ•Ê‚·‚é‚±‚Æ
+    // èµ¤ç‰Œã‚’å˜ç‹¬ã®ç‰Œã¨ã—ã¦åŒºåˆ¥ã™ã‚‹ã“ã¨
     EXPECT_EQ((std::vector<std::string>{
         "m1", "m2", "m3", "p4", "p0", "p5", "s7", "s8", "s9", "z1", "z2", "z3_" }),
         Shoupai("m123p405s789z11123").get_dapai());
     EXPECT_EQ((std::vector<std::string>{
         "m1", "m2", "m3", "p4", "p5", "s7", "s8", "s9", "z1", "z2", "z3", "p0_" }),
         Shoupai("m123p45s789z11123p0").get_dapai());
-    // èo‚µ‚Æƒcƒ‚Ø‚è‚ğ‹æ•Ê‚·‚é‚±‚Æ
+    // æ‰‹å‡ºã—ã¨ãƒ„ãƒ¢åˆ‡ã‚Šã‚’åŒºåˆ¥ã™ã‚‹ã“ã¨
     EXPECT_EQ((std::vector<std::string>{
         "m1", "m2", "m3", "p4", "p5", "s7", "s8", "s9", "z1", "z2", "z3", "p5_" }),
         Shoupai("m123p45s789z11123p5").get_dapai());
     EXPECT_EQ((std::vector<std::string>{
         "m1", "m2", "m3", "p4", "p0", "p5", "s7", "s8", "s9", "z1", "z2", "p0_" }),
         Shoupai("m123p405s789z1112p0").get_dapai());
-    // •š‚¹”v‚Ì‚İ‚Ìè”v‚Å‚Í‹ó”z—ñ‚ğ•Ô‚·‚±‚Æ
+    // ä¼ã›ç‰Œã®ã¿ã®æ‰‹ç‰Œã§ã¯ç©ºé…åˆ—ã‚’è¿”ã™ã“ã¨
     EXPECT_EQ((std::vector<std::string>{}), Shoupai("______________").get_dapai());
     EXPECT_EQ((std::vector<std::string>{}), Shoupai("___________,m123-,").get_dapai());
-    // ‹ò‘Ö‚¦‚Æ‚È‚é‘Å”v‚ª‹–‚³‚ê‚È‚¢‚±‚Æ(—¼–Ê–Â‚«)
+    // å–°æ›¿ãˆã¨ãªã‚‹æ‰“ç‰ŒãŒè¨±ã•ã‚Œãªã„ã“ã¨(ä¸¡é¢é³´ã)
     EXPECT_EQ((std::vector<std::string>{
         "m5", "p4", "p0", "p6", "s7", "s8", "s9", "z2", "z3" }),
         Shoupai("m145p406s789z23,m1-23,").get_dapai());
     EXPECT_EQ((std::vector<std::string>{
         "m5", "p4", "p0", "p6", "s7", "s8", "s9", "z2", "z3" }),
         Shoupai("m145p406s789z23,m234-,").get_dapai());
-    // ‹ò‘Ö‚¦‚Æ‚È‚é‘Å”v‚ª‹–‚³‚ê‚È‚¢‚±‚Æ(›Æ’£–Â‚«)
+    // å–°æ›¿ãˆã¨ãªã‚‹æ‰“ç‰ŒãŒè¨±ã•ã‚Œãªã„ã“ã¨(åµŒå¼µé³´ã)
     EXPECT_EQ((std::vector<std::string>{
         "m1", "m2", "m3", "p2", "p8", "s7", "s8", "s9","z2", "z3" }),
         Shoupai("m123p258s789z23,p45-6,").get_dapai());
-    // ‹ò‘Ö‚¦‚Æ‚È‚é‘Å”v‚ª‹–‚³‚ê‚È‚¢‚±‚Æ(•Ó’£–Â‚«)
+    // å–°æ›¿ãˆã¨ãªã‚‹æ‰“ç‰ŒãŒè¨±ã•ã‚Œãªã„ã“ã¨(è¾ºå¼µé³´ã)
     EXPECT_EQ((std::vector<std::string>{
         "m1", "m2", "m3", "p4", "p5", "p6", "s4", "s6", "z2", "z3" }),
         Shoupai("m123p456s467z23,s7-89,").get_dapai());
-    // ‹ò‘Ö‚¦‚Æ‚È‚é‘Å”v‚ª‹–‚³‚ê‚È‚¢‚±‚Æ(ƒ|ƒ“)
+    // å–°æ›¿ãˆã¨ãªã‚‹æ‰“ç‰ŒãŒè¨±ã•ã‚Œãªã„ã“ã¨(ãƒãƒ³)
     EXPECT_EQ((std::vector<std::string>{
         "m1", "m2", "m3", "p4", "p5", "p6", "s7", "s8", "s9", "z2" }),
         Shoupai("m123p456s789z12,z111+,").get_dapai());
-    // ‹ò‘Ö‚¦‚Æ‚È‚é‘Å”v‚ª‹–‚³‚ê‚È‚¢‚±‚Æ(Ô”v“ü‚è‚Ì–Â‚«)
+    // å–°æ›¿ãˆã¨ãªã‚‹æ‰“ç‰ŒãŒè¨±ã•ã‚Œãªã„ã“ã¨(èµ¤ç‰Œå…¥ã‚Šã®é³´ã)
     EXPECT_EQ((std::vector<std::string>{
         "m6", "p4", "p5", "p6", "s7", "s8", "s9", "z1", "z2" }),
         Shoupai("m256p456s789z12,m340-,").get_dapai());
-    // ‹ò‘Ö‚¦‚Æ‚È‚é‘Å”v‚ª‹–‚³‚ê‚È‚¢‚±‚Æ(Ô”v‘Å”v)
+    // å–°æ›¿ãˆã¨ãªã‚‹æ‰“ç‰ŒãŒè¨±ã•ã‚Œãªã„ã“ã¨(èµ¤ç‰Œæ‰“ç‰Œ)
     EXPECT_EQ((std::vector<std::string>{
         "m6", "p4", "p5", "p6", "s7", "s8", "s9", "z1", "z2" }),
         Shoupai("m206p456s789z12,m345-,").get_dapai());
-    // Ô”v‚É‚æ‚éƒ|ƒ“‚ÌÛ‚É³‚µ‚­‹ò‚¢‘Ö‚¦”»’è‚·‚é‚±‚Æ
+    // èµ¤ç‰Œã«ã‚ˆã‚‹ãƒãƒ³ã®éš›ã«æ­£ã—ãå–°ã„æ›¿ãˆåˆ¤å®šã™ã‚‹ã“ã¨
     EXPECT_EQ((std::vector<std::string>{
         "m2", "p1", "s1", "s2", "s6", "s7", "s8" }),
         Shoupai("m25p1s12678,z666+,m550-,").get_dapai());
-    // ‹ò‘Ö‚¦‚Ì‚½‚ß‘Å”v‚Å‚«‚È‚¢ê‡‚ª‚ ‚é‚±‚Æ
+    // å–°æ›¿ãˆã®ãŸã‚æ‰“ç‰Œã§ããªã„å ´åˆãŒã‚ã‚‹ã“ã¨
     EXPECT_EQ((std::vector<std::string>{}), Shoupai("m14,p456-,s789-,z111+,m234-,").get_dapai());
     EXPECT_EQ((std::vector<std::string>{}), Shoupai("m14,p456-,s789-,z111+,m1-23,").get_dapai());
     EXPECT_EQ((std::vector<std::string>{}), Shoupai("m22,p456-,s789-,z111+,m12-3,").get_dapai());
-    // ‹ò‚¢‘Ö‚¦‚ğ‹–‚·‚±‚Æ‚à‚Å‚«‚é‚±‚Æ
+    // å–°ã„æ›¿ãˆã‚’è¨±ã™ã“ã¨ã‚‚ã§ãã‚‹ã“ã¨
     EXPECT_EQ((std::vector<std::string>{
         "m1", "m4", "m5", "p4", "p0", "p6", "s7", "s8", "s9", "z2", "z3" }),
         Shoupai("m145p406s789z23,m1-23,").get_dapai(false));
 }
 
 TEST(ShoupaiTest, get_chi_mianzi) {
-    // ƒcƒ‚’¼Œã‚Æ•›˜I‚Ì’¼Œã‚Éƒ`[‚Å‚«‚È‚¢‚±‚Æ
+    // ãƒ„ãƒ¢ç›´å¾Œã¨å‰¯éœ²ã®ç›´å¾Œã«ãƒãƒ¼ã§ããªã„ã“ã¨
     EXPECT_THROW(Shoupai("m123p456s789z12345").get_chi_mianzi("m1-"), std::runtime_error);
     EXPECT_THROW(Shoupai("m123p456s789z12,z333=,").get_chi_mianzi("m1-"), std::runtime_error);
     EXPECT_THROW(Shoupai("______________").get_chi_mianzi("m1-"), std::runtime_error);
-    // ƒ`[‚Å‚«‚éƒƒ“ƒc‚ª‚È‚¢ê‡
+    // ãƒãƒ¼ã§ãã‚‹ãƒ¡ãƒ³ãƒ„ãŒãªã„å ´åˆ
     EXPECT_EQ((std::vector<std::string>{}), Shoupai("m123p456s789z1234").get_chi_mianzi("m5-"));
     EXPECT_EQ((std::vector<std::string>{}), Shoupai("_____________").get_chi_mianzi("m5-"));
-    // ƒ`[‚Å‚«‚éƒƒ“ƒc‚ª1‚Â‚Ìê‡
+    // ãƒãƒ¼ã§ãã‚‹ãƒ¡ãƒ³ãƒ„ãŒ1ã¤ã®å ´åˆ
     EXPECT_EQ((std::vector<std::string>{
         "m123-" }),
         Shoupai("m123p456s789z1234").get_chi_mianzi("m3-"));
-    // ƒ`[‚Å‚«‚éƒƒ“ƒc‚ª2‚Â‚Ìê‡
+    // ãƒãƒ¼ã§ãã‚‹ãƒ¡ãƒ³ãƒ„ãŒ2ã¤ã®å ´åˆ
     EXPECT_EQ((std::vector<std::string>{
         "m123-", "m23-4" }),
         Shoupai("m1234p456s789z123").get_chi_mianzi("m3-"));
-    // ƒ`[‚Å‚«‚éƒƒ“ƒc‚ª3‚Â‚Ìê‡
+    // ãƒãƒ¼ã§ãã‚‹ãƒ¡ãƒ³ãƒ„ãŒ3ã¤ã®å ´åˆ
     EXPECT_EQ((std::vector<std::string>{
         "m123-", "m23-4", "m3-45" }),
         Shoupai("m12345p456s789z12").get_chi_mianzi("m3-"));
-    // Ô”v‚Åƒ`[‚Å‚«‚é‚±‚Æ
+    // èµ¤ç‰Œã§ãƒãƒ¼ã§ãã‚‹ã“ã¨
     EXPECT_EQ((std::vector<std::string>{
         "p40-6" }),
         Shoupai("m123p456s789z1234").get_chi_mianzi("p0-"));
-    // Ô”vŠÜ‚İ‚Åƒ`[‚Å‚«‚é‚±‚Æ
+    // èµ¤ç‰Œå«ã¿ã§ãƒãƒ¼ã§ãã‚‹ã“ã¨
     EXPECT_EQ((std::vector<std::string>{
         "p3-40" }),
         Shoupai("m123p34067s789z12").get_chi_mianzi("p3-"));
@@ -480,7 +480,7 @@ TEST(ShoupaiTest, get_chi_mianzi) {
     EXPECT_EQ((std::vector<std::string>{
         "p067-" }),
         Shoupai("m123p34067s789z12").get_chi_mianzi("p7-"));
-    // Ô”v‚È‚µ‚Ìƒƒ“ƒc‚à‘I‘ğ‚·‚é‚±‚Æ
+    // èµ¤ç‰Œãªã—ã®ãƒ¡ãƒ³ãƒ„ã‚‚é¸æŠã™ã‚‹ã“ã¨
     EXPECT_EQ((std::vector<std::string>{
         "p3-40", "p3-45" }),
         Shoupai("m123p340567s789z1").get_chi_mianzi("p3-"));
@@ -493,28 +493,28 @@ TEST(ShoupaiTest, get_chi_mianzi) {
     EXPECT_EQ((std::vector<std::string>{
         "p067-", "p567-" }),
         Shoupai("m123p340567s789z1").get_chi_mianzi("p7-"));
-    // ƒcƒ‚Ø‚è‚Ì”v‚ğƒ`[‚Å‚«‚é‚±‚Æ
+    // ãƒ„ãƒ¢åˆ‡ã‚Šã®ç‰Œã‚’ãƒãƒ¼ã§ãã‚‹ã“ã¨
     EXPECT_EQ((std::vector<std::string>{
         "m123-" }),
         Shoupai("m123p456s789z1234").get_chi_mianzi("m3_-"));
-    // ƒŠ[ƒ`éŒ¾”v‚ğƒ`[‚Å‚«‚é‚±‚Æ
+    // ãƒªãƒ¼ãƒå®£è¨€ç‰Œã‚’ãƒãƒ¼ã§ãã‚‹ã“ã¨
     EXPECT_EQ((std::vector<std::string>{
         "m123-" }),
         Shoupai("m123p456s789z1234").get_chi_mianzi("m3*-"));
-    // ƒcƒ‚Ø‚èƒŠ[ƒ`‚ÌéŒ¾”v‚ğƒ`[‚Å‚«‚é‚±‚Æ
+    // ãƒ„ãƒ¢åˆ‡ã‚Šãƒªãƒ¼ãƒã®å®£è¨€ç‰Œã‚’ãƒãƒ¼ã§ãã‚‹ã“ã¨
     EXPECT_EQ((std::vector<std::string>{
         "m123-" }),
         Shoupai("m123p456s789z1234").get_chi_mianzi("m3_*-"));
-    // ƒŠ[ƒ`Œã‚Íƒ`[‚Å‚«‚È‚¢‚±‚Æ
+    // ãƒªãƒ¼ãƒå¾Œã¯ãƒãƒ¼ã§ããªã„ã“ã¨
     EXPECT_EQ((std::vector<std::string>{}), Shoupai("m123p456s789z1234*").get_chi_mianzi("m3-"));
-    // ‘Å”v‘I‘ğ‚Å‚«‚È‚­‚È‚é–Â‚«•û‚ğŠÜ‚ß‚È‚¢‚±‚Æ
+    // æ‰“ç‰Œé¸æŠã§ããªããªã‚‹é³´ãæ–¹ã‚’å«ã‚ãªã„ã“ã¨
     EXPECT_EQ((std::vector<std::string>{}), Shoupai("s6789,m123-,p456-,z111+").get_chi_mianzi("s6-"));
     EXPECT_EQ((std::vector<std::string>{}), Shoupai("s6789,m123-,p456-,z111+").get_chi_mianzi("s9-"));
     EXPECT_EQ((std::vector<std::string>{}), Shoupai("s7889,m123-,p456-,z111+").get_chi_mianzi("s8-"));
     EXPECT_EQ((std::vector<std::string>{}), Shoupai("s7899,m123-,p456-,z111+").get_chi_mianzi("s9-"));
     EXPECT_EQ((std::vector<std::string>{}), Shoupai("s7789,m123-,p456-,z111+").get_chi_mianzi("s7-"));
     EXPECT_EQ((std::vector<std::string>{}), Shoupai("s6678999,m123-,p456-").get_chi_mianzi("s6-"));
-    // ‹ò‚¢‘Ö‚¦‚ğ‚Æ‚È‚é–Â‚«‚ğ‹–‚·‚±‚Æ‚à‚Å‚«‚é‚±‚Æ
+    // å–°ã„æ›¿ãˆã‚’ã¨ãªã‚‹é³´ãã‚’è¨±ã™ã“ã¨ã‚‚ã§ãã‚‹ã“ã¨
     EXPECT_EQ((std::vector<std::string>{
         "s6-78" }),
         Shoupai("s6789,m123-,p456-,z111+").get_chi_mianzi("s6-", false));
@@ -533,41 +533,41 @@ TEST(ShoupaiTest, get_chi_mianzi) {
     EXPECT_EQ((std::vector<std::string>{
         "s6-78" }),
         Shoupai("s6678999,m123-,p456-").get_chi_mianzi("s6-", false));
-    // •s³‚È”v‚Åƒ`[‚Å‚«‚È‚¢‚±‚Æ
+    // ä¸æ­£ãªç‰Œã§ãƒãƒ¼ã§ããªã„ã“ã¨
     EXPECT_THROW(Shoupai("m123p456s789z1234").get_chi_mianzi("mm-"), std::invalid_argument);
     EXPECT_THROW(Shoupai("m123p456s789z1234").get_chi_mianzi("m1"), std::invalid_argument);
-    // š”v‚Åƒ`[‚Å‚«‚È‚¢‚±‚Æ
+    // å­—ç‰Œã§ãƒãƒ¼ã§ããªã„ã“ã¨
     EXPECT_EQ((std::vector<std::string>{}), Shoupai("m123p456s789z1234").get_chi_mianzi("z1-"));
-    // ã‰ÆˆÈŠO‚©‚çƒ`[‚Å‚«‚È‚¢‚±‚Æ
+    // ä¸Šå®¶ä»¥å¤–ã‹ã‚‰ãƒãƒ¼ã§ããªã„ã“ã¨
     EXPECT_EQ((std::vector<std::string>{}), Shoupai("m123p456s789z1234").get_chi_mianzi("m1+"));
     EXPECT_EQ((std::vector<std::string>{}), Shoupai("m123p456s789z1234").get_chi_mianzi("m1="));
 }
 
 TEST(ShoupaiTest, get_gang_mianzi) {
-    // ƒcƒ‚’¼Œã‚Æ•›˜I‚Ì’¼Œã‚É‘å–¾È‚Å‚«‚È‚¢‚±‚Æ
+    // ãƒ„ãƒ¢ç›´å¾Œã¨å‰¯éœ²ã®ç›´å¾Œã«å¤§æ˜æ§“ã§ããªã„ã“ã¨
     EXPECT_THROW(Shoupai("m111p456s789z12345").get_gang_mianzi("m1+"), std::runtime_error);
     EXPECT_THROW(Shoupai("m111p456s789z12,z333=,").get_gang_mianzi("m1+"), std::runtime_error);
     EXPECT_THROW(Shoupai("______________").get_gang_mianzi("m1-"), std::runtime_error);
-    // ‘å–¾È‚Å‚«‚éƒƒ“ƒc‚ª‚È‚¢ê‡
+    // å¤§æ˜æ§“ã§ãã‚‹ãƒ¡ãƒ³ãƒ„ãŒãªã„å ´åˆ
     EXPECT_EQ((std::vector<std::string>{}), Shoupai("m123p456s789z1122").get_gang_mianzi("z1+"));
     EXPECT_EQ((std::vector<std::string>{}), Shoupai("_____________").get_gang_mianzi("z1="));
-    // ‰º‰Æ‚©‚ç‘å–¾È‚Å‚«‚é‚±‚Æ
+    // ä¸‹å®¶ã‹ã‚‰å¤§æ˜æ§“ã§ãã‚‹ã“ã¨
     EXPECT_EQ((std::vector<std::string>{
         "m1111+" }),
         Shoupai("m111p456s789z1234").get_gang_mianzi("m1+"));
-    // ‘Î–Ê‚©‚ç‘å–¾È‚Å‚«‚é‚±‚Æ
+    // å¯¾é¢ã‹ã‚‰å¤§æ˜æ§“ã§ãã‚‹ã“ã¨
     EXPECT_EQ((std::vector<std::string>{
         "p4444=" }),
         Shoupai("m123p444s789z1234").get_gang_mianzi("p4="));
-    // ã‰Æ‚©‚ç‘å–¾È‚Å‚«‚é‚±‚Æ
+    // ä¸Šå®¶ã‹ã‚‰å¤§æ˜æ§“ã§ãã‚‹ã“ã¨
     EXPECT_EQ((std::vector<std::string>{
         "s7777-" }),
         Shoupai("m123p456s777z1234").get_gang_mianzi("s7-"));
-    // Ô”v‚Å‘å–¾È‚Å‚«‚é‚±‚Æ
+    // èµ¤ç‰Œã§å¤§æ˜æ§“ã§ãã‚‹ã“ã¨
     EXPECT_EQ((std::vector<std::string>{
         "p5550+" }),
         Shoupai("m123p555s789z1234").get_gang_mianzi("p0+"));
-    // Ô”v“ü‚è‚Ì‘å–¾È‚ª‚Å‚«‚é‚±‚Æ
+    // èµ¤ç‰Œå…¥ã‚Šã®å¤§æ˜æ§“ãŒã§ãã‚‹ã“ã¨
     EXPECT_EQ((std::vector<std::string>{
         "p5505+" }),
         Shoupai("m123p055s789z1234").get_gang_mianzi("p5+"));
@@ -577,48 +577,48 @@ TEST(ShoupaiTest, get_gang_mianzi) {
     EXPECT_EQ((std::vector<std::string>{
         "p0005+" }),
         Shoupai("m123p000s789z1234").get_gang_mianzi("p5+"));
-    // ƒcƒ‚Ø‚è‚Ì”v‚ğ‘å–¾È‚Å‚«‚é‚±‚Æ
+    // ãƒ„ãƒ¢åˆ‡ã‚Šã®ç‰Œã‚’å¤§æ˜æ§“ã§ãã‚‹ã“ã¨
     EXPECT_EQ((std::vector<std::string>{
         "m1111+" }),
         Shoupai("m111p456s789z1234").get_gang_mianzi("m1_+"));
-    // ƒŠ[ƒ`éŒ¾”v‚ğ‘å–¾È‚Å‚«‚é‚±‚Æ
+    // ãƒªãƒ¼ãƒå®£è¨€ç‰Œã‚’å¤§æ˜æ§“ã§ãã‚‹ã“ã¨
     EXPECT_EQ((std::vector<std::string>{
         "m1111+" }),
         Shoupai("m111p456s789z1234").get_gang_mianzi("m1*+"));
-    // ƒcƒ‚Ø‚èƒŠ[ƒ`‚ÌéŒ¾”v‚ğ‘å–¾È‚Å‚«‚é‚±‚Æ
+    // ãƒ„ãƒ¢åˆ‡ã‚Šãƒªãƒ¼ãƒã®å®£è¨€ç‰Œã‚’å¤§æ˜æ§“ã§ãã‚‹ã“ã¨
     EXPECT_EQ((std::vector<std::string>{
         "m1111+" }),
         Shoupai("m111p456s789z1234").get_gang_mianzi("m1_*+"));
-    // ƒŠ[ƒ`Œã‚Í‘å–¾È‚Å‚«‚È‚¢‚±‚Æ
+    // ãƒªãƒ¼ãƒå¾Œã¯å¤§æ˜æ§“ã§ããªã„ã“ã¨
     EXPECT_EQ((std::vector<std::string>{}), Shoupai("m111p456s789z1234*").get_gang_mianzi("m1+"));
-    // •s³‚È”v‚Å‘å–¾È‚Å‚«‚È‚¢‚±‚Æ
+    // ä¸æ­£ãªç‰Œã§å¤§æ˜æ§“ã§ããªã„ã“ã¨
     EXPECT_THROW(Shoupai("m111p555s999z1234").get_gang_mianzi("mm+"), std::invalid_argument);
     EXPECT_THROW(Shoupai("m111p555s999z1234").get_gang_mianzi("m1"), std::invalid_argument);
-    // ‘Å”v‚Æ•›˜I‚Ì’¼Œã‚É‚ÍˆÃÈ‚Å‚«‚È‚¢‚±‚Æ
+    // æ‰“ç‰Œã¨å‰¯éœ²ã®ç›´å¾Œã«ã¯æš—æ§“ã§ããªã„ã“ã¨
     EXPECT_THROW(Shoupai("m1111p555s999z123").get_gang_mianzi(), std::runtime_error);
     EXPECT_THROW(Shoupai("m1111p555s999,z333=").get_gang_mianzi(), std::runtime_error);
     EXPECT_THROW(Shoupai("m11112p555s999,z333=,").get_gang_mianzi(), std::runtime_error);
     EXPECT_THROW(Shoupai("_____________").get_gang_mianzi(), std::runtime_error);
-    // ˆÃÈ‚Å‚«‚éƒƒ“ƒc‚ª‚È‚¢ê‡
+    // æš—æ§“ã§ãã‚‹ãƒ¡ãƒ³ãƒ„ãŒãªã„å ´åˆ
     EXPECT_EQ((std::vector<std::string>{}), Shoupai("m123p456s789z12345").get_gang_mianzi());
     EXPECT_EQ((std::vector<std::string>{}), Shoupai("______________").get_gang_mianzi());
-    // äİq‚ÅˆÃÈ‚Å‚«‚é‚±‚Æ
+    // è¬å­ã§æš—æ§“ã§ãã‚‹ã“ã¨
     EXPECT_EQ((std::vector<std::string>{
         "m1111" }),
         Shoupai("m1111p456s789z1234").get_gang_mianzi());
-    // “›q‚ÅˆÃÈ‚Å‚«‚é‚±‚Æ
+    // ç­’å­ã§æš—æ§“ã§ãã‚‹ã“ã¨
     EXPECT_EQ((std::vector<std::string>{
         "p4444" }),
         Shoupai("m123p4444s789z1234").get_gang_mianzi());
-    // õq‚ÅˆÃÈ‚Å‚«‚é‚±‚Æ
+    // ç´¢å­ã§æš—æ§“ã§ãã‚‹ã“ã¨
     EXPECT_EQ((std::vector<std::string>{
         "s7777" }),
         Shoupai("m123p456s7777z1234").get_gang_mianzi());
-    // š”v‚ÅˆÃÈ‚Å‚«‚é‚±‚Æ
+    // å­—ç‰Œã§æš—æ§“ã§ãã‚‹ã“ã¨
     EXPECT_EQ((std::vector<std::string>{
         "z1111" }),
         Shoupai("m123p456s789z11112").get_gang_mianzi());
-    // Ô”v“ü‚è‚ÅˆÃÈ‚Å‚«‚é‚±‚Æ
+    // èµ¤ç‰Œå…¥ã‚Šã§æš—æ§“ã§ãã‚‹ã“ã¨
     EXPECT_EQ((std::vector<std::string>{
         "p5550" }),
         Shoupai("m123p0555s789z1234").get_gang_mianzi());
@@ -631,55 +631,55 @@ TEST(ShoupaiTest, get_gang_mianzi) {
     EXPECT_EQ((std::vector<std::string>{
         "p0000" }),
         Shoupai("m123p0000s789z1234").get_gang_mianzi());
-    // ƒŠ[ƒ`Œã‚àˆÃÈ‚Å‚«‚é‚±‚Æ
+    // ãƒªãƒ¼ãƒå¾Œã‚‚æš—æ§“ã§ãã‚‹ã“ã¨
     EXPECT_EQ((std::vector<std::string>{
         "m1111" }),
         Shoupai("m111p456s789z1122m1*").get_gang_mianzi());
-    // ƒŠ[ƒ`Œã‚Í‘—‚èÈ‚Å‚«‚È‚¢‚±‚Æ
+    // ãƒªãƒ¼ãƒå¾Œã¯é€ã‚Šæ§“ã§ããªã„ã“ã¨
     EXPECT_EQ((std::vector<std::string>{}), Shoupai("m111123p456s78z11m4*").get_gang_mianzi());
-    // ˆÃÈ‚Å‚«‚éƒƒ“ƒc‚ª•¡”‚Ìê‡
+    // æš—æ§“ã§ãã‚‹ãƒ¡ãƒ³ãƒ„ãŒè¤‡æ•°ã®å ´åˆ
     EXPECT_EQ((std::vector<std::string>{
         "m1111", "z1111" }),
         Shoupai("m1111p456s789z1111").get_gang_mianzi());
-    // ‘Å”v‚Æ•›˜I‚Ì’¼Œã‚É‚Í‰ÁÈ‚Å‚«‚È‚¢‚±‚Æ
+    // æ‰“ç‰Œã¨å‰¯éœ²ã®ç›´å¾Œã«ã¯åŠ æ§“ã§ããªã„ã“ã¨
     EXPECT_THROW(Shoupai("m1p555s999z123,m111-").get_gang_mianzi(), std::runtime_error);
     EXPECT_THROW(Shoupai("m1p555s999,z333=,m111-").get_gang_mianzi(), std::runtime_error);
     EXPECT_THROW(Shoupai("m12p555s999,z333=,m111-,").get_gang_mianzi(), std::runtime_error);
     EXPECT_THROW(Shoupai("__________,m111-,").get_gang_mianzi(), std::runtime_error);
-    // ‰ÁÈ‚Å‚«‚éƒƒ“ƒc‚ª‚È‚¢ê‡
+    // åŠ æ§“ã§ãã‚‹ãƒ¡ãƒ³ãƒ„ãŒãªã„å ´åˆ
     EXPECT_EQ((std::vector<std::string>{}), Shoupai("m123p456s789z12,z777+").get_gang_mianzi());
     EXPECT_EQ((std::vector<std::string>{}), Shoupai("___________,z777+").get_gang_mianzi());
-    // äİq‚Å‰ÁÈ‚Å‚«‚é‚±‚Æ
+    // è¬å­ã§åŠ æ§“ã§ãã‚‹ã“ã¨
     EXPECT_EQ((std::vector<std::string>{
         "m111+1" }),
         Shoupai("m1p456s789z1234,m111+").get_gang_mianzi());
-    // “›q‚Å‰ÁÈ‚Å‚«‚é‚±‚Æ
+    // ç­’å­ã§åŠ æ§“ã§ãã‚‹ã“ã¨
     EXPECT_EQ((std::vector<std::string>{
         "p444=4" }),
         Shoupai("m123p4s789z1234,p444=").get_gang_mianzi());
-    // õq‚Å‰ÁÈ‚Å‚«‚é‚±‚Æ
+    // ç´¢å­ã§åŠ æ§“ã§ãã‚‹ã“ã¨
     EXPECT_EQ((std::vector<std::string>{
         "s777-7" }),
         Shoupai("m123p456s7z1234,s777-").get_gang_mianzi());
-    // š”v‚Å‰ÁÈ‚Å‚«‚é‚±‚Æ
+    // å­—ç‰Œã§åŠ æ§“ã§ãã‚‹ã“ã¨
     EXPECT_EQ((std::vector<std::string>{
         "z111+1" }),
         Shoupai("m123p456s789z12,z111+").get_gang_mianzi());
-    // Ô”v‚Å‰ÁÈ‚Å‚«‚é‚±‚Æ
+    // èµ¤ç‰Œã§åŠ æ§“ã§ãã‚‹ã“ã¨
     EXPECT_EQ((std::vector<std::string>{
         "p555=0" }),
         Shoupai("m123p0s789z1234,p555=").get_gang_mianzi());
-    // Ô”v“ü‚è‚Å‰ÁÈ‚Å‚«‚é‚±‚Æ
+    // èµ¤ç‰Œå…¥ã‚Šã§åŠ æ§“ã§ãã‚‹ã“ã¨
     EXPECT_EQ((std::vector<std::string>{
         "p550-5" }),
         Shoupai("m123p5s789z1234,p550-").get_gang_mianzi());
-    // ƒŠ[ƒ`Œã‚Í‰ÁÈ‚Å‚«‚È‚¢‚±‚Æ
+    // ãƒªãƒ¼ãƒå¾Œã¯åŠ æ§“ã§ããªã„ã“ã¨
     EXPECT_EQ((std::vector<std::string>{}), Shoupai("p456s789z1234m1*,m111+").get_gang_mianzi());
-    // ‰ÁÈ‚Å‚«‚éƒƒ“ƒc‚ª•¡”‚Ìê‡
+    // åŠ æ§“ã§ãã‚‹ãƒ¡ãƒ³ãƒ„ãŒè¤‡æ•°ã®å ´åˆ
     EXPECT_EQ((std::vector<std::string>{
         "m111+1", "p444=4" }),
         Shoupai("m1p4s789z123,m111+,p444=").get_gang_mianzi());
-    // ˆÃÈ‚Æ‰ÁÈ‚ª“¯‚É‚Å‚«‚éê‡
+    // æš—æ§“ã¨åŠ æ§“ãŒåŒæ™‚ã«ã§ãã‚‹å ´åˆ
     EXPECT_EQ((std::vector<std::string>{
         "m111+1", "z1111" }),
         Shoupai("m1p456s789z1111,m111+").get_gang_mianzi());

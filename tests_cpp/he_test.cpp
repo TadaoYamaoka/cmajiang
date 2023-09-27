@@ -1,35 +1,35 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "../src_cpp/he.h"
 
 TEST(HeTest, dapai) {
-	// •s³‚È‘Å”v‚ª‚Å‚«‚È‚¢‚±‚Æ
+	// ä¸æ­£ãªæ‰“ç‰ŒãŒã§ããªã„ã“ã¨
 	EXPECT_THROW(He().dapai("z8"), std::invalid_argument);
-	// ‘Å”vŒãÌ‚Ä”v‚Ì’·‚³‚ª1‘‚¦‚é‚±‚Æ
+	// æ‰“ç‰Œå¾Œæ¨ã¦ç‰Œã®é•·ã•ãŒ1å¢—ãˆã‚‹ã“ã¨
 	{
 		He he;
 		const auto expected = he.pai().size() + 1;
 		EXPECT_EQ(expected, he.dapai("m1").pai().size());
 	}
-	// ƒcƒ‚Ø‚è‚ğ•\Œ»‚Å‚«‚é‚±‚Æ
+	// ãƒ„ãƒ¢åˆ‡ã‚Šã‚’è¡¨ç¾ã§ãã‚‹ã“ã¨
 	EXPECT_EQ("m1_", He().dapai("m1_").pai().back());
-	// ƒŠ[ƒ`‚ğ•\Œ»‚Å‚«‚é‚±‚Æ
+	// ãƒªãƒ¼ãƒã‚’è¡¨ç¾ã§ãã‚‹ã“ã¨
 	EXPECT_EQ("m1*", He().dapai("m1*").pai().back());
-	// ƒcƒ‚Ø‚èƒŠ[ƒ`‚ğ•\Œ»‚Å‚«‚é‚±‚Æ
+	// ãƒ„ãƒ¢åˆ‡ã‚Šãƒªãƒ¼ãƒã‚’è¡¨ç¾ã§ãã‚‹ã“ã¨
 	EXPECT_EQ("m1_*", He().dapai("m1_*").pai().back());
 }
 
 TEST(HeTest, fulou) {
-	// •s³‚È–Êq‚Å–Â‚¯‚È‚¢‚±‚Æ
+	// ä¸æ­£ãªé¢å­ã§é³´ã‘ãªã„ã“ã¨
 	EXPECT_THROW(He().dapai("m1").fulou("m1-"), std::invalid_argument);
 	EXPECT_THROW(He().dapai("m1").fulou("m1111"), std::invalid_argument);
 	EXPECT_THROW(He().dapai("m1").fulou("m12-3"), std::invalid_argument);
-	// ‘Å”vŒãÌ‚Ä”v‚Ì’·‚³‚ª1‘‚¦‚é‚±‚Æ
+	// æ‰“ç‰Œå¾Œæ¨ã¦ç‰Œã®é•·ã•ãŒ1å¢—ãˆã‚‹ã“ã¨
 	{
 		He he = He().dapai("m1_");
 		const auto expected = he.pai().size();
 		EXPECT_EQ(expected, he.fulou("m111+").pai().size());
 	}
-	// ’N‚©‚ç–Â‚©‚ê‚½‚©•\Œ»‚Å‚«‚é‚±‚Æ
+	// èª°ã‹ã‚‰é³´ã‹ã‚ŒãŸã‹è¡¨ç¾ã§ãã‚‹ã“ã¨
 	{
 		He he;
 		he.dapai("m2*");
@@ -39,16 +39,16 @@ TEST(HeTest, fulou) {
 
 TEST(HeTest, find) {
 	He he;
-	// Ì‚Ä‚ç‚ê‚½”v‚ğ’T‚¹‚é‚±‚Æ
+	// æ¨ã¦ã‚‰ã‚ŒãŸç‰Œã‚’æ¢ã›ã‚‹ã“ã¨
 	EXPECT_TRUE(he.dapai("m1").find("m1"));
-	// ƒcƒ‚Ø‚è‚Ì”v‚ğ’T‚¹‚é‚±‚Æ
+	// ãƒ„ãƒ¢åˆ‡ã‚Šã®ç‰Œã‚’æ¢ã›ã‚‹ã“ã¨
 	EXPECT_TRUE(he.dapai("m2_").find("m2"));
-	// ƒŠ[ƒ`‘Å”v‚ğ’T‚¹‚é‚±‚Æ
+	// ãƒªãƒ¼ãƒæ‰“ç‰Œã‚’æ¢ã›ã‚‹ã“ã¨
 	EXPECT_TRUE(he.dapai("m3*").find("m3"));
-	// Ô”v‚ğ’T‚¹‚é‚±‚Æ
+	// èµ¤ç‰Œã‚’æ¢ã›ã‚‹ã“ã¨
 	EXPECT_TRUE(he.dapai("m0").find("m5"));
-	// –Â‚©‚ê‚½”v‚ğ’T‚¹‚é‚±‚Æ
+	// é³´ã‹ã‚ŒãŸç‰Œã‚’æ¢ã›ã‚‹ã“ã¨
 	EXPECT_TRUE(he.dapai("m4_").fulou("m234-").find("m4"));
-	// “ü—Í‚ª³‹K‰»‚³‚ê‚Ä‚¢‚È‚¢ê‡‚Å‚à’T‚¹‚é‚±‚Æ
+	// å…¥åŠ›ãŒæ­£è¦åŒ–ã•ã‚Œã¦ã„ãªã„å ´åˆã§ã‚‚æ¢ã›ã‚‹ã“ã¨
 	EXPECT_TRUE(he.find("m0_*"));
 }

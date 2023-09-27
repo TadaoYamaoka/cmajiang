@@ -1,41 +1,41 @@
-#include "pch.h"
+ο»Ώ#include "pch.h"
 #include "../src_cpp/shan.h"
 
 #include <algorithm>
 
 TEST(ShanTest, zhenbaopai) {
-    // κδέ ¨ “ρδέ
+    // δΈ€θ¬ β†’ δΊθ¬
     EXPECT_EQ("m2", Shan::zhenbaopai("m1"));
-    // ‹γδέ ¨ κδέ
+    // δΉθ¬ β†’ δΈ€θ¬
     EXPECT_EQ("m1", Shan::zhenbaopai("m9"));
-    // Τάδέ ¨ Zδέ
+    // θµ¤δΊ”θ¬ β†’ ε…­θ¬
     EXPECT_EQ("m6", Shan::zhenbaopai("m0"));
-    // κ“› ¨ “ρ“›
+    // δΈ€η­’ β†’ δΊη­’
     EXPECT_EQ("p2", Shan::zhenbaopai("p1"));
-    // ‹γ“› ¨ κ“›
+    // δΉη­’ β†’ δΈ€η­’
     EXPECT_EQ("p1", Shan::zhenbaopai("p9"));
-    // Τά“› ¨ Z“›
+    // θµ¤δΊ”η­’ β†’ ε…­η­’
     EXPECT_EQ("p6", Shan::zhenbaopai("p0"));
-    // κυ ¨ “ρυ
+    // δΈ€η΄Ά β†’ δΊη΄Ά
     EXPECT_EQ("s2", Shan::zhenbaopai("s1"));
-    // ‹γυ ¨ κυ
+    // δΉη΄Ά β†’ δΈ€η΄Ά
     EXPECT_EQ("s1", Shan::zhenbaopai("s9"));
-    // Τάυ ¨ Zυ
+    // θµ¤δΊ”η΄Ά β†’ ε…­η΄Ά
     EXPECT_EQ("s6", Shan::zhenbaopai("s0"));
-    // “ ¨ “μ
+    // ζ± β†’ ε—
     EXPECT_EQ("z2", Shan::zhenbaopai("z1"));
-    // –k ¨ “
+    // ε— β†’ ζ±
     EXPECT_EQ("z1", Shan::zhenbaopai("z4"));
-    // ”’ ¨ αΆ
+    // η™½ β†’ η™Ό
     EXPECT_EQ("z6", Shan::zhenbaopai("z5"));
-    // ’† ¨ ”’
+    // δΈ­ β†’ η™½
     EXPECT_EQ("z5", Shan::zhenbaopai("z7"));
-    // •s³‚Θ”v ¨ ƒGƒ‰[
+    // δΈζ­£γªη‰ β†’ γ‚¨γƒ©γƒΌ
     EXPECT_THROW(Shan::zhenbaopai("z0"), std::invalid_argument);
 }
 
 TEST(ShanTest, constructor) {
-    //Τ”v‚Θ‚µ‚ΕƒCƒ“ƒXƒ^ƒ“ƒX‚ª¶¬‚Ε‚«‚ι‚±‚Ζ
+    //θµ¤η‰γªγ—γ§γ‚¤γƒ³γ‚Ήγ‚Ώγƒ³γ‚Ήγη”ζγ§γγ‚‹γ“γ¨
     {
         Rule rule;
         rule.hongpai = { 0, 0, 0 };
@@ -52,7 +52,7 @@ TEST(ShanTest, constructor) {
             "z1", "z1", "z1", "z1", "z2", "z2", "z2", "z2", "z3", "z3", "z3", "z3", "z4", "z4", "z4", "z4",
             "z5", "z5", "z5", "z5", "z6", "z6", "z6", "z6", "z7", "z7", "z7", "z7" }), pai);
     }
-    //Τ”v‚ ‚θ‚ΕƒCƒ“ƒXƒ^ƒ“ƒX‚ª¶¬‚Ε‚«‚ι‚±‚Ζ
+    //θµ¤η‰γ‚γ‚γ§γ‚¤γƒ³γ‚Ήγ‚Ώγƒ³γ‚Ήγη”ζγ§γγ‚‹γ“γ¨
     {
         Rule rule;
         rule.hongpai = { 1, 2, 3 };
@@ -72,21 +72,21 @@ TEST(ShanTest, constructor) {
 }
 
 TEST(ShanTest, paishu) {
-    // ”vR¶¬’Όγ‚Μc”v”‚Ν122
+    // η‰ε±±η”ζη›΄εΎγ®ζ®‹η‰ζ•°γ―122
     EXPECT_EQ(122, Shan().paishu());
 }
 
 TEST(ShanTest, baopai) {
-    // ”vR¶¬’Όγ‚Μƒhƒ‰‚Ν1–‡
+    // η‰ε±±η”ζη›΄εΎγ®γƒ‰γƒ©γ―1ζ
     EXPECT_EQ(1, Shan().baopai().size());
 }
 
 TEST(ShanTest, fubaopai) {
-    // ”vR¶¬’Όγ‚Ν 0 ‚π•Τ‚·
+    // η‰ε±±η”ζη›΄εΎγ― 0 γ‚’θΏ”γ™
     EXPECT_EQ(0, Shan().fubaopai().size());
-    // ”vRΕ’θγ‚Ν— ƒhƒ‰‚π•Τ‚·
+    // η‰ε±±ε›Ίε®εΎγ―θ£γƒ‰γƒ©γ‚’θΏ”γ™
     EXPECT_EQ(1, Shan().close().fubaopai().size());
-    // — ƒhƒ‰‚Θ‚µ‚Μκ‡‚Ν”vRΕ’θγ‚ΰ 0 ‚π•Τ‚·
+    // θ£γƒ‰γƒ©γªγ—γ®ε ΄εγ―η‰ε±±ε›Ίε®εΎγ‚‚ 0 γ‚’θΏ”γ™
     {
         Rule rule;
         rule.fubaopai = false;
@@ -95,56 +95,56 @@ TEST(ShanTest, fubaopai) {
 }
 
 TEST(ShanTest, zimo) {
-    // ”vR¶¬’Όγ‚Ιƒcƒ‚‚κ‚ι‚±‚Ζ
+    // η‰ε±±η”ζη›΄εΎγ«γƒ„γƒΆγ‚γ‚‹γ“γ¨
     EXPECT_NO_THROW(Shan().zimo());
-    // ƒcƒ‚γ‚Ιc”v”‚ªΈ‚ι‚±‚Ζ
+    // γƒ„γƒΆεΎγ«ζ®‹η‰ζ•°γζΈ›γ‚‹γ“γ¨
     {
         Shan shan;
         const auto paishu = shan.paishu();
         shan.zimo();
         EXPECT_EQ(paishu - 1, shan.paishu());
     }
-    // ‰¤”v‚Νƒcƒ‚‚κ‚Θ‚Ά‚±‚Ζ
+    // η‹η‰γ―γƒ„γƒΆγ‚γªγ„γ“γ¨
     {
         Shan shan;
         while (shan.paishu()) { shan.zimo(); }
         EXPECT_THROW(shan.zimo(), std::runtime_error);
     }
-    // ”vRΕ’θγ‚Νƒcƒ‚‚κ‚Θ‚Ά‚±‚Ζ
+    // η‰ε±±ε›Ίε®εΎγ―γƒ„γƒΆγ‚γªγ„γ“γ¨
     EXPECT_THROW(Shan().close().zimo(), std::runtime_error);
 }
 
 TEST(ShanTest, gangzimo) {
-    // ”vR¶¬’Όγ‚ΙΘƒcƒ‚‚Ε‚«‚ι‚±‚Ζ
+    // η‰ε±±η”ζη›΄εΎγ«ζ§“γƒ„γƒΆγ§γγ‚‹γ“γ¨
     EXPECT_NO_THROW(Shan().gangzimo());
-    // Θƒcƒ‚γ‚Ιc”v”‚ªΈ‚ι‚±‚Ζ
+    // ζ§“γƒ„γƒΆεΎγ«ζ®‹η‰ζ•°γζΈ›γ‚‹γ“γ¨
     {
         Shan shan;
         const auto paishu = shan.paishu();
         shan.gangzimo();
         EXPECT_EQ(paishu - 1, shan.paishu());
     }
-    // Θƒcƒ‚’Όγ‚Νƒcƒ‚‚κ‚Θ‚Ά‚±‚Ζ
+    // ζ§“γƒ„γƒΆη›΄εΎγ―γƒ„γƒΆγ‚γªγ„γ“γ¨
     {
         Shan shan;
         shan.gangzimo();
         EXPECT_THROW(shan.zimo(), std::runtime_error);
     }
-    // Θƒcƒ‚’Όγ‚Ι‘±‚―‚ΔΘƒcƒ‚‚Ε‚«‚Θ‚Ά‚±‚Ζ
+    // ζ§“γƒ„γƒΆη›΄εΎγ«η¶γ‘γ¦ζ§“γƒ„γƒΆγ§γγªγ„γ“γ¨
     {
         Shan shan;
         shan.gangzimo();
         EXPECT_THROW(shan.gangzimo(), std::runtime_error);
     }
-    // ƒnƒCƒeƒC‚ΕΘƒcƒ‚‚Ε‚«‚Θ‚Ά‚±‚Ζ
+    // γƒγ‚¤γƒ†γ‚¤γ§ζ§“γƒ„γƒΆγ§γγªγ„γ“γ¨
     {
         Shan shan;
         while (shan.paishu()) { shan.zimo(); }
         EXPECT_THROW(shan.gangzimo(), std::runtime_error);
     }
-    // ”vRΕ’θγ‚ΝΘƒcƒ‚‚Ε‚«‚Θ‚Ά‚±‚Ζ
+    // η‰ε±±ε›Ίε®εΎγ―ζ§“γƒ„γƒΆγ§γγªγ„γ“γ¨
     EXPECT_THROW(Shan().close().gangzimo(), std::runtime_error);
-    // 5‚Β–Ϊ‚ΜΘƒcƒ‚‚ª‚Ε‚«‚Θ‚Ά‚±‚Ζ
+    // 5γ¤η›®γ®ζ§“γƒ„γƒΆγγ§γγªγ„γ“γ¨
     {
         Shan shan;
         for (int i = 0; i < 4; i++) {
@@ -153,7 +153,7 @@ TEST(ShanTest, gangzimo) {
         }
         EXPECT_THROW(shan.gangzimo(), std::runtime_error);
     }
-    // ƒJƒ“ƒhƒ‰‚Θ‚µ‚Ε‚ΰ5‚Β–Ϊ‚ΜΘƒcƒ‚‚ª‚Ε‚«‚Θ‚Ά‚±‚Ζ
+    // γ‚«γƒ³γƒ‰γƒ©γªγ—γ§γ‚‚5γ¤η›®γ®ζ§“γƒ„γƒΆγγ§γγªγ„γ“γ¨
     {
         Rule rule;
         rule.gangbaopai = false;
@@ -167,53 +167,53 @@ TEST(ShanTest, gangzimo) {
 }
 
 TEST(ShanTest, kaigang) {
-    // ”vR¶¬’Όγ‚ΙJΘ‚Ε‚«‚Θ‚Ά‚±‚Ζ
+    // η‰ε±±η”ζη›΄εΎγ«ι–‹ζ§“γ§γγªγ„γ“γ¨
     EXPECT_THROW(Shan().kaigang(), std::runtime_error);
-    // Θƒcƒ‚γ‚ΙJΘ‚Ε‚«‚ι‚±‚Ζ
+    // ζ§“γƒ„γƒΆεΎγ«ι–‹ζ§“γ§γγ‚‹γ“γ¨
     {
         Shan shan;
         shan.gangzimo();
         EXPECT_NO_THROW(shan.kaigang());
     }
-    // JΘ‚Ι‚ζ‚θƒhƒ‰‚ª‘‚¦‚ι‚±‚Ζ
+    // ι–‹ζ§“γ«γ‚γ‚γƒ‰γƒ©γεΆ—γγ‚‹γ“γ¨
     {
         Shan shan;
         shan.gangzimo();
         const auto expected = shan.baopai().size() + 1;
         EXPECT_EQ(expected, shan.kaigang().baopai().size());
     }
-    // JΘ‚Ι‚ζ‚θ— ƒhƒ‰‚ª‘‚¦‚ι‚±‚Ζ
+    // ι–‹ζ§“γ«γ‚γ‚θ£γƒ‰γƒ©γεΆ—γγ‚‹γ“γ¨
     {
         Shan shan;
         shan.gangzimo();
         EXPECT_EQ(2, shan.kaigang().close().fubaopai().size());
     }
-    // JΘγ‚Νƒcƒ‚‚Ε‚«‚ι‚±‚Ζ
+    // ι–‹ζ§“εΎγ―γƒ„γƒΆγ§γγ‚‹γ“γ¨
     {
         Shan shan;
         shan.gangzimo();
         EXPECT_NO_THROW(shan.kaigang().zimo());
     }
-    // JΘγ‚ΝΘƒcƒ‚‚Ε‚«‚ι‚±‚Ζ
+    // ι–‹ζ§“εΎγ―ζ§“γƒ„γƒΆγ§γγ‚‹γ“γ¨
     {
         Shan shan;
         shan.gangzimo();
         EXPECT_NO_THROW(shan.kaigang().gangzimo());
     }
-    // ”vRΕ’θγ‚ΝJΘ‚Ε‚«‚Θ‚Ά‚±‚Ζ
+    // η‰ε±±ε›Ίε®εΎγ―ι–‹ζ§“γ§γγªγ„γ“γ¨
     {
         Shan shan;
         shan.gangzimo();
         EXPECT_THROW(Shan().close().kaigang(), std::runtime_error);
     }
-    // ƒJƒ“ƒhƒ‰‚Θ‚µ‚Μκ‡‚ΝJΘ‚Ε‚«‚Θ‚Ά‚±‚Ζ
+    // γ‚«γƒ³γƒ‰γƒ©γªγ—γ®ε ΄εγ―ι–‹ζ§“γ§γγªγ„γ“γ¨
     {
         Rule rule;
         rule.gangbaopai = false;
         Shan shan(rule);
         EXPECT_THROW(shan.kaigang(), std::runtime_error);
     }
-    // ƒJƒ“ƒhƒ‰‚Θ‚µ‚Ε‚ΰ5‚Β–Ϊ‚ΜΘƒcƒ‚‚ª‚Ε‚«‚Θ‚Ά‚±‚Ζ
+    // γ‚«γƒ³γƒ‰γƒ©γªγ—γ§γ‚‚5γ¤η›®γ®ζ§“γƒ„γƒΆγγ§γγªγ„γ“γ¨
     {
         Rule rule;
         rule.gangbaopai = false;
@@ -221,7 +221,7 @@ TEST(ShanTest, kaigang) {
         shan.gangzimo();
         EXPECT_THROW(shan.kaigang(), std::runtime_error);
     }
-    // ƒJƒ“— ‚Θ‚µ‚Μκ‡‚ΝJΘ‚Ε— ƒhƒ‰‚ª‘‚¦‚Θ‚Ά‚±‚Ζ
+    // γ‚«γƒ³θ£γªγ—γ®ε ΄εγ―ι–‹ζ§“γ§θ£γƒ‰γƒ©γεΆ—γγªγ„γ“γ¨
     {
         Rule rule;
         rule.ganglibaopai = false;
@@ -229,7 +229,7 @@ TEST(ShanTest, kaigang) {
         shan.gangzimo();
         EXPECT_EQ(1, shan.kaigang().close().fubaopai().size());
     }
-    // — ƒhƒ‰‚Θ‚µ‚Μκ‡‚ΝJΘ‚Ε— ƒhƒ‰”­¶‚µ‚Θ‚Ά‚±‚Ζ
+    // θ£γƒ‰γƒ©γªγ—γ®ε ΄εγ―ι–‹ζ§“γ§θ£γƒ‰γƒ©η™Ίη”γ—γªγ„γ“γ¨
     {
         Rule rule;
         rule.fubaopai = false;
