@@ -27,13 +27,33 @@ public:
         std::array<std::string, 4> shoupai;
     };
 
+    enum class Status {
+        NONE,
+        KAIJU,
+        QIPAI,
+        ZIMO,
+        DAPAI,
+        FULOU,
+        GANG,
+        GANGZIMO,
+        HULE,
+        PINGJU,
+        JIEJI
+    };
+
+    enum class HuleOption {
+        NONE,
+        QIANGGANG,
+        LINGSHANG
+    };
+
     Game(const Rule& rule = {});
 
-    void call_players(const std::string& type);
+    void call_players(const Status type);
     void reply(const int id, const std::string& msg, const std::string& arg = {});
     void next();
 
-    // 开局
+    // 开局(半荘の開始)
     void kaiju(const int qijia = -1);
     // 起牌(配牌)
     void qipai(const Shan& shan);
@@ -173,13 +193,13 @@ public:
     const Model& model() const { return _model; }
     const Rule& rule() const { return _rule; }
 
-    const std::string& status() const { return _status; }
+    const Status status() const { return _status; }
 
 private:
     Rule _rule;
     Model _model;
 
-    std::string _status;
+    Status _status;
     Defen _defen;
     std::array<int, 4> _rank;
     std::array<float, 4> _point;
@@ -208,7 +228,7 @@ private:
     std::array<bool, 4> _neng_rong;
     // 和了
     std::vector<int> _hule;
-    std::string _hule_option;
+    HuleOption _hule_option;
     // 流局
     bool _no_game;
     // 连庄(連荘)

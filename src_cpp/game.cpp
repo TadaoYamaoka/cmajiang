@@ -38,7 +38,7 @@ Game::Game(const Rule& rule) : _rule(rule) {
     _model.defen = { _rule.startingPoints, _rule.startingPoints, _rule.startingPoints, _rule.startingPoints };
 }
 
-void Game::call_players(const std::string& type) {
+void Game::call_players(const Status type) {
     _status = type;
     _reply = {};
 }
@@ -48,22 +48,38 @@ void Game::reply(const int id, const std::string& msg, const std::string& arg) {
 }
 
 void Game::next() {
-    if (_status == "kaiju") {
+    switch (_status) {
+    case Status::KAIJU:
         reply_kaiju();
-    }
-    else if (_status == "qipai") {
+        break;
+    case Status::QIPAI:
         reply_qipai();
-    }
-    else if (_status == "zimo") {
+        break;
+    case Status::ZIMO:
         if (get_reply(_model.lunban).msg.empty()) return;
         reply_zimo();
+        break;
+    case Status::DAPAI:
+        reply_dapai();
+        break;
+    case Status::FULOU:
+        reply_fulou();
+        break;
+    case Status::GANG:
+        reply_gang();
+        break;
+    case Status::GANGZIMO:
+        reply_zimo();
+        break;
+    case Status::HULE:
+        reply_hule();
+        break;
+    case Status::PINGJU:
+        reply_pingju();
+        break;
+    default:
+        throw std::runtime_error("unexpected status");
     }
-    else if (_status == "dapai")    reply_dapai();
-    else if (_status == "fulou")    reply_fulou();
-    else if (_status == "gang")     reply_gang();
-    else if (_status == "gangzimo") reply_zimo();
-    else if (_status == "hule")     reply_hule();
-    else if (_status == "pingju")   reply_pingju();
 }
 
 // 开局
@@ -75,7 +91,7 @@ void Game::kaiju(const int qijia) {
     // 場数
     _max_jushu = _rule.roundsType == 0 ? 0 : _rule.roundsType * 4 - 1;
 
-    call_players("kaiju");
+    call_players(Status::KAIJU);
 }
 
 // 起牌(配牌)
@@ -106,7 +122,7 @@ void Game::qipai(const Shan& shan) {
     _neng_rong = { true, true, true, true };
 
     _hule.clear();
-    _hule_option.clear();
+    _hule_option = HuleOption::NONE;
     _no_game = false;
     _lianzhuang = false;
     _changbang = _model.changbang;
@@ -117,7 +133,7 @@ void Game::qipai(const Shan& shan) {
     _point = {};
     _pingju = {};
 
-    call_players("qipai");
+    call_players(Status::QIPAI);
 }
 
 void Game::qipai() {
@@ -131,7 +147,7 @@ void Game::zimo() {
     auto zimo = _model.shan.zimo();
     _model.shoupai[_model.lunban].zimo(zimo);
 
-    call_players("zimo");
+    call_players(Status::ZIMO);
 }
 
 // 打牌
@@ -168,7 +184,7 @@ void Game::dapai(const std::string& p) {
 
     if (!_gang.empty()) kaigang();
 
-    call_players("dapai");
+    call_players(Status::DAPAI);
 }
 
 // 副露
@@ -190,7 +206,7 @@ void Game::fulou(const std::string& m) {
 
     _fulou = m;
 
-    call_players("fulou");
+    call_players(Status::FULOU);
 }
 
 // 杠(槓)
@@ -202,7 +218,7 @@ void Game::gang(const std::string& m) {
     _gang = m;
     _n_gang[_model.lunban]++;
 
-    call_players("gang");
+    call_players(Status::GANG);
 }
 
 // 杠自摸(槓自摸)
@@ -216,7 +232,7 @@ void Game::gangzimo() {
     if (!_rule.gangbaopaiPostAddition ||
         std::regex_search(_gang, re_gangzimo)) kaigang();
 
-    call_players("gangzimo");
+    call_players(Status::GANGZIMO);
 }
 
 // 开杠(開槓)
@@ -231,16 +247,16 @@ void Game::kaigang() {
 
 // 和了
 void Game::hule() {
-    if (_status != "hule") {
+    if (_status != Status::HULE) {
         _model.shan.close();
-        _hule_option = _status == "gang" ? "qianggang"
-            : _status == "gangzimo" ? "lingshang"
-            : std::string{};
+        _hule_option = _status == Status::GANG ? HuleOption::QIANGGANG
+            : _status == Status::GANGZIMO ? HuleOption::LINGSHANG
+            : HuleOption::NONE;
     }
 
     auto menfeng = _hule.size() ? pop_front(_hule) : _model.lunban;
     auto rongpai = menfeng == _model.lunban ? std::string{}
-        : (_hule_option == "qianggang"
+        : (_hule_option == HuleOption::QIANGGANG
             ? _gang.substr(0, 1) + _gang.back()
             : _dapai.substr(0, 2)
             ) + "_+=-"[(4 + _model.lunban - menfeng) % 4];
@@ -254,9 +270,9 @@ void Game::hule() {
         Param::Hupai{
             _lizhi[menfeng],
             _yifa[menfeng],
-            _hule_option == "qianggang",
-            _hule_option == "lingshang",
-            _model.shan.paishu() > 0 || _hule_option == "lingshang" ? 0 : rongpai.empty() ? 1 : 2,
+            _hule_option == HuleOption::QIANGGANG,
+            _hule_option == HuleOption::LINGSHANG,
+            _model.shan.paishu() > 0 || _hule_option == HuleOption::LINGSHANG ? 0 : rongpai.empty() ? 1 : 2,
             !(_diyizimo && rongpai.empty()) ? 0 : menfeng == 0 ? 1 : 2
         },
         _model.shan.baopai(),
@@ -272,7 +288,7 @@ void Game::hule() {
     if (_rule.roundsType == 0) _lianzhuang = false;
     _fenpei = _defen.fenpei;
 
-    call_players("hule");
+    call_players(Status::HULE);
 }
 
 // 流局
@@ -348,7 +364,7 @@ void Game::pingju(std::string name, std::array<std::string, 4> shoupai) {
     _pingju.name = name;
     _pingju.shoupai = shoupai;
 
-    call_players("pingju");
+    call_players(Status::PINGJU);
 }
 
 // 終了
@@ -422,7 +438,7 @@ void Game::jieju() {
         _point[paiming[0]] -= _point[id];
     }
 
-    call_players("jieju");
+    call_players(Status::JIEJI);
 }
 
 
@@ -691,19 +707,19 @@ std::pair<bool, std::vector<std::string>> Game::allow_lizhi() {
 bool Game::allow_hule(const int l) {
     if (l < 0) {
         const auto hupai = _model.shoupai[_model.lunban].lizhi()
-            || _status == "gangzimo"
+            || _status == Status::GANGZIMO
             || _model.shan.paishu() == 0;
         return Game::allow_hule(_rule,
             _model.shoupai[_model.lunban], {},
             _model.zhuangfeng, _model.lunban, hupai);
     }
     else {
-        const auto p = (_status == "gang"
+        const auto p = (_status == Status::GANG
             ? _gang.substr(0, 1) + _gang.back()
             : _dapai
             ) + "_+=-"[(4 + _model.lunban - l) % 4];
         const auto hupai = _model.shoupai[l].lizhi()
-            || _status == "gang"
+            || _status == Status::GANG
             || _model.shan.paishu() == 0;
         return Game::allow_hule(_rule,
             _model.shoupai[l], p,
