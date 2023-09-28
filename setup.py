@@ -1,0 +1,49 @@
+﻿from setuptools import setup, Extension
+from setuptools.command.build_ext import build_ext
+
+
+class my_build_ext(build_ext):
+    def build_extensions(self):
+        if self.compiler.compiler_type == "unix":
+            for e in self.extensions:
+                e.extra_compile_args = ["-std=c++17", "-msse4.2", "-mavx2"]
+        elif self.compiler.compiler_type == "msvc":
+            for e in self.extensions:
+                e.extra_compile_args = ["/std:c++17", "/arch:AVX2"]
+
+        build_ext.build_extensions(self)
+
+
+ext_modules = [
+    Extension(
+        "cmajiang._cmajiang",
+        [
+            "cmajiang/_cmajiang.pyx",
+            "src_cpp/game.cpp",
+            "src_cpp/he.cpp",
+            "src_cpp/hule.cpp",
+            "src_cpp/shan.cpp",
+            "src_cpp/shoupai.cpp",
+            "src_cpp/xiangting.cpp",
+        ],
+        language="c++",
+        include_dirs=["src_cpp"],
+        extra_compile_args=["-std=c++17"],
+    )
+]
+
+setup(
+    name="cmajiang",
+    version="0.0.1",
+    packages=["cmajiang"],
+    ext_modules=ext_modules,
+    cmdclass={"build_ext": my_build_ext},
+    author="Tadao Yamaoka",
+    url="https://github.com/TadaoYamaoka/cmajiang",
+    description="A fast Python mahjong library",
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+    ],
+)
