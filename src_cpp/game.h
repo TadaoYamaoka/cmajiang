@@ -72,6 +72,9 @@ public:
     void reply(const int id, const Message msg, const std::string& arg = {});
     void next();
 
+    // 手番のプレイヤーID
+    int lunban_player_id() const { return _model.player_id[_model.lunban]; }
+
     // 开局(半荘の開始)
     void kaiju(const int qijia = -1);
     // 起牌(配牌)

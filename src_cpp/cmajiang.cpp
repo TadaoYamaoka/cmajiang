@@ -401,6 +401,7 @@ PYBIND11_MODULE(_cmajiang, m) {
         .def(py::init<const Rule&>())
         .def("reply", &Game::reply)
         .def("next", &Game::next)
+        .def_property_readonly("lunban_player_id", &Game::lunban_player_id)
         .def("kaiju", &Game::kaiju, py::arg("qijia") = -1)
         .def("qipai", &Game::qipai)
         .def("qipai_", &Game::qipai_)
