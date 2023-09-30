@@ -38,11 +38,11 @@ public:
 
     enum class Message {
         NONE,
-        DAOPAI,
-        FULOU,
-        HULE,
-        GANG,
-        DAPAI,
+        DAOPAI, // 倒牌
+        FULOU,  // 副露
+        HULE,   // 和了
+        GANG,   // 杠(槓)
+        DAPAI,  // 打牌
     };
 
     enum class Status {

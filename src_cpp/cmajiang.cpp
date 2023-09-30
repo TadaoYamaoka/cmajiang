@@ -383,6 +383,14 @@ PYBIND11_MODULE(_cmajiang, m) {
         .def_readwrite("player_id", &Game::Model::player_id)
         .def_readwrite("lunban", &Game::Model::lunban)
         ;
+	py::enum_<Game::Message>(m, "Message")
+        .value("NONE", Game::Message::NONE)
+        .value("DAOPAI", Game::Message::DAOPAI, u8"倒牌")
+        .value("FULOU", Game::Message::FULOU, u8"副露")
+        .value("HULE", Game::Message::HULE, u8"和了")
+        .value("GANG", Game::Message::GANG, u8"槓")
+        .value("DAPAI", Game::Message::DAPAI, u8"打牌")
+        ;
 	py::enum_<Game::Status>(m, "Status")
         .value("NONE", Game::Status::NONE)
         .value("KAIJU", Game::Status::KAIJU, u8"開始")
