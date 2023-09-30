@@ -23,8 +23,26 @@ public:
     };
 
     struct Pingju {
-        std::string name;
+        enum Name {
+            NONE,
+            HUANGPAI, // 荒牌平局
+            MANGUAN,  // 流し満貫
+            YAO9,     // 九種九牌
+            HULE3,    // 三家和了
+            LIZHI4,   // 四家立直
+            FENG4,    // 四風連打
+            GANG4,    // 四槓散了
+        } name;
         std::array<std::string, 4> shoupai;
+    };
+
+    enum class Message {
+        NONE,
+        DAOPAI,
+        FULOU,
+        HULE,
+        GANG,
+        DAPAI,
     };
 
     enum class Status {
@@ -47,16 +65,17 @@ public:
         LINGSHANG
     };
 
-    Game(const Rule& rule = {});
+    Game(const Rule& rule);
+    Game() : Game(Rule{}) {};
 
     void call_players(const Status type);
-    void reply(const int id, const std::string& msg, const std::string& arg = {});
+    void reply(const int id, const Message msg, const std::string& arg = {});
     void next();
 
     // 开局(半荘の開始)
     void kaiju(const int qijia = -1);
     // 起牌(配牌)
-    void qipai(const Shan& shan);
+    void qipai_(const Shan& shan);
     void qipai();
     // 自摸
     void zimo();
@@ -73,7 +92,7 @@ public:
     // 和了
     void hule();
     // 流局
-    void pingju(std::string name = {}, std::array<std::string, 4> shoupai = {});
+    void pingju(Pingju::Name name = Pingju::NONE, std::array<std::string, 4> shoupai = {});
     // 終了
     void last();
     // 结局(終局)
@@ -81,7 +100,7 @@ public:
 
     // 応答取得
     struct Reply {
-        std::string msg;
+        Message msg;
         std::string arg;
     };
     Reply get_reply(const int l);
@@ -113,40 +132,38 @@ public:
     std::vector<std::string> get_gang_mianzi(const int l = -1);
 
     // 立直可能
-    bool allow_lizhi(const std::string& p);
-    std::pair<bool, std::vector<std::string>> allow_lizhi();
+    std::pair<bool, std::vector<std::string>> allow_lizhi(const std::string& p = {});
     // 和了可能
     bool allow_hule(const int l = -1);
     // 流局可能
     bool allow_pingju();
 
     // 打牌取得
-    static std::vector<std::string> get_dapai(const Rule& rule, const Shoupai& shoupai);
+    static std::vector<std::string> _get_dapai(const Rule& rule, const Shoupai& shoupai);
     // 吃(チー)面子取得
-    static std::vector<std::string> get_chi_mianzi(const Rule& rule, const Shoupai& shoupai, const std::string& p, const int paishu);
+    static std::vector<std::string> _get_chi_mianzi(const Rule& rule, const Shoupai& shoupai, const std::string& p, const int paishu);
     // 碰(ポン)面子取得
-    static std::vector<std::string> get_peng_mianzi(const Rule& rule, const Shoupai& shoupai, const std::string& p, const int paishu);
+    static std::vector<std::string> _get_peng_mianzi(const Rule& rule, const Shoupai& shoupai, const std::string& p, const int paishu);
     // 杠(槓)面子取得
-    static std::vector<std::string> get_gang_mianzi(const Rule& rule, const Shoupai& shoupai, const std::string& p, const int paishu, const int n_gang = -1);
+    static std::vector<std::string> _get_gang_mianzi(const Rule& rule, const Shoupai& shoupai, const std::string& p, const int paishu, const int n_gang = -1);
 
     // 立直可能
-    static bool allow_lizhi(const Rule& rule, const Shoupai& shoupai, const std::string& p, const int paishu = INT_MAX, const int defen = INT_MAX);
-    static std::pair<bool, std::vector<std::string>> allow_lizhi(const Rule& rule, const Shoupai& shoupai, const int paishu = INT_MAX, const int defen = INT_MAX);
+    static std::pair<bool, std::vector<std::string>> _allow_lizhi(const Rule& rule, const Shoupai& shoupai, const std::string& p = {}, const int paishu = INT_MAX, const int defen = INT_MAX);
     // 和了可能
-    static bool allow_hule(const Rule& rule, const Shoupai& shoupai, const std::string& p, const int zhuangfeng, const int menfeng, const bool hupai, const bool neng_rong = true);
+    static bool _allow_hule(const Rule& rule, const Shoupai& shoupai, const std::string& p, const int zhuangfeng, const int menfeng, const bool hupai, const bool neng_rong = true);
     // 流局可能
-    static bool allow_pingju(const Rule& rule, const Shoupai& shoupai, const bool diyizimo);
+    static bool _allow_pingju(const Rule& rule, const Shoupai& shoupai, const bool diyizimo);
     // ノーテン宣言可能
-    static bool allow_no_daopai(const Rule& rule, const Shoupai& shoupai, const int paishu);
+    static bool _allow_no_daopai(const Rule& rule, const Shoupai& shoupai, const int paishu);
 
     int qijia() const { return _model.qijia; }
     const Shan& shan() const { return _model.shan; }
 
     const std::array<Shoupai, 4>& shoupai() const { return _model.shoupai; }
-    const Shoupai& shoupai(const int l) const { return _model.shoupai[l]; }
+    const Shoupai& shoupai_(const int l) const { return _model.shoupai[l]; }
 
     const std::array<He, 4>& he() const { return _model.he; }
-    const He& he(const int l) const { return _model.he[l]; }
+    const He& he_(const int l) const { return _model.he[l]; }
 
     int max_jushu() const { return _max_jushu; }
 
@@ -155,32 +172,32 @@ public:
 
     const bool fengpai() const { return _fengpai; }
 
-    const std::string& dapai() const { return _dapai; }
+    const std::string& dapai_() const { return _dapai; }
 
     const std::array<int, 4>& lizhi() const { return _lizhi; }
-    int lizhi(const int l) const { return _lizhi[l]; }
+    int lizhi_(const int l) const { return _lizhi[l]; }
 
     const std::array<bool, 4>& yifa() const { return _yifa; }
-    bool yifa(const int l) const { return _yifa[l]; }
+    bool yifa_(const int l) const { return _yifa[l]; }
     void set_yifa(const std::array<bool, 4>& yifa_) { _yifa = yifa_; }
-    void set_yifa(const int l, const bool yifa_) { _yifa[l] = yifa_; }
+    void set_yifa_(const int l, const bool yifa_) { _yifa[l] = yifa_; }
 
     void set_n_gang(const std::array<int, 4>& n_gang_) { _n_gang = n_gang_; }
 
     const std::array<bool, 4>& neng_rong() const { return _neng_rong; }
-    bool neng_rong(const int l) const { return _neng_rong[l]; }
+    bool neng_rong_(const int l) const { return _neng_rong[l]; }
     void set_neng_rong(const std::array<bool, 4>& neng_rong_) { _neng_rong = neng_rong_; }
-    void set_neng_rong(const int l, const bool neng_rong_) { _neng_rong[l] = neng_rong_; }
+    void set_neng_rong_(const int l, const bool neng_rong_) { _neng_rong[l] = neng_rong_; }
 
-    const std::string& fulou() const { return _fulou; }
-    const std::string& gang() const { return _gang; }
+    const std::string& fulou_() const { return _fulou; }
+    const std::string& gang_() const { return _gang; }
     
-    const std::vector<int>& get_hule() const { return _hule; }
+    const std::vector<int>& hule_() const { return _hule; }
     void set_hule(const std::vector<int>& hule_) { _hule = hule_; }
     const Defen& defen() const { return _defen; }
     const std::array<int, 4>& rank() const { return _rank; }
     const std::array<float, 4>& point() const { return _point; }
-    const Pingju& get_pingju() const { return _pingju; }
+    const Pingju& pingju_() const { return _pingju; }
     const std::array<int, 4>& fenpei() const { return _fenpei; }
 
     bool lianzhuang() const {return _lianzhuang; }
@@ -190,7 +207,6 @@ public:
     void set_no_game(const bool no_game_) { _no_game = no_game_; }
 
     Model& model() { return _model; }
-    const Model& model() const { return _model; }
     const Rule& rule() const { return _rule; }
 
     const Status status() const { return _status; }

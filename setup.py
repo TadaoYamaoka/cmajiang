@@ -1,5 +1,5 @@
 ﻿from setuptools import setup, Extension
-from setuptools.command.build_ext import build_ext
+from pybind11.setup_helpers import Pybind11Extension, build_ext
 
 
 class my_build_ext(build_ext):
@@ -15,10 +15,10 @@ class my_build_ext(build_ext):
 
 
 ext_modules = [
-    Extension(
+    Pybind11Extension(
         "cmajiang._cmajiang",
         [
-            "cmajiang/_cmajiang.pyx",
+            "src_cpp/cmajiang.cpp",
             "src_cpp/game.cpp",
             "src_cpp/he.cpp",
             "src_cpp/hule.cpp",
@@ -27,8 +27,9 @@ ext_modules = [
             "src_cpp/xiangting.cpp",
         ],
         language="c++",
-        include_dirs=["src_cpp"],
-        extra_compile_args=["-std=c++17"],
+        include_dirs=[
+            "src_cpp",
+        ],
     )
 ]
 

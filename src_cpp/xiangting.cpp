@@ -77,12 +77,12 @@ int mianzi_all(const Shoupai& shoupai, const bool jiangpai) {
 
     int z[] = {0, 0, 0};
     for (int n = 1; n <= 7; n++) {
-        if (shoupai.z(n) >= 3) z[0]++;
-        else if (shoupai.z(n) == 2) z[1]++;
-        else if (shoupai.z(n) == 1) z[2]++;
+        if (shoupai.z_(n) >= 3) z[0]++;
+        else if (shoupai.z_(n) == 2) z[1]++;
+        else if (shoupai.z_(n) == 1) z[2]++;
     }
 
-    const int n_fulou = (int)shoupai.fulou().size();
+    const int n_fulou = (int)shoupai.fulou_().size();
 
     int min = 13;
 
@@ -118,14 +118,14 @@ int xiangting_yiban(const Shoupai& shoupai) {
             }
         }
     }
-    if (min == -1 && !shoupai_.zimo().empty() && shoupai_.zimo().size() > 2) return 0;
+    if (min == -1 && !shoupai_.zimo_().empty() && shoupai_.zimo_().size() > 2) return 0;
 
     return min;
 }
 
 // 国士無双形
 int xiangting_guoshi(const Shoupai& shoupai) {
-    if (shoupai.fulou().size()) return INT_MAX;
+    if (shoupai.fulou_().size()) return INT_MAX;
 
     int n_yaojiu = 0;
     int n_duizi = 0;
@@ -144,7 +144,7 @@ int xiangting_guoshi(const Shoupai& shoupai) {
 // 七対子形
 int xiangting_qidui(const Shoupai& shoupai) {
 
-    if (shoupai.fulou().size()) return INT_MAX;
+    if (shoupai.fulou_().size()) return INT_MAX;
 
     int n_duizi = 0;
     int n_guli = 0;
@@ -174,7 +174,7 @@ int xiangting(const Shoupai& shoupai) {
 
 // 听牌(向聴数が減る牌)
 std::vector<std::string> tingpai(const Shoupai& shoupai, const std::function<int(const Shoupai&)>& f_xiangting) {
-    if (!shoupai.zimo().empty()) throw std::runtime_error("zimo must be empty");
+    if (!shoupai.zimo_().empty()) throw std::runtime_error("zimo must be empty");
 
     auto shoupai_ = shoupai;
     std::vector<std::string> pai;

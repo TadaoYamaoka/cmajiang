@@ -431,52 +431,53 @@ std::vector<std::string> Shoupai::get_peng_mianzi(const std::string& p) const {
 
 // 杠(槓)面子取得
 std::vector<std::string> Shoupai::get_gang_mianzi(const std::string& p) const {
-    if (!_zimo.empty()) throw std::runtime_error("zimo must be empty");
-    if (!valid_pai(p)) throw std::invalid_argument(p);
+    if (!p.empty()) {
+        if (!_zimo.empty()) throw std::runtime_error("zimo must be empty");
+        if (!valid_pai(p)) throw std::invalid_argument(p);
 
-    const auto s = p[0];
-    auto n = to_int(p[1]);
-    if (n == 0) n = 5;
-    std::smatch match;
-    if (!std::regex_search(p, match, re_menqian_end)) throw std::invalid_argument(p);
-    const auto d = match.str();
-    if (_lizhi) return {};
+        const auto s = p[0];
+        auto n = to_int(p[1]);
+        if (n == 0) n = 5;
+        std::smatch match;
+        if (!std::regex_search(p, match, re_menqian_end)) throw std::invalid_argument(p);
+        const auto d = match.str();
+        if (_lizhi) return {};
 
-    const auto& bingpai = this->bingpai(s);
-    if (bingpai[n] == 3) {
-        if (n == 5) return { s + std::string(3 - bingpai[0], '5')
-            + std::string(bingpai[0], '0') + p[1] + d };
-        else return { to_string(s, n, n, n, n) + d };
-    }
-    return {};
-}
-
-std::vector<std::string> Shoupai::get_gang_mianzi() const {
-    if (_zimo.empty()) throw std::runtime_error("zimo must not be empty");
-    if (_zimo.size() > 2) throw std::runtime_error("unexpected zimo " + _zimo);
-    const auto p = std::regex_replace(_zimo, re_ling, "5");
-
-    std::vector<std::string> mianzi;
-    for (const auto s : { 'm', 'p', 's', 'z' }) {
         const auto& bingpai = this->bingpai(s);
-        for (int n = 1; n < bingpai.size(); n++) {
-            if (bingpai[n] == 0) continue;
-            if (bingpai[n] == 4) {
-                if (_lizhi && to_string(s, n) != p) continue;
-                if (n == 5) mianzi.emplace_back(s + std::string(4 - bingpai[0], '5')
-                    + std::string(bingpai[0], '0'));
-                else mianzi.emplace_back(to_string(s, n, n, n, n));
-            }
-            else {
-                if (_lizhi) continue;
-                for (const auto& m : _fulou) {
-                    if (std::regex_replace(m, re_ling, "5").substr(0, 4) == to_string(s, n, n, n)) {
-                        if (n == 5 && bingpai[0] > 0) mianzi.emplace_back(m + '0');
-                        else                          mianzi.emplace_back(m + to_char(n));
+        if (bingpai[n] == 3) {
+            if (n == 5) return { s + std::string(3 - bingpai[0], '5')
+                + std::string(bingpai[0], '0') + p[1] + d };
+            else return { to_string(s, n, n, n, n) + d };
+        }
+        return {};
+    }
+    else {
+        if (_zimo.empty()) throw std::runtime_error("zimo must not be empty");
+        if (_zimo.size() > 2) throw std::runtime_error("unexpected zimo " + _zimo);
+        const auto p = std::regex_replace(_zimo, re_ling, "5");
+
+        std::vector<std::string> mianzi;
+        for (const auto s : { 'm', 'p', 's', 'z' }) {
+            const auto& bingpai = this->bingpai(s);
+            for (int n = 1; n < bingpai.size(); n++) {
+                if (bingpai[n] == 0) continue;
+                if (bingpai[n] == 4) {
+                    if (_lizhi && to_string(s, n) != p) continue;
+                    if (n == 5) mianzi.emplace_back(s + std::string(4 - bingpai[0], '5')
+                        + std::string(bingpai[0], '0'));
+                    else mianzi.emplace_back(to_string(s, n, n, n, n));
+                }
+                else {
+                    if (_lizhi) continue;
+                    for (const auto& m : _fulou) {
+                        if (std::regex_replace(m, re_ling, "5").substr(0, 4) == to_string(s, n, n, n)) {
+                            if (n == 5 && bingpai[0] > 0) mianzi.emplace_back(m + '0');
+                            else                          mianzi.emplace_back(m + to_char(n));
+                        }
                     }
                 }
             }
         }
+        return mianzi;
     }
-    return mianzi;
 }

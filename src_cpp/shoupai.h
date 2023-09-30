@@ -48,8 +48,7 @@ public:
     // 碰(ポン)面子取得
     std::vector<std::string> get_peng_mianzi(const std::string& p) const;
     // 杠(槓)面子取得
-    std::vector<std::string> get_gang_mianzi(const std::string& p) const;
-    std::vector<std::string> get_gang_mianzi() const;
+    std::vector<std::string> get_gang_mianzi(const std::string& p = {}) const;
 
     const std::vector<int>& bingpai(const char s) const {
         return const_cast<Shoupai&>(*this)._bingpai(s);
@@ -59,12 +58,12 @@ public:
     const std::vector<int>& p() const { return _p; }
     const std::vector<int>& s() const { return _s; }
     const std::vector<int>& z() const { return _z; }
-    int m(const int n) const { return _m[n]; }
-    int p(const int n) const { return _p[n]; }
-    int s(const int n) const { return _s[n]; }
-    int z(const int n) const { return _z[n]; }
-    const std::vector<std::string>& fulou() const { return _fulou; };
-    const std::string& zimo() const { return _zimo; }
+    int m_(const int n) const { return _m[n]; }
+    int p_(const int n) const { return _p[n]; }
+    int s_(const int n) const { return _s[n]; }
+    int z_(const int n) const { return _z[n]; }
+    const std::vector<std::string>& fulou_() const { return _fulou; };
+    const std::string& zimo_() const { return _zimo; }
 
     friend int xiangting_yiban(const Shoupai& shoupai);
     friend std::vector<std::string> tingpai(const Shoupai& shoupai, const std::function<int(const Shoupai&)>& f_xiangting);

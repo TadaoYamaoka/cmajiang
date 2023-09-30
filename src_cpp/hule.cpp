@@ -99,14 +99,14 @@ std::vector<std::vector<std::string>> mianzi_all(const Shoupai& shoupai) {
 
     std::vector<std::string> zipai;
     for (int n = 1; n <= 7; n++) {
-        if (shoupai.z(n) == 0) continue;
-        if (shoupai.z(n) != 3) return {};
+        if (shoupai.z_(n) == 0) continue;
+        if (shoupai.z_(n) != 3) return {};
         zipai.emplace_back(to_string('z', n, n, n));
     }
 
     std::vector<std::string> fulou;
-    fulou.reserve(shoupai.fulou().size());
-    for (const auto& m : shoupai.fulou()) {
+    fulou.reserve(shoupai.fulou_().size());
+    for (const auto& m : shoupai.fulou_()) {
         fulou.emplace_back(std::regex_replace(m, re_ling, "5"));
     }
 
@@ -164,7 +164,7 @@ std::vector<std::vector<std::string>> hule_mianzi_yiban(Shoupai& shoupai, const 
 
 // 七対子形
 std::vector<std::vector<std::string>> hule_mianzi_qidui(const Shoupai& shoupai, const std::string& hulepai) {
-    if (shoupai.fulou().size() > 0) return {};
+    if (shoupai.fulou_().size() > 0) return {};
 
     std::vector<std::string> mianzi;
 
@@ -190,7 +190,7 @@ std::vector<std::vector<std::string>> hule_mianzi_qidui(const Shoupai& shoupai, 
 
 // 国士無双形
 std::vector<std::vector<std::string>> hule_mianzi_guoshi(const Shoupai& shoupai, const std::string& hulepai) {
-    if (shoupai.fulou().size() > 0) return {};
+    if (shoupai.fulou_().size() > 0) return {};
 
     std::vector<std::string> mianzi;
     int n_duizi = 0;
@@ -223,7 +223,7 @@ std::vector<std::vector<std::string>> hule_mianzi_guoshi(const Shoupai& shoupai,
 
 // 九蓮宝燈形
 std::vector<std::vector<std::string>> hule_mianzi_jiulian(const Shoupai& shoupai, const std::string& hulepai) {
-    if (shoupai.fulou().size() > 0) return {};
+    if (shoupai.fulou_().size() > 0) return {};
 
     const auto s = hulepai[0];
     if (s == 'z') return {};
@@ -250,8 +250,8 @@ std::vector<std::vector<std::string>> hule_mianzi(const Shoupai& shoupai, const 
     auto new_shoupai = shoupai;
     if (!rongpai.empty()) new_shoupai.zimo(rongpai);
 
-    if (new_shoupai.zimo().empty() || new_shoupai.zimo().size() > 2) return {};
-    const auto hulepai = std::regex_replace(rongpai.empty() ? new_shoupai.zimo() + '_' : rongpai, re_ling, "5");
+    if (new_shoupai.zimo_().empty() || new_shoupai.zimo_().size() > 2) return {};
+    const auto hulepai = std::regex_replace(rongpai.empty() ? new_shoupai.zimo_() + '_' : rongpai, re_ling, "5");
 
     return concat(concat(concat(
         hule_mianzi_yiban(new_shoupai, hulepai),
@@ -836,6 +836,8 @@ Defen hule(const Shoupai& shoupai, std::string rongpai, const Param& param) {
             && (!rv.fanshu || rv.fanshu > max.fanshu
                 || rv.fanshu == max.fanshu && rv.fu > max.fu)) max = rv;
     }
+
+    max.menfeng = param.menfeng;
 
     return max;
 }

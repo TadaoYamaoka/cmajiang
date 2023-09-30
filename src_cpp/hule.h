@@ -107,6 +107,7 @@ struct Defen {
     int damanguan;
     int defen;
     std::array<int, 4> fenpei;
+    int menfeng;
 
     bool operator==(const Defen& other) const {
         return hupai == other.hupai &&

@@ -60,7 +60,7 @@ Game init_game(
     return game;
 }
 
-void set_reply(Game& game, const int l, const std::string& msg, const std::string& arg = {}) {
+void set_reply(Game& game, const int l, const Game::Message msg, const std::string& arg = {}) {
 	game.reply(game.model().player_id[l], msg, arg);
 }
 
@@ -100,13 +100,13 @@ TEST(GameTest, qipai) {
 	{
 		std::regex regex(R"([mpsz])");
 		for (int l = 0; l < 4; l++) {
-			EXPECT_EQ(13, std::regex_replace(game.shoupai(l).toString(), regex, "").size());
+			EXPECT_EQ(13, std::regex_replace(game.shoupai_(l).toString(), regex, "").size());
 		}
 	}
 	// 河が初期化されること
 	{
 		for (int l = 0; l < 4; l++) {
-			EXPECT_EQ(0, game.he(l).pai().size());
+			EXPECT_EQ(0, game.he_(l).pai().size());
 		}
 	}
 	// 第一ツモ巡であること
@@ -123,7 +123,7 @@ TEST(GameTest, qipai) {
 		std::vector<std::string> qipai;
 		std::copy(shan.pai().end() - 13, shan.pai().end(), std::back_inserter(qipai));
 		Shoupai shoupai(qipai);
-		game.qipai(shan);
+		game.qipai_(shan);
 		EXPECT_EQ(shoupai.toString(), game.model().shoupai[0].toString());
 	}
 	// 途中流局なしの場合、最初から四風連打中でないこと
@@ -202,33 +202,33 @@ TEST(GameTest, dapai) {
 		auto game = init_game({}, -1, 0, 0, { "_", "", "", "" });
 		game.zimo();
 		game.dapai("m1*");
-		EXPECT_EQ(2, game.lizhi(game.model().lunban));
-		EXPECT_TRUE(game.yifa(game.model().lunban));
+		EXPECT_EQ(2, game.lizhi_(game.model().lunban));
+		EXPECT_TRUE(game.yifa_(game.model().lunban));
 	}
 	// リーチ後の打牌で一発の権利を失うこと
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "", "", "" });
-		game.set_yifa(0, true);
+		game.set_yifa_(0, true);
 		game.zimo();
 		game.dapai("m1");
-		EXPECT_FALSE(game.yifa(game.model().lunban));
+		EXPECT_FALSE(game.yifa_(game.model().lunban));
 	}
 	// テンパイ時に和了牌が河にある場合、フリテンとなること
 	{
 		auto game = init_game({}, -1, 0, 0, { "m123p456s789z11122", "", "", "" });
 		game.model().lunban = 0;
-		EXPECT_TRUE(game.neng_rong(game.model().lunban));
+		EXPECT_TRUE(game.neng_rong_(game.model().lunban));
 		game.dapai("m1");
-		EXPECT_FALSE(game.neng_rong(game.model().lunban));
+		EXPECT_FALSE(game.neng_rong_(game.model().lunban));
 	}
 	// リーチ後はフリテンが解除されないこと
 	{
 		auto game = init_game({}, -1, 0, 0, { "_____________*", "", "", "" });
-		game.set_neng_rong(0, false);
+		game.set_neng_rong_(0, false);
 		game.zimo();
-		auto dapai = game.model().shoupai[0].zimo();
+		auto dapai = game.model().shoupai[0].zimo_();
 		game.dapai(dapai);
-		EXPECT_FALSE(game.neng_rong(game.model().lunban));
+		EXPECT_FALSE(game.neng_rong_(game.model().lunban));
 	}
 	// 加槓後の打牌で開槓されること
 	{
@@ -254,7 +254,7 @@ TEST(GameTest, fulou) {
 	// 手番が更新されること(上家からのチー)
 	EXPECT_EQ(1, game.model().lunban);
 	// 手牌が副露されること
-	EXPECT_EQ("m12-3", game.model().shoupai[1].fulou()[0]);
+	EXPECT_EQ("m12-3", game.model().shoupai[1].fulou_()[0]);
 	// 通知が伝わること
 	EXPECT_EQ(Game::Status::FULOU, game.status());
 
@@ -264,7 +264,7 @@ TEST(GameTest, fulou) {
 		game.zimo();
 		game.dapai("m2");
 		game.fulou("m2222+");
-		EXPECT_EQ("m2222+", game.model().shoupai[3].fulou()[0]);
+		EXPECT_EQ("m2222+", game.model().shoupai[3].fulou_()[0]);
 	}
 	// 第一ツモ巡でなくなること
 	{
@@ -291,7 +291,7 @@ TEST(GameTest, gang) {
 	{
 		game.zimo();
 		game.gang("s555+0");
-		EXPECT_EQ("s555+0", game.model().shoupai[0].fulou()[0]);
+		EXPECT_EQ("s555+0", game.model().shoupai[0].fulou_()[0]);
 	}
 	// 通知が伝わること
 	EXPECT_EQ(Game::Status::GANG, game.status());
@@ -301,7 +301,7 @@ TEST(GameTest, gang) {
 		auto game = init_game({}, -1, 0, 0, { "_", "", "", "" });
 		game.zimo();
 		game.gang("s5550");
-		EXPECT_EQ("s5550", game.model().shoupai[0].fulou()[0]);
+		EXPECT_EQ("s5550", game.model().shoupai[0].fulou_()[0]);
 	}
 	// 後乗せの槓が開槓されること
 	{
@@ -397,7 +397,7 @@ TEST(GameTest, kakigang) {
 		game.gangzimo();
 		game.kaigang();
 		EXPECT_EQ(2, game.model().shan.baopai().size());
-		EXPECT_TRUE(game.gang().empty());
+		EXPECT_TRUE(game.gang_().empty());
 	}
 	// 通知が伝わること
 	EXPECT_EQ(Game::Status::GANGZIMO, game.status());
@@ -411,7 +411,7 @@ TEST(GameTest, kakigang) {
 		game.gang("m1111");
 		game.gangzimo();
 		EXPECT_EQ(1, game.model().shan.baopai().size());
-		EXPECT_TRUE(game.gang().empty());
+		EXPECT_TRUE(game.gang_().empty());
 	}
 }
 
@@ -434,7 +434,7 @@ TEST(GameTest, hule) {
 		auto game = init_game({}, -1, 0, 0, { "m123p456s789z1122", "_", "", "" });
 		game.set_diyizimo(false);
 		game.zimo();
-		game.dapai(game.model().shoupai[0].zimo() + "_*");
+		game.dapai(game.model().shoupai[0].zimo_() + "_*");
 		game.zimo();
 		game.dapai("z1");
 		game.set_hule({ 0 });
@@ -446,7 +446,7 @@ TEST(GameTest, hule) {
 	{
 		auto game = init_game({}, -1, 0, 0, { "m123p456s789z1122", "_", "", "" });
 		game.zimo();
-		game.dapai(game.model().shoupai[0].zimo() + "_*");
+		game.dapai(game.model().shoupai[0].zimo_() + "_*");
 		game.zimo();
 		game.dapai("z1");
 		game.set_hule({ 0 });
@@ -582,7 +582,7 @@ TEST(GameTest, pingju) {
 
 	// 途中流局
 	{
-		game.pingju("yao9"); // 九種九牌
+		game.pingju(Game::Pingju::YAO9); // 九種九牌
 		EXPECT_TRUE(game.no_game());
 		EXPECT_TRUE(game.lianzhuang());
 	}
@@ -595,8 +595,8 @@ TEST(GameTest, pingju) {
 		rule.liujumanguan/*流し満貫あり*/ = false;
 		auto game = init_game(rule, -1, 0, 0, { "m22p12366s406789", "m55p40s123,z111-,p678-", "m67p678s22,s56-7,p444-", "m12345p33s333,m406-" });
 		game.pingju();
-		EXPECT_EQ("", game.get_pingju().name);
-		EXPECT_EQ(4, count_if(game.get_pingju().shoupai, [](const auto& s) { return !s.empty(); }));
+		EXPECT_EQ(Game::Pingju::HUANGPAI, game.pingju_().name);
+		EXPECT_EQ(4, count_if(game.pingju_().shoupai, [](const auto& s) { return !s.empty(); }));
 		EXPECT_EQ((std::array<int, 4>{}), game.fenpei());
 	}
 	// 全員ノーテン
@@ -605,8 +605,8 @@ TEST(GameTest, pingju) {
 		rule.liujumanguan/*流し満貫あり*/ = false;
 		auto game = init_game(rule, -1, 0, 0, { "m40789p4667s8z577", "m99p12306z277,m345-", "m3p1234689z55,s7-89", "m2233467p234555" });
 		game.pingju();
-		EXPECT_EQ("", game.get_pingju().name);
-		EXPECT_EQ(0, count_if(game.get_pingju().shoupai, [](const auto& s) { return !s.empty(); }));
+		EXPECT_EQ(Game::Pingju::HUANGPAI, game.pingju_().name);
+		EXPECT_EQ(0, count_if(game.pingju_().shoupai, [](const auto& s) { return !s.empty(); }));
 		EXPECT_EQ((std::array<int, 4>{}), game.fenpei());
 	}
 	// 2人テンパイ
@@ -615,8 +615,8 @@ TEST(GameTest, pingju) {
 		rule.liujumanguan/*流し満貫あり*/ = false;
 		auto game = init_game(rule, -1, 0, 0, { "m22p12366s406789", "m99p12306z277,m345-", "m3p1234689z55,s7-89", "m12345p33s333,m406-" });
 		game.pingju();
-		EXPECT_EQ("", game.get_pingju().name);
-		EXPECT_EQ(2, count_if(game.get_pingju().shoupai, [](const auto& s) { return !s.empty(); }));
+		EXPECT_EQ(Game::Pingju::HUANGPAI, game.pingju_().name);
+		EXPECT_EQ(2, count_if(game.pingju_().shoupai, [](const auto& s) { return !s.empty(); }));
 		EXPECT_EQ((std::array<int, 4>{ 1500, -1500, -1500, 1500 }), game.fenpei());
 	}
 	// 形式テンパイとならない牌姿
@@ -625,8 +625,8 @@ TEST(GameTest, pingju) {
 		rule.liujumanguan/*流し満貫あり*/ = false;
 		auto game = init_game(rule, -1, 0, 0, { "m123p456s789z1111", "m99p12306z277,m345-", "m3p1234689z55,s7-89", "m12345p33s333,m406-" });
 		game.pingju();
-		EXPECT_EQ("", game.get_pingju().name);
-		EXPECT_EQ(1, count_if(game.get_pingju().shoupai, [](const auto& s) { return !s.empty(); }));
+		EXPECT_EQ(Game::Pingju::HUANGPAI, game.pingju_().name);
+		EXPECT_EQ(1, count_if(game.pingju_().shoupai, [](const auto& s) { return !s.empty(); }));
 		EXPECT_EQ((std::array<int, 4>{ -1000, -1000, -1000, 3000 }), game.fenpei());
 	}
 	// ノーテン宣言ありの場合、宣言なしをノーテンとみなすこと
@@ -635,9 +635,9 @@ TEST(GameTest, pingju) {
 		rule.liujumanguan/*流し満貫あり*/ = false;
 		rule.notenDeclaration/*ノーテン宣言あり*/ = true;
 		auto game = init_game(rule, -1, 0, 0, { "m22p12366s406789", "m55p40s123,z111-,p678-", "m67p678s22,s56-7,p444-", "m12345p33s333,m406-" });
-		game.pingju("", { "", "_", "_", "_" });
-		EXPECT_EQ("", game.get_pingju().name);
-		EXPECT_EQ(3, count_if(game.get_pingju().shoupai, [](const auto& s) { return !s.empty(); }));
+		game.pingju(Game::Pingju::NONE, { "", "_", "_", "_" });
+		EXPECT_EQ(Game::Pingju::HUANGPAI, game.pingju_().name);
+		EXPECT_EQ(3, count_if(game.pingju_().shoupai, [](const auto& s) { return !s.empty(); }));
 		EXPECT_EQ((std::array<int, 4>{ -3000, 1000, 1000, 1000 }), game.fenpei());
 	}
 	// ノーテン宣言であってもリーチ者の手牌は公開すること
@@ -647,8 +647,8 @@ TEST(GameTest, pingju) {
 		rule.notenDeclaration/*ノーテン宣言あり*/ = true;
 		auto game = init_game(rule, -1, 0, 0, { "m22p12366s406789*", "", "", "" });
 		game.pingju();
-		EXPECT_EQ("", game.get_pingju().name);
-		EXPECT_FALSE(game.get_pingju().shoupai[0].empty());
+		EXPECT_EQ(Game::Pingju::HUANGPAI, game.pingju_().name);
+		EXPECT_FALSE(game.pingju_().shoupai[0].empty());
 	}
 	// ノーテン罰なし
 	{
@@ -657,8 +657,8 @@ TEST(GameTest, pingju) {
 		rule.notenPenalty/*ノーテン罰あり*/ = false;
 		auto game = init_game(rule, -1, 0, 0, { "m22p12366s406789", "m99p12306z277,m345-", "m3p1234689z55,s7-89", "m12345p33s333,m406-" });
 		game.pingju();
-		EXPECT_EQ("", game.get_pingju().name);
-		EXPECT_EQ(1, count_if(game.get_pingju().shoupai, [](const auto& s) { return !s.empty(); }));
+		EXPECT_EQ(Game::Pingju::HUANGPAI, game.pingju_().name);
+		EXPECT_EQ(1, count_if(game.pingju_().shoupai, [](const auto& s) { return !s.empty(); }));
 		EXPECT_EQ((std::array<int, 4>{ 0, 0, 0, 0 }), game.fenpei());
 	}
 	// テンパイ連荘
@@ -712,7 +712,7 @@ TEST(GameTest, pingju) {
 		game.zimo(); game.dapai("p2");
 		game.zimo(); game.dapai("s2");
 		game.pingju();
-		EXPECT_EQ("nm", game.get_pingju().name);
+		EXPECT_EQ(Game::Pingju::MANGUAN, game.pingju_().name);
 		EXPECT_EQ((std::array<int, 4>{ 12000, -4000, -4000, -4000 }), game.fenpei());
 	}
 	// 鳴かれた場合、流し満貫は成立しない
@@ -723,7 +723,7 @@ TEST(GameTest, pingju) {
 		game.zimo(); game.dapai("p2");
 		game.zimo(); game.dapai("s2");
 		game.pingju();
-		EXPECT_EQ("", game.get_pingju().name);
+		EXPECT_EQ(Game::Pingju::HUANGPAI, game.pingju_().name);
 	}
 	// 2人が流し満貫
 	{
@@ -733,7 +733,7 @@ TEST(GameTest, pingju) {
 		game.zimo(); game.dapai("p2");
 		game.zimo(); game.dapai("s2");
 		game.pingju();
-		EXPECT_EQ("nm", game.get_pingju().name);
+		EXPECT_EQ(Game::Pingju::MANGUAN, game.pingju_().name);
 		EXPECT_EQ((std::array<int, 4>{ 8000, 4000, -6000, -6000 }), game.fenpei());
 	}
 	// ノーテン罰なしのルールの場合、リーチ者と親以外は手牌を開かないこと
@@ -744,7 +744,7 @@ TEST(GameTest, pingju) {
 		auto game = init_game(rule, -1, 0, 0, { "m567999s4466777", "m05p123s56z333*,s8888", "m11p789s06,z555-,p406-", "" });
 		game.pingju();
 		EXPECT_EQ((std::array<std::string, 4>{ "m567999s4466777", "m05p123s56z333*,s8888", "", "" }),
-			game.get_pingju().shoupai);
+			game.pingju_().shoupai);
 	}
 	// ノーテン罰なしで和了連荘のルールの場合、リーチ者以外は手牌を開かないこと
 	{
@@ -755,7 +755,7 @@ TEST(GameTest, pingju) {
 		auto game = init_game(rule, -1, 0, 0, { "m567999s4466777", "m05p123s56z333*,s8888", "m11p789s06,z555-,p406-", "" });
 		game.pingju();
 		EXPECT_EQ((std::array<std::string, 4>{ "", "m05p123s56z333*,s8888", "", "" }),
-			game.get_pingju().shoupai);
+			game.pingju_().shoupai);
 	}
 }
 
@@ -1022,42 +1022,42 @@ TEST(GameTest, reply_zimo) {
 	{
 		auto game = init_game({}, -1, 0, 0, {}, { "m1" });
 		game.zimo();
-		set_reply(game, 0, "dapai", "m1_");
+		set_reply(game, 0, Game::Message::DAPAI, "m1_");
 		game.next();
 		EXPECT_EQ(Game::Status::DAPAI, game.status());
-		EXPECT_EQ("m1_", game.dapai());
+		EXPECT_EQ("m1_", game.dapai_());
 	}
 	// リーチ
 	{
 		auto game = init_game({}, -1, 0, 0, { "m123p456s789z1122", "", "", ""  }, { "m1" });
 		game.zimo();
-		set_reply(game, 0, "dapai", "m1_*");
+		set_reply(game, 0, Game::Message::DAPAI, "m1_*");
 		game.next();
 		EXPECT_EQ(Game::Status::DAPAI, game.status());
-		EXPECT_EQ("m1_*", game.dapai());
+		EXPECT_EQ("m1_*", game.dapai_());
 	}
 	// 打牌(不正応答)
 	{
 		auto game = init_game({}, -1, 0, 0, {}, { "m1" });
 		game.zimo();
-		set_reply(game, 0, "dapai", "m2_");
+		set_reply(game, 0, Game::Message::DAPAI, "m2_");
 		game.next();
 		EXPECT_EQ(Game::Status::DAPAI, game.status());
-		EXPECT_NE("m2_", game.dapai());
+		EXPECT_NE("m2_", game.dapai_());
 	}
 	// 九種九牌
 	{
 		auto game = init_game({}, -1, 0, 0, { "m123459z1234567", "", "", "" });
 		game.zimo();
-		set_reply(game, 0, "daopai", "-");
+		set_reply(game, 0, Game::Message::DAOPAI, "-");
 		game.next();
-		EXPECT_EQ("yao9", game.get_pingju().name);
+		EXPECT_EQ(Game::Pingju::YAO9, game.pingju_().name);
 	}
 	// 九種九牌(不正応答)
 	{
 		auto game = init_game({}, -1, 0, 0, { "m234567z1234567", "", "", "" });
 		game.zimo();
-		set_reply(game, 0, "daopai", "-");
+		set_reply(game, 0, Game::Message::DAOPAI, "-");
 		game.next();
 		EXPECT_EQ(Game::Status::DAPAI, game.status());
 	}
@@ -1067,7 +1067,7 @@ TEST(GameTest, reply_zimo) {
 		rule.abortiveDraw/*途中流局あり*/ = false;
 		auto game = init_game(rule, -1, 0, 0, { "m123459z1234567", "", "", "" });
 		game.zimo();
-		set_reply(game, 0, "daopai", "-");
+		set_reply(game, 0, Game::Message::DAOPAI, "-");
 		game.next();
 		EXPECT_EQ(Game::Status::DAPAI, game.status());
 	}
@@ -1075,7 +1075,7 @@ TEST(GameTest, reply_zimo) {
 	{
 		auto game = init_game({}, -1, 0, 0, { "m123p456s789z1122", "", "", "" }, { "z1" });
 		game.zimo();
-		set_reply(game, 0, "hule", "-");
+		set_reply(game, 0, Game::Message::HULE, "-");
 		game.next();
 		EXPECT_EQ(Game::Status::HULE, game.status());
 	}
@@ -1083,7 +1083,7 @@ TEST(GameTest, reply_zimo) {
 	{
 		auto game = init_game({}, -1, 0, 0, { "m123p456s789z1122", "", "", "" }, { "z3" });
 		game.zimo();
-		set_reply(game, 0, "hule", "-");
+		set_reply(game, 0, Game::Message::HULE, "-");
 		game.next();
 		EXPECT_EQ(Game::Status::DAPAI, game.status());
 	}
@@ -1091,16 +1091,16 @@ TEST(GameTest, reply_zimo) {
 	{
 		auto game = init_game({}, -1, 0, 0, { "m123p456z1122,s888+", "", "", "" }, { "s8" });
 		game.zimo();
-		set_reply(game, 0, "gang", "s888+8");
+		set_reply(game, 0, Game::Message::GANG, "s888+8");
 		game.next();
 		EXPECT_EQ(Game::Status::GANG, game.status());
-		EXPECT_EQ("s888+8", game.gang());
+		EXPECT_EQ("s888+8", game.gang_());
 	}
 	// カン(不正応答)
 	{
 		auto game = init_game({}, -1, 0, 0, { "m123p456z1122,s888+", "", "", "" }, { "s7" });
 		game.zimo();
-		set_reply(game, 0, "gang", "s888+8");
+		set_reply(game, 0, Game::Message::GANG, "s888+8");
 		game.next();
 		EXPECT_EQ(Game::Status::DAPAI, game.status());
 	}
@@ -1109,7 +1109,7 @@ TEST(GameTest, reply_zimo) {
 		auto game = init_game({}, -1, 0, 0, { "m123p456z1122,s888+", "", "", "" }, { "s8" });
 		game.set_n_gang({ 0, 0, 0, 4 });
 		game.zimo();
-		set_reply(game, 0, "gang", "s888+8");
+		set_reply(game, 0, Game::Message::GANG, "s888+8");
 		game.next();
 		EXPECT_EQ(Game::Status::DAPAI, game.status());
 	}
@@ -1117,10 +1117,10 @@ TEST(GameTest, reply_zimo) {
 	{
 		auto game = init_game({}, -1, 0, 0, {}, { "m1" });
 		game.zimo();
-		set_reply(game, 0, "gang", "s888+8");
+		set_reply(game, 0, Game::Message::GANG, "s888+8");
 		game.next();
 		EXPECT_EQ(Game::Status::DAPAI, game.status());
-		EXPECT_EQ("m1_", game.dapai());
+		EXPECT_EQ("m1_", game.dapai_());
 	}
 	// 槓ツモ
 	{
@@ -1147,7 +1147,7 @@ TEST(GameTest, reply_dapai) {
 		auto game = init_game({}, -1, 0, 0, { "_", "m123p456s789z1122", "", "" });
 		game.zimo();
 		game.dapai("z1");
-		set_reply(game, 1, "hule", "-");
+		set_reply(game, 1, Game::Message::HULE, "-");
 		game.next();
 		EXPECT_EQ(Game::Status::HULE, game.status());
 		EXPECT_EQ(1, max_index(game.fenpei()));
@@ -1158,18 +1158,18 @@ TEST(GameTest, reply_dapai) {
 		game.zimo();
 		game.dapai("z1");
 		game.next();
-		EXPECT_FALSE(game.neng_rong(1));
+		EXPECT_FALSE(game.neng_rong_(1));
 	}
 	// ダブロン
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "m23446p45688s345", "m34s33,s444-,s666+,p406-", "" });
 		game.zimo();
 		game.dapai("m5*");
-		set_reply(game, 1, "hule", "-");
-		set_reply(game, 2, "hule", "-");
+		set_reply(game, 1, Game::Message::HULE, "-");
+		set_reply(game, 2, Game::Message::HULE, "-");
 		game.next();
 		EXPECT_EQ(1, max_index(game.fenpei()));
-		EXPECT_EQ((std::vector<int>{2}), game.get_hule());
+		EXPECT_EQ((std::vector<int>{2}), game.hule_());
 	}
 	// ダブロンを頭ハネに変更できること
 	{
@@ -1178,23 +1178,23 @@ TEST(GameTest, reply_dapai) {
 		auto game = init_game(rule, -1, 0, 0, { "_", "m23446p45688s345", "m34s33,s444-,s666+,p406-", "" });
 		game.zimo();
 		game.dapai("m5*");
-		set_reply(game, 1, "hule", "-");
-		set_reply(game, 2, "hule", "-");
+		set_reply(game, 1, Game::Message::HULE, "-");
+		set_reply(game, 2, Game::Message::HULE, "-");
 		game.next();
 		EXPECT_EQ(1, max_index(game.fenpei()));
-		EXPECT_EQ((std::vector<int>{}), game.get_hule());
+		EXPECT_EQ((std::vector<int>{}), game.hule_());
 	}
 	// 三家和
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "m23446p45688s345", "m34s33,s444-,s666+,p406-", "m23467s88,s222+,z666=" });
 		game.zimo();
 		game.dapai("m5*");
-		set_reply(game, 1, "hule", "-");
-		set_reply(game, 2, "hule", "-");
-		set_reply(game, 3, "hule", "-");
+		set_reply(game, 1, Game::Message::HULE, "-");
+		set_reply(game, 2, Game::Message::HULE, "-");
+		set_reply(game, 3, Game::Message::HULE, "-");
 		game.next();
-		EXPECT_EQ("ron3", game.get_pingju().name);
-		EXPECT_EQ((std::array<std::string, 4>{ "", "m23446p45688s345", "m34s33,s444-,s666+,p406-", "m23467s88,s222+,z666=" }), game.get_pingju().shoupai);
+		EXPECT_EQ(Game::Pingju::HULE3, game.pingju_().name);
+		EXPECT_EQ((std::array<std::string, 4>{ "", "m23446p45688s345", "m34s33,s444-,s666+,p406-", "m23467s88,s222+,z666=" }), game.pingju_().shoupai);
 	}
 	// トリロン可に変更できること
 	{
@@ -1203,12 +1203,12 @@ TEST(GameTest, reply_dapai) {
 		auto game = init_game(rule, -1, 0, 0, { "_", "m23446p45688s345", "m34s33,s444-,s666+,p406-", "m23467s88,s222+,z666=" });
 		game.zimo();
 		game.dapai("m5*");
-		set_reply(game, 1, "hule", "-");
-		set_reply(game, 2, "hule", "-");
-		set_reply(game, 3, "hule", "-");
+		set_reply(game, 1, Game::Message::HULE, "-");
+		set_reply(game, 2, Game::Message::HULE, "-");
+		set_reply(game, 3, Game::Message::HULE, "-");
 		game.next();
 		EXPECT_EQ(1, max_index(game.fenpei()));
-		EXPECT_EQ((std::vector<int>{ 2, 3 }), game.get_hule());
+		EXPECT_EQ((std::vector<int>{ 2, 3 }), game.hule_());
 	}
 	// リーチ成立
 	{
@@ -1225,7 +1225,7 @@ TEST(GameTest, reply_dapai) {
 		auto game = init_game({}, 0, 0, 0, { "m55688p234567s06", "m23446p45688s345", "", "" }, { "s7" });
 		game.zimo();
 		game.dapai("m5*");
-		set_reply(game, 1, "hule", "-");
+		set_reply(game, 1, Game::Message::HULE, "-");
 		game.next();
 		EXPECT_EQ(25000, game.model().defen[0]);
 		EXPECT_EQ(0, game.model().lizhibang);
@@ -1239,8 +1239,8 @@ TEST(GameTest, reply_dapai) {
 			game.dapai(p);
 		}
 		game.next();
-		EXPECT_EQ("riichi4", game.get_pingju().name);
-		EXPECT_EQ((std::array<std::string, 4>{ "m11156p45688s234*", "m222p11340s12356*", "m23467789p34599*", "m34056p678s34566*" }), game.get_pingju().shoupai);
+		EXPECT_EQ(Game::Pingju::LIZHI4, game.pingju_().name);
+		EXPECT_EQ((std::array<std::string, 4>{ "m11156p45688s234*", "m222p11340s12356*", "m23467789p34599*", "m34056p678s34566*" }), game.pingju_().shoupai);
 	}
 	// 途中流局なしの場合は四家立直でも続行すること
 	{
@@ -1262,8 +1262,8 @@ TEST(GameTest, reply_dapai) {
 			game.dapai("z1");
 		}
 		game.next();
-		EXPECT_EQ("kaze4", game.get_pingju().name);
-		EXPECT_EQ((std::array<std::string, 4>{ "", "", "", "" }), game.get_pingju().shoupai);
+		EXPECT_EQ(Game::Pingju::FENG4, game.pingju_().name);
+		EXPECT_EQ((std::array<std::string, 4>{ "", "", "", "" }), game.pingju_().shoupai);
 	}
 	// 途中流局なしの場合は四風連打とならず、第一ツモ巡が終了すること
 	{
@@ -1294,8 +1294,8 @@ TEST(GameTest, reply_dapai) {
 		game.gangzimo();
 		game.dapai("z7_");
 		game.next();
-		EXPECT_EQ("kan4", game.get_pingju().name);
-		EXPECT_EQ((std::array<std::string, 4>{ "", "", "", "" }), game.get_pingju().shoupai);
+		EXPECT_EQ(Game::Pingju::GANG4, game.pingju_().name);
+		EXPECT_EQ((std::array<std::string, 4>{ "", "", "", "" }), game.pingju_().shoupai);
 	}
 	// 1人で四開槓
 	{
@@ -1342,28 +1342,28 @@ TEST(GameTest, reply_dapai) {
 		game.zimo();
 		while (game.model().shan.paishu()) game.model().shan.zimo();
 		game.dapai(game.model().shoupai[0].get_dapai()[0]);
-		set_reply(game, 1, "daopai", "-");
-		set_reply(game, 2, "daopai", "-");
+		set_reply(game, 1, Game::Message::DAOPAI, "-");
+		set_reply(game, 2, Game::Message::DAOPAI, "-");
 		game.next();
-		EXPECT_EQ("", game.get_pingju().name);
-		EXPECT_EQ((std::array<std::string, 4>{ "", "m222p11340s12356", "m23467789p34599", "" }), game.get_pingju().shoupai);
+		EXPECT_EQ(Game::Pingju::HUANGPAI, game.pingju_().name);
+		EXPECT_EQ((std::array<std::string, 4>{ "", "m222p11340s12356", "m23467789p34599", "" }), game.pingju_().shoupai);
 	}
 	// カン
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "", "", "m111234p567s3378" });
 		game.zimo();
 		game.dapai("m1");
-		set_reply(game, 3, "fulou", "m1111+");
+		set_reply(game, 3, Game::Message::FULOU, "m1111+");
 		game.next();
 		EXPECT_EQ(Game::Status::FULOU, game.status());
-		EXPECT_EQ("m1111+", game.fulou());
+		EXPECT_EQ("m1111+", game.fulou_());
 	}
 	// カン(不正応答)
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "", "", "m111234p567s3378" });
 		game.zimo();
 		game.dapai("m2");
-		set_reply(game, 3, "fulou", "m1111+");
+		set_reply(game, 3, Game::Message::FULOU, "m1111+");
 		game.next();
 		EXPECT_EQ(Game::Status::ZIMO, game.status());
 	}
@@ -1373,7 +1373,7 @@ TEST(GameTest, reply_dapai) {
 		game.set_n_gang({ 4, 0, 0, 0 });
 		game.zimo();
 		game.dapai("m2");
-		set_reply(game, 3, "fulou", "m1111+");
+		set_reply(game, 3, Game::Message::FULOU, "m1111+");
 		game.next();
 		EXPECT_EQ(Game::Status::ZIMO, game.status());
 	}
@@ -1383,17 +1383,17 @@ TEST(GameTest, reply_dapai) {
 		game.set_n_gang({ 4, 0, 0, 0 });
 		game.zimo();
 		game.dapai("m1");
-		set_reply(game, 2, "fulou", "m111=");
+		set_reply(game, 2, Game::Message::FULOU, "m111=");
 		game.next();
 		EXPECT_EQ(Game::Status::FULOU, game.status());
-		EXPECT_EQ("m111=", game.fulou());
+		EXPECT_EQ("m111=", game.fulou_());
 	}
 	// ポン(不正応答)
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "", "m112345p567s3378", "" });
 		game.zimo();
 		game.dapai("m2");
-		set_reply(game, 2, "fulou", "m111=");
+		set_reply(game, 2, Game::Message::FULOU, "m111=");
 		game.next();
 		EXPECT_EQ(Game::Status::ZIMO, game.status());
 	}
@@ -1402,17 +1402,17 @@ TEST(GameTest, reply_dapai) {
 		auto game = init_game({}, -1, 0, 0, { "_", "m112345p567s3378", "", "" });
 		game.zimo();
 		game.dapai("m6");
-		set_reply(game, 1, "fulou", "m456-");
+		set_reply(game, 1, Game::Message::FULOU, "m456-");
 		game.next();
 		EXPECT_EQ(Game::Status::FULOU, game.status());
-		EXPECT_EQ("m456-", game.fulou());
+		EXPECT_EQ("m456-", game.fulou_());
 	}
 	// チー(不正応答)
 	{
 		auto game = init_game({}, -1, 0, 0, { "_", "m112345p567s3378", "", "" });
 		game.zimo();
 		game.dapai("m5");
-		set_reply(game, 1, "fulou", "m456-");
+		set_reply(game, 1, Game::Message::FULOU, "m456-");
 		game.next();
 		EXPECT_EQ(Game::Status::ZIMO, game.status());
 	}
@@ -1421,11 +1421,11 @@ TEST(GameTest, reply_dapai) {
 		auto game = init_game({}, -1, 0, 0, { "_", "m23567p456s889z11", "m11789p123s11289", "" });
 		game.zimo();
 		game.dapai("m1");
-		set_reply(game, 1, "fulou", "m1-23");
-		set_reply(game, 2, "fulou", "m111=");
+		set_reply(game, 1, Game::Message::FULOU, "m1-23");
+		set_reply(game, 2, Game::Message::FULOU, "m111=");
 		game.next();
 		EXPECT_EQ(Game::Status::FULOU, game.status());
-		EXPECT_EQ("m111=", game.fulou());
+		EXPECT_EQ("m111=", game.fulou_());
 	}
 }
 
@@ -1445,10 +1445,10 @@ TEST(GameTest, reply_fulou) {
 		game.zimo();
 		game.dapai("m1");
 		game.fulou("m1-23");
-		set_reply(game, 1, "dapai", "s9");
+		set_reply(game, 1, Game::Message::DAPAI, "s9");
 		game.next();
 		EXPECT_EQ(Game::Status::DAPAI, game.status());
-		EXPECT_EQ("s9", game.dapai());
+		EXPECT_EQ("s9", game.dapai_());
 	}
 	// チー・ポン → 打牌(不正応答)
 	{
@@ -1456,10 +1456,10 @@ TEST(GameTest, reply_fulou) {
 		game.zimo();
 		game.dapai("m1");
 		game.fulou("m1-23");
-		set_reply(game, 1, "dapai", "m4");
+		set_reply(game, 1, Game::Message::DAPAI, "m4");
 		game.next();
 		EXPECT_EQ(Game::Status::DAPAI, game.status());
-		EXPECT_EQ("z1", game.dapai());
+		EXPECT_EQ("z1", game.dapai_());
 	}
 	// 無応答のときに右端の牌を切ること
 	{
@@ -1469,7 +1469,7 @@ TEST(GameTest, reply_fulou) {
 		game.fulou("m1-23");
 		game.next();
 		EXPECT_EQ(Game::Status::DAPAI, game.status());
-		EXPECT_EQ("z1", game.dapai());
+		EXPECT_EQ("z1", game.dapai_());
 	}
 }
 
@@ -1487,7 +1487,7 @@ TEST(GameTest, reply_gang) {
 		auto game = init_game({}, -1, 0, 0, { "m45p456s11789,m111+", "", "", "m23456p123s67899" }, { "m1" });
 		game.zimo();
 		game.gang("m111+1");
-		set_reply(game, 3, "hule", "-");
+		set_reply(game, 3, Game::Message::HULE, "-");
 		game.next();
 		EXPECT_EQ(Game::Status::HULE, game.status());
 		EXPECT_EQ(3, max_index(game.fenpei()));
@@ -1497,7 +1497,7 @@ TEST(GameTest, reply_gang) {
 		auto game = init_game({}, -1, 0, 0, { "m45p456s11789,m111+", "", "", "m33456p123s67899" }, { "m1" });
 		game.zimo();
 		game.gang("m111+1");
-		set_reply(game, 3, "hule", "-");
+		set_reply(game, 3, Game::Message::HULE, "-");
 		game.next();
 		EXPECT_EQ(Game::Status::GANGZIMO, game.status());
 	}
@@ -1506,7 +1506,7 @@ TEST(GameTest, reply_gang) {
 		auto game = init_game({}, -1, 0, 0, { "m11145p456s11789", "", "", "m23456p123s67899" }, { "m1" });
 		game.zimo();
 		game.gang("m1111");
-		set_reply(game, 3, "hule", "-");
+		set_reply(game, 3, Game::Message::HULE, "-");
 		game.next();
 		EXPECT_EQ(Game::Status::GANGZIMO, game.status());
 	}
@@ -1516,19 +1516,19 @@ TEST(GameTest, reply_gang) {
 		game.zimo();
 		game.gang("m111+1");
 		game.next();
-		EXPECT_FALSE(game.neng_rong(3));
+		EXPECT_FALSE(game.neng_rong_(3));
 	}
 	// ダブロン
 	{
 		auto game = init_game({}, -1, 0, 0, { "m11p222s88,z666=,m505-", "m23446p45688s345", "m34s33,s444-,s666+,p406-", "" }, { "m5" });
 		game.zimo();
 		game.gang("m505-5");
-		set_reply(game, 1, "hule", "-");
-		set_reply(game, 2, "hule", "-");
+		set_reply(game, 1, Game::Message::HULE, "-");
+		set_reply(game, 2, Game::Message::HULE, "-");
 		game.next();
 		EXPECT_EQ(Game::Status::HULE, game.status());
 		EXPECT_EQ(1, max_index(game.fenpei()));
-		EXPECT_EQ((std::vector<int>{2}), game.get_hule());
+		EXPECT_EQ((std::vector<int>{2}), game.hule_());
 	}
 	// ダブロンを頭ハネに変更できること
 	{
@@ -1537,12 +1537,12 @@ TEST(GameTest, reply_gang) {
 		auto game = init_game(rule, -1, 0, 0, { "m11p222s88,z666=,m505-", "m23446p45688s345", "m34s33,s444-,s666+,p406-", "" }, { "m5" });
 		game.zimo();
 		game.gang("m505-5");
-		set_reply(game, 1, "hule", "-");
-		set_reply(game, 2, "hule", "-");
+		set_reply(game, 1, Game::Message::HULE, "-");
+		set_reply(game, 2, Game::Message::HULE, "-");
 		game.next();
 		EXPECT_EQ(Game::Status::HULE, game.status());
 		EXPECT_EQ(1, max_index(game.fenpei()));
-		EXPECT_EQ((std::vector<int>{}), game.get_hule());
+		EXPECT_EQ((std::vector<int>{}), game.hule_());
 	}
 }
 
@@ -1755,20 +1755,20 @@ TEST(GameTest, allow_lizhi) {
 	{
 		auto game = init_game({}, -1, 0, 0, { "m123p456s789z1123", "", "", "" }, { "z2" });
 		game.zimo();
-		EXPECT_TRUE(game.allow_lizhi("z3*"));
+		EXPECT_TRUE(game.allow_lizhi("z3*").first);
 	}
 	// ツモ番がない場合、リーチできない
 	{
 		auto game = init_game({}, -1, 0, 0, { "m123p456s789z1123", "", "", "" }, { "z2" });
 		game.zimo();
 		while (game.model().shan.paishu() >= 4) game.model().shan.zimo();
-		EXPECT_FALSE(game.allow_lizhi("z3*"));
+		EXPECT_FALSE(game.allow_lizhi("z3*").first);
 	}
 	// 持ち点が1000点に満たない場合、リーチできない
 	{
 		auto game = init_game({}, -1, 0, 0, { "m123p456s789z1123", "", "", "" }, { "z2" }, {}, {}, { 900, 19100, 45000, 35000 });
 		game.zimo();
-		EXPECT_FALSE(game.allow_lizhi("z3*"));
+		EXPECT_FALSE(game.allow_lizhi("z3*").first);
 	}
 	// ツモ番なしでもリーチできるように変更できること
 	{
@@ -1777,7 +1777,7 @@ TEST(GameTest, allow_lizhi) {
 		auto game = init_game(rule, -1, 0, 0, { "m123p456s789z1123", "", "", "" }, { "z2" });
 		game.zimo();
 		while (game.model().shan.paishu() >= 4) game.model().shan.zimo();
-		EXPECT_TRUE(game.allow_lizhi("z3*"));
+		EXPECT_TRUE(game.allow_lizhi("z3*").first);
 	}
 	// 持ち点が1000点に満たなくてもリーチできるように変更できること
 	{
@@ -1785,7 +1785,7 @@ TEST(GameTest, allow_lizhi) {
 		rule.bankruptcyEndAll/*トビ終了あり*/ = false;
 		auto game = init_game(rule, -1, 0, 0, { "m123p456s789z1123", "", "", "" }, { "z2" }, {}, {}, { 900, 19100, 45000, 35000 });
 		game.zimo();
-		EXPECT_TRUE(game.allow_lizhi("z3*"));
+		EXPECT_TRUE(game.allow_lizhi("z3*").first);
 	}
 }
 
@@ -1925,19 +1925,19 @@ TEST(GameTest, static_get_dapai) {
 	{
 		Rule rule;
 		rule.canChangePermissionLevel/*喰い替え許可レベル*/ = 0;
-		EXPECT_EQ((std::vector<std::string>{ "p5", "p6", "p7" }), Game::get_dapai(rule, shoupai));
+		EXPECT_EQ((std::vector<std::string>{ "p5", "p6", "p7" }), Game::_get_dapai(rule, shoupai));
 	}
 	// 現物以外の喰い替えあり
 	{
 		Rule rule;
 		rule.canChangePermissionLevel/*喰い替え許可レベル*/ = 1;
-		EXPECT_EQ((std::vector<std::string>{ "m8", "p5", "p6", "p7" }), Game::get_dapai(rule, shoupai));
+		EXPECT_EQ((std::vector<std::string>{ "m8", "p5", "p6", "p7" }), Game::_get_dapai(rule, shoupai));
 	}
 	// 現物喰い替えもあり
 	{
 		Rule rule;
 		rule.canChangePermissionLevel/*喰い替え許可レベル*/ = 2;
-		EXPECT_EQ((std::vector<std::string>{ "m5", "m8", "p5", "p6", "p7" }), Game::get_dapai(rule, shoupai));
+		EXPECT_EQ((std::vector<std::string>{ "m5", "m8", "p5", "p6", "p7" }), Game::_get_dapai(rule, shoupai));
 	}
 }
 
@@ -1949,32 +1949,32 @@ TEST(GameTest, static_get_chi_mianzi) {
 	{
 		Rule rule;
 		rule.canChangePermissionLevel/*喰い替え許可レベル*/ = 0;
-		EXPECT_EQ((std::vector<std::string>{}), Game::get_chi_mianzi(rule, shoupai1, "m1-", 1));
-		EXPECT_EQ((std::vector<std::string>{}), Game::get_chi_mianzi(rule, shoupai2, "m1-", 1));
+		EXPECT_EQ((std::vector<std::string>{}), Game::_get_chi_mianzi(rule, shoupai1, "m1-", 1));
+		EXPECT_EQ((std::vector<std::string>{}), Game::_get_chi_mianzi(rule, shoupai2, "m1-", 1));
 	}
 	// 現物以外の喰い替えあり
 	{
 		Rule rule;
 		rule.canChangePermissionLevel/*喰い替え許可レベル*/ = 1;
-		EXPECT_EQ((std::vector<std::string>{ "m1-23" }), Game::get_chi_mianzi(rule, shoupai1, "m1-", 1));
-		EXPECT_EQ((std::vector<std::string>{}), Game::get_chi_mianzi(rule, shoupai2, "m1-", 1));
+		EXPECT_EQ((std::vector<std::string>{ "m1-23" }), Game::_get_chi_mianzi(rule, shoupai1, "m1-", 1));
+		EXPECT_EQ((std::vector<std::string>{}), Game::_get_chi_mianzi(rule, shoupai2, "m1-", 1));
 	}
 	// 現物喰い替えもあり
 	{
 		Rule rule;
 		rule.canChangePermissionLevel/*喰い替え許可レベル*/ = 2;
-		EXPECT_EQ((std::vector<std::string>{ "m1-23" }), Game::get_chi_mianzi(rule, shoupai1, "m1-", 1));
-		EXPECT_EQ((std::vector<std::string>{ "m1-23" }), Game::get_chi_mianzi(rule, shoupai2, "m1-", 1));
+		EXPECT_EQ((std::vector<std::string>{ "m1-23" }), Game::_get_chi_mianzi(rule, shoupai1, "m1-", 1));
+		EXPECT_EQ((std::vector<std::string>{ "m1-23" }), Game::_get_chi_mianzi(rule, shoupai2, "m1-", 1));
 	}
 	// ハイテイは鳴けない
 	{
 		Rule rule;
 		rule.canChangePermissionLevel/*喰い替え許可レベル*/ = 2;
-		EXPECT_EQ((std::vector<std::string>{}), Game::get_chi_mianzi(rule, shoupai1, "m1-", 0));
+		EXPECT_EQ((std::vector<std::string>{}), Game::_get_chi_mianzi(rule, shoupai1, "m1-", 0));
 	}
 	// ツモした状態でチーできない
 	{
-		EXPECT_EQ((std::vector<std::string>{}), Game::get_chi_mianzi({}, shoupai1, "s3-", 1));
+		EXPECT_EQ((std::vector<std::string>{}), Game::_get_chi_mianzi({}, shoupai1, "s3-", 1));
 	}
 }
 
@@ -1985,17 +1985,17 @@ TEST(GameTest, static_get_peng_mianzi) {
 	{
 		Rule rule;
 		rule.canChangePermissionLevel/*喰い替え許可レベル*/ = 0;
-		EXPECT_EQ((std::vector<std::string>{ "m111+" }), Game::get_peng_mianzi(rule, shoupai, "m1+", 1));
+		EXPECT_EQ((std::vector<std::string>{ "m111+" }), Game::_get_peng_mianzi(rule, shoupai, "m1+", 1));
 	}
 	// ハイテイは鳴けない
 	{
 		Rule rule;
 		rule.canChangePermissionLevel/*喰い替え許可レベル*/ = 0;
-		EXPECT_EQ((std::vector<std::string>{}), Game::get_peng_mianzi(rule, shoupai, "m1+", 0));
+		EXPECT_EQ((std::vector<std::string>{}), Game::_get_peng_mianzi(rule, shoupai, "m1+", 0));
 	}
 	// ツモした状態でポンできない
 	{
-		EXPECT_THROW(Game::get_peng_mianzi({}, Shoupai("m123p456s11789z123"), "s1-", 1), std::runtime_error);
+		EXPECT_THROW(Game::_get_peng_mianzi({}, Shoupai("m123p456s11789z123"), "s1-", 1), std::runtime_error);
 	}
 }
 
@@ -2010,150 +2010,150 @@ TEST(GameTest, static_get_gang_mianzi) {
 	{
 		Rule rule;
 		rule.lizhiPostClosedGangPermissionLevel/*リーチ後暗槓許可レベル*/ = 0;
-		EXPECT_EQ((std::vector<std::string>{}), Game::get_gang_mianzi(rule, shoupai1, {}, 1));
-		EXPECT_EQ((std::vector<std::string>{}), Game::get_gang_mianzi(rule, shoupai2, {}, 1));
-		EXPECT_EQ((std::vector<std::string>{}), Game::get_gang_mianzi(rule, shoupai3, {}, 1));
-		EXPECT_EQ((std::vector<std::string>{}), Game::get_gang_mianzi(rule, shoupai4, {}, 1));
-		EXPECT_EQ((std::vector<std::string>{}), Game::get_gang_mianzi(rule, shoupai5, {}, 1));
+		EXPECT_EQ((std::vector<std::string>{}), Game::_get_gang_mianzi(rule, shoupai1, {}, 1));
+		EXPECT_EQ((std::vector<std::string>{}), Game::_get_gang_mianzi(rule, shoupai2, {}, 1));
+		EXPECT_EQ((std::vector<std::string>{}), Game::_get_gang_mianzi(rule, shoupai3, {}, 1));
+		EXPECT_EQ((std::vector<std::string>{}), Game::_get_gang_mianzi(rule, shoupai4, {}, 1));
+		EXPECT_EQ((std::vector<std::string>{}), Game::_get_gang_mianzi(rule, shoupai5, {}, 1));
 	}
 	// リーチ後の牌姿の変わる暗槓なし
 	{
 		Rule rule;
 		rule.lizhiPostClosedGangPermissionLevel/*リーチ後暗槓許可レベル*/ = 1;
-		EXPECT_EQ((std::vector<std::string>{ "z1111" }), Game::get_gang_mianzi(rule, shoupai1, {}, 1));
-		EXPECT_EQ((std::vector<std::string>{}), Game::get_gang_mianzi(rule, shoupai2, {}, 1));
-		EXPECT_EQ((std::vector<std::string>{}), Game::get_gang_mianzi(rule, shoupai3, {}, 1));
-		EXPECT_EQ((std::vector<std::string>{}), Game::get_gang_mianzi(rule, shoupai4, {}, 1));
-		EXPECT_EQ((std::vector<std::string>{}), Game::get_gang_mianzi(rule, shoupai5, {}, 1));
+		EXPECT_EQ((std::vector<std::string>{ "z1111" }), Game::_get_gang_mianzi(rule, shoupai1, {}, 1));
+		EXPECT_EQ((std::vector<std::string>{}), Game::_get_gang_mianzi(rule, shoupai2, {}, 1));
+		EXPECT_EQ((std::vector<std::string>{}), Game::_get_gang_mianzi(rule, shoupai3, {}, 1));
+		EXPECT_EQ((std::vector<std::string>{}), Game::_get_gang_mianzi(rule, shoupai4, {}, 1));
+		EXPECT_EQ((std::vector<std::string>{}), Game::_get_gang_mianzi(rule, shoupai5, {}, 1));
 	}
 	// リーチ後の待ちの変わる暗槓なし
 	{
 		Rule rule;
 		rule.lizhiPostClosedGangPermissionLevel/*リーチ後暗槓許可レベル*/ = 2;
-		EXPECT_EQ((std::vector<std::string>{ "z1111" }), Game::get_gang_mianzi(rule, shoupai1, {}, 1));
-		EXPECT_EQ((std::vector<std::string>{}), Game::get_gang_mianzi(rule, shoupai2, {}, 1));
-		EXPECT_EQ((std::vector<std::string>{ "s3333" }), Game::get_gang_mianzi(rule, shoupai3, {}, 1));
-		EXPECT_EQ((std::vector<std::string>{ "s1111" }), Game::get_gang_mianzi(rule, shoupai4, {}, 1));
-		EXPECT_EQ((std::vector<std::string>{}), Game::get_gang_mianzi(rule, shoupai5, {}, 1));
+		EXPECT_EQ((std::vector<std::string>{ "z1111" }), Game::_get_gang_mianzi(rule, shoupai1, {}, 1));
+		EXPECT_EQ((std::vector<std::string>{}), Game::_get_gang_mianzi(rule, shoupai2, {}, 1));
+		EXPECT_EQ((std::vector<std::string>{ "s3333" }), Game::_get_gang_mianzi(rule, shoupai3, {}, 1));
+		EXPECT_EQ((std::vector<std::string>{ "s1111" }), Game::_get_gang_mianzi(rule, shoupai4, {}, 1));
+		EXPECT_EQ((std::vector<std::string>{}), Game::_get_gang_mianzi(rule, shoupai5, {}, 1));
 	}
 	// ハイテイはカンできない
 	{
-		EXPECT_EQ((std::vector<std::string>{}), Game::get_gang_mianzi({}, Shoupai("m1112p456s789z111z1"), {}, 0));
-		EXPECT_EQ((std::vector<std::string>{}), Game::get_gang_mianzi({}, Shoupai("m1112p456s789z111"), "z1=", 0));
+		EXPECT_EQ((std::vector<std::string>{}), Game::_get_gang_mianzi({}, Shoupai("m1112p456s789z111z1"), {}, 0));
+		EXPECT_EQ((std::vector<std::string>{}), Game::_get_gang_mianzi({}, Shoupai("m1112p456s789z111"), "z1=", 0));
 	}
 }
 
 TEST(GameTest, static_allow_lizhi) {
 	// 打牌できない場合、リーチはできない
 	{
-		EXPECT_FALSE(Game::allow_lizhi({}, Shoupai("m123p456s789z1122")).first);
+		EXPECT_FALSE(Game::_allow_lizhi({}, Shoupai("m123p456s789z1122")).first);
 	}
 	// すでにリーチしている場合、リーチはできない
 	{
-		EXPECT_FALSE(Game::allow_lizhi({}, Shoupai("m123p456s789z11223*")).first);
+		EXPECT_FALSE(Game::_allow_lizhi({}, Shoupai("m123p456s789z11223*")).first);
 	}
 	// メンゼンでない場合、リーチはできない
 	{
-		EXPECT_FALSE(Game::allow_lizhi({}, Shoupai("m123p456s789z23,z111=")).first);
+		EXPECT_FALSE(Game::_allow_lizhi({}, Shoupai("m123p456s789z23,z111=")).first);
 	}
 	// ツモ番がない場合、リーチはできない
 	{
-		EXPECT_FALSE(Game::allow_lizhi({}, Shoupai("m123p456s789z11223"), "z3", 3));
+		EXPECT_FALSE(Game::_allow_lizhi({}, Shoupai("m123p456s789z11223"), "z3", 3).first);
 	}
 	// ルールが許せばツモ番がなくてもリーチは可能
 	{
 		Rule rule;
 		rule.lizhiWithoutTsumoBonus/*ツモ番なしリーチあり*/ = true;
-		EXPECT_TRUE(Game::allow_lizhi(rule, Shoupai("m123p456s789z11223"), "z3", 3));
+		EXPECT_TRUE(Game::_allow_lizhi(rule, Shoupai("m123p456s789z11223"), "z3", 3).first);
 	}
 	// 持ち点が1000点に満たない場合、リーチはできない
 	{
-		EXPECT_FALSE(Game::allow_lizhi({}, Shoupai("m123p456s789z11223"), "z3", 3, 900));
+		EXPECT_FALSE(Game::_allow_lizhi({}, Shoupai("m123p456s789z11223"), "z3", 3, 900).first);
 	}
 	// トビなしなら持ち点が1000点に満たなくてもリーチは可能
 	{
 		Rule rule;
 		rule.bankruptcyEndAll/*トビ終了あり*/ = false;
-		EXPECT_FALSE(Game::allow_lizhi(rule, Shoupai("m123p456s789z11223"), "z3", 3, 900));
+		EXPECT_FALSE(Game::_allow_lizhi(rule, Shoupai("m123p456s789z11223"), "z3", 3, 900).first);
 	}
 	// テンパイしていない場合、リーチはできない
 	{
-		EXPECT_FALSE(Game::allow_lizhi({}, Shoupai("m123p456s789z11234")).first);
+		EXPECT_FALSE(Game::_allow_lizhi({}, Shoupai("m123p456s789z11234")).first);
 	}
 	// 形式テンパイと認められない牌姿でリーチはできない
 	{
-		EXPECT_FALSE(Game::allow_lizhi({}, Shoupai("m123p456s789z11112"), "z2"));
+		EXPECT_FALSE(Game::_allow_lizhi({}, Shoupai("m123p456s789z11112"), "z2").first);
 	}
 	// 指定された打牌でリーチ可能な場合、真を返すこと
 	{
-		EXPECT_TRUE(Game::allow_lizhi({}, Shoupai("m123p456s789z11112"), "z1"));
+		EXPECT_TRUE(Game::_allow_lizhi({}, Shoupai("m123p456s789z11112"), "z1").first);
 	}
 	// 打牌が指定されていない場合、リーチ可能な打牌一覧を返す
 	{
-		EXPECT_EQ((std::vector<std::string>{ "s7", "s8" }), Game::allow_lizhi({}, Shoupai("m123p456s788z11122")).second);
-		EXPECT_EQ((std::vector<std::string>{ "z3_" }), Game::allow_lizhi({}, Shoupai("m123p456s789z11223")).second);
+		EXPECT_EQ((std::vector<std::string>{ "s7", "s8" }), Game::_allow_lizhi({}, Shoupai("m123p456s788z11122")).second);
+		EXPECT_EQ((std::vector<std::string>{ "z3_" }), Game::_allow_lizhi({}, Shoupai("m123p456s789z11223")).second);
 	}
 	// リーチ可能な打牌がない場合、false を返す
 	{
-		EXPECT_FALSE(Game::allow_lizhi({}, Shoupai("m11112344449999")).first);
+		EXPECT_FALSE(Game::_allow_lizhi({}, Shoupai("m11112344449999")).first);
 	}
 }
 
 TEST(GameTest, static_allow_hule) {
 	// フリテンの場合、ロン和了できない
 	{
-		EXPECT_FALSE(Game::allow_hule({}, Shoupai("m123p456z1122,s789-"), "z1=", 0, 1, false, false));
+		EXPECT_FALSE(Game::_allow_hule({}, Shoupai("m123p456z1122,s789-"), "z1=", 0, 1, false, false));
 	}
 	// 和了形になっていない場合、和了できない
 	{
-		EXPECT_FALSE(Game::allow_hule({}, Shoupai("m123p456z11223,s789-"), {}, 0, 1, false, true));
+		EXPECT_FALSE(Game::_allow_hule({}, Shoupai("m123p456z11223,s789-"), {}, 0, 1, false, true));
 	}
 	// 役あり和了形の場合、和了できる
 	{
-		EXPECT_TRUE(Game::allow_hule({}, Shoupai("m123p456s789z3377"), "z3+", 0, 1, true, true));
+		EXPECT_TRUE(Game::_allow_hule({}, Shoupai("m123p456s789z3377"), "z3+", 0, 1, true, true));
 	}
 	// 役なし和了形の場合、和了できない
 	{
-		EXPECT_FALSE(Game::allow_hule({}, Shoupai("m123p456s789z3377"), "z3+", 0, 1, false, true));
+		EXPECT_FALSE(Game::_allow_hule({}, Shoupai("m123p456s789z3377"), "z3+", 0, 1, false, true));
 	}
 	// クイタンなしの場合、クイタンでは和了できない
 	{
 		Rule rule;
 		rule.canduan/*クイタンあり*/ = false;
-		EXPECT_FALSE(Game::allow_hule(rule, Shoupai("m22555p234s78,p777-"), "s6=", 0, 1, false, true));
+		EXPECT_FALSE(Game::_allow_hule(rule, Shoupai("m22555p234s78,p777-"), "s6=", 0, 1, false, true));
 	}
 	// ツモ和了
 	{
-		EXPECT_TRUE(Game::allow_hule({}, Shoupai("m123p456s789z33377"), {}, 0, 1, false, false));
+		EXPECT_TRUE(Game::_allow_hule({}, Shoupai("m123p456s789z33377"), {}, 0, 1, false, false));
 	}
 	// ロン和了
 	{
-		EXPECT_TRUE(Game::allow_hule({}, Shoupai("m123p456z1122,s789-"), "z1=", 0, 1, false, true));
+		EXPECT_TRUE(Game::_allow_hule({}, Shoupai("m123p456z1122,s789-"), "z1=", 0, 1, false, true));
 	}
 }
 
 TEST(GameTest, static_allow_pingju) {
 	// 第一巡でない場合、九種九牌とならない
 	{
-		EXPECT_FALSE(Game::allow_pingju({}, Shoupai("m1234569z1234567"), false));
+		EXPECT_FALSE(Game::_allow_pingju({}, Shoupai("m1234569z1234567"), false));
 	}
 	// ツモ後でない場合、九種九牌とならない
 	{
-		EXPECT_FALSE(Game::allow_pingju({}, Shoupai("m123459z1234567"), true));
+		EXPECT_FALSE(Game::_allow_pingju({}, Shoupai("m123459z1234567"), true));
 	}
 	// 途中流局なし場合、九種九牌とならない
 	{
 		Rule rule;
 		rule.abortiveDraw/*途中流局あり*/ = false;
-		EXPECT_FALSE(Game::allow_pingju(rule, Shoupai("m1234569z1234567"), true));
+		EXPECT_FALSE(Game::_allow_pingju(rule, Shoupai("m1234569z1234567"), true));
 	}
 	// 八種九牌は流局にできない
 	{
-		EXPECT_FALSE(Game::allow_pingju({}, Shoupai("m1234567z1234567"), true));
+		EXPECT_FALSE(Game::_allow_pingju({}, Shoupai("m1234567z1234567"), true));
 	}
 	// 九種九牌
 	{
-		EXPECT_TRUE(Game::allow_pingju({}, Shoupai("m1234569z1234567"), true));
+		EXPECT_TRUE(Game::_allow_pingju({}, Shoupai("m1234569z1234567"), true));
 	}
 }
 
@@ -2163,27 +2163,27 @@ TEST(GameTest, static_allow_no_daopai) {
 
 	// 最終打牌以外はノーテン宣言できない
 	{
-		EXPECT_FALSE(Game::allow_no_daopai(rule, Shoupai("m123p456z1122,s789-"), 1));
-		EXPECT_FALSE(Game::allow_no_daopai(rule, Shoupai("m123p456z1122,s789-").zimo("z3"), 0));
+		EXPECT_FALSE(Game::_allow_no_daopai(rule, Shoupai("m123p456z1122,s789-"), 1));
+		EXPECT_FALSE(Game::_allow_no_daopai(rule, Shoupai("m123p456z1122,s789-").zimo("z3"), 0));
 	}
 	// ノーテン宣言ありのルールでない場合、ノーテン宣言できない
 	{
-		EXPECT_FALSE(Game::allow_no_daopai({}, Shoupai("m123p456z1122,s789-"), 0));
+		EXPECT_FALSE(Game::_allow_no_daopai({}, Shoupai("m123p456z1122,s789-"), 0));
 	}
 	// リーチしている場合、ノーテン宣言できない
 	{
-		EXPECT_FALSE(Game::allow_no_daopai(rule, Shoupai("m123p456p789z1122*"), 0));
+		EXPECT_FALSE(Game::_allow_no_daopai(rule, Shoupai("m123p456p789z1122*"), 0));
 	}
 	// テンパイしていない場合、ノーテン宣言できない
 	{
-		EXPECT_FALSE(Game::allow_no_daopai(rule, Shoupai("m123p456p789z1123"), 0));
+		EXPECT_FALSE(Game::_allow_no_daopai(rule, Shoupai("m123p456p789z1123"), 0));
 	}
 	// 形式テンパイと認められない牌姿の場合、ノーテン宣言できない
 	{
-		EXPECT_FALSE(Game::allow_no_daopai(rule, Shoupai("m123p456p789z1111"), 0));
+		EXPECT_FALSE(Game::_allow_no_daopai(rule, Shoupai("m123p456p789z1111"), 0));
 	}
 	// ノーテン宣言
 	{
-		EXPECT_TRUE(Game::allow_no_daopai(rule, Shoupai("m123p456z1122,s789-"), 0));
+		EXPECT_TRUE(Game::_allow_no_daopai(rule, Shoupai("m123p456z1122,s789-"), 0));
 	}
 }

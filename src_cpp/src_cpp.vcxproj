@@ -134,7 +134,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="cmajiang.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="he.h" />
     <ClInclude Include="hule.h" />

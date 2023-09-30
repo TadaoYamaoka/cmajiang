@@ -22,8 +22,8 @@ public:
     Shan();
     Shan(const Rule& rule);
 
-    const std::vector<std::string>& pai() const { return _pai; }
     std::vector<std::string>& pai() { return _pai; }
+    void set_pai(const std::vector<std::string>& pai) { _pai = pai; }
     // 牌数
     int paishu() const { return (int)_pai.size() - 14; }
     // 宝牌(ドラ)

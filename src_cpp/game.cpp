@@ -43,7 +43,7 @@ void Game::call_players(const Status type) {
     _reply = {};
 }
 
-void Game::reply(const int id, const std::string& msg, const std::string& arg) {
+void Game::reply(const int id, const Message msg, const std::string& arg) {
     _reply[id] = { msg, arg };
 }
 
@@ -56,7 +56,7 @@ void Game::next() {
         reply_qipai();
         break;
     case Status::ZIMO:
-        if (get_reply(_model.lunban).msg.empty()) return;
+        if (get_reply(_model.lunban).msg == Message::NONE) return;
         reply_zimo();
         break;
     case Status::DAPAI:
@@ -95,7 +95,7 @@ void Game::kaiju(const int qijia) {
 }
 
 // 起牌(配牌)
-void Game::qipai(const Shan& shan) {
+void Game::qipai_(const Shan& shan) {
     _model.shan = shan;
     for (int l = 0; l < 4; l++) {
         std::vector<std::string> qipai_;
@@ -137,7 +137,7 @@ void Game::qipai(const Shan& shan) {
 }
 
 void Game::qipai() {
-    qipai(Shan(_rule));
+    qipai_(Shan(_rule));
 }
 
 // 自摸
@@ -292,10 +292,10 @@ void Game::hule() {
 }
 
 // 流局
-void Game::pingju(std::string name, std::array<std::string, 4> shoupai) {
+void Game::pingju(Pingju::Name name, std::array<std::string, 4> shoupai) {
     std::array<int, 4> fenpei = { 0, 0, 0, 0 };
 
-    if (name.empty()) {
+    if (name == Pingju::NONE) {
         int n_tingpai = 0;
         for (int l = 0; l < 4; l++) {
             if (_rule.notenDeclaration/*ノーテン宣言あり*/ && shoupai[l].empty()
@@ -328,7 +328,7 @@ void Game::pingju(std::string name, std::array<std::string, 4> shoupai) {
                     all_yaojiu = false; break;
                 }
                 if (all_yaojiu) {
-                    name = "nm"/*流し満貫*/;
+                    name = Pingju::MANGUAN/*流し満貫*/;
                     for (int i = 0; i < 4; i++) {
                         fenpei[i] += l == 0 && i == l ? 12000
                             : l == 0 ? -4000
@@ -339,8 +339,9 @@ void Game::pingju(std::string name, std::array<std::string, 4> shoupai) {
                 }
             }
         }
-        if (name.empty()) {
+        if (name == Pingju::NONE) {
             // 荒牌平局(通常の流局)
+            name = Pingju::HUANGPAI;
             if (_rule.notenPenalty/*ノーテン罰あり*/
                 && 0 < n_tingpai && n_tingpai < 4)
             {
@@ -460,27 +461,27 @@ void Game::reply_qipai() {
 // 自摸の応答
 void Game::reply_zimo() {
     const auto& reply = get_reply(_model.lunban);
-    if (reply.msg == "daopai") {
+    if (reply.msg == Message::DAOPAI) {
         if (allow_pingju()) {
             std::array<std::string, 4> shoupai{};
             shoupai[_model.lunban] = _model.shoupai[_model.lunban].toString();
-            return pingju("yao9"/*九種九牌*/, shoupai);
+            return pingju(Pingju::YAO9/*九種九牌*/, shoupai);
         }
     }
-    else if (reply.msg == "hule") {
+    else if (reply.msg == Message::HULE) {
         if (allow_hule()) {
             return hule();
         }
     }
-    else if (reply.msg == "gang") {
+    else if (reply.msg == Message::GANG) {
         if (find(get_gang_mianzi(), reply.arg)) {
             return gang(reply.arg);
         }
     }
-    else if (reply.msg == "dapai") {
+    else if (reply.msg == Message::DAPAI) {
         auto dapai_ = std::regex_replace(reply.arg, re_reply_zimo, "");
         if (find(get_dapai(), dapai_)) {
-            if (reply.arg.back() == '*' && allow_lizhi(dapai_)) {
+            if (reply.arg.back() == '*' && allow_lizhi(dapai_).first) {
                 return dapai(reply.arg);
             }
             return dapai(dapai_);
@@ -496,7 +497,7 @@ void Game::reply_dapai() {
     for (int i = 1; i < 4; i++) {
         int l = (_model.lunban + i) % 4;
         const auto& reply = get_reply(l);
-        if (reply.msg == "hule" && allow_hule(l)) {
+        if (reply.msg == Message::HULE && allow_hule(l)) {
             if (_rule.maxSimultaneousWinners/*最大同時和了数*/ == 1 && _hule.size())
                 continue;
             _hule.emplace_back(l);
@@ -513,7 +514,7 @@ void Game::reply_dapai() {
         for (const auto l : _hule) {
             shoupai[l] = _model.shoupai[l].toString();
         }
-        return pingju("ron3"/*三家和了*/, shoupai);
+        return pingju(Pingju::HULE3/*三家和了*/, shoupai);
     }
     else if (_hule.size()) {
         return hule();
@@ -529,20 +530,20 @@ void Game::reply_dapai() {
             std::array<std::string, 4> shoupai;
             std::transform(_model.shoupai.begin(), _model.shoupai.end(), shoupai.begin(),
                 [](const auto& shoupai_) { return shoupai_.toString(); });
-            return pingju("riichi4"/*四家立直*/, shoupai);
+            return pingju(Pingju::LIZHI4/*四家立直*/, shoupai);
         }
     }
 
     if (_diyizimo && _model.lunban == 3) {
         _diyizimo = false;
         if (_fengpai) {
-            return pingju("kaze4"/*四風連打*/);
+            return pingju(Pingju::FENG4/*四風連打*/);
         }
     }
 
     if (std::accumulate(_n_gang.begin(), _n_gang.end(), 0) == 4) {
         if (_rule.abortiveDraw/*途中流局あり*/  && *std::max_element(_n_gang.begin(), _n_gang.end()) < 4) {
-            return pingju("kan4"/*四槓散了*/);
+            return pingju(Pingju::GANG4/*四槓散了*/);
         }
     }
 
@@ -550,15 +551,15 @@ void Game::reply_dapai() {
         std::array<std::string, 4> shoupai{};
         for (int l = 0; l < 4; l++) {
             const auto& reply = get_reply(l);
-            if (reply.msg == "daopai") shoupai[l] = reply.arg;
+            if (reply.msg == Message::DAOPAI) shoupai[l] = reply.arg;
         }
-        return pingju("", shoupai);
+        return pingju(Pingju::NONE, shoupai);
     }
 
     for (int i = 1; i < 4; i++) {
         int l = (_model.lunban + i) % 4;
         const auto& reply = get_reply(l);
-        if (reply.msg == "fulou") {
+        if (reply.msg == Message::FULOU) {
             auto m = std::regex_replace(reply.arg, re_ling, "5");
             if (std::regex_search(m, re_reply_dapai1)) {
                 if (find(get_gang_mianzi(l), reply.arg)) {
@@ -574,7 +575,7 @@ void Game::reply_dapai() {
     }
     int l = (_model.lunban + 1) % 4;
     const auto& reply = get_reply(l);
-    if (reply.msg == "fulou") {
+    if (reply.msg == Message::FULOU) {
         if (find(get_chi_mianzi(l), reply.arg)) {
             return fulou(reply.arg);
         }
@@ -590,7 +591,7 @@ void Game::reply_fulou() {
     }
 
     const auto& reply = get_reply(_model.lunban);
-    if (reply.msg == "dapai") {
+    if (reply.msg == Message::DAPAI) {
         if (find(get_dapai(), reply.arg)) {
             return dapai(reply.arg);
         }
@@ -609,7 +610,7 @@ void Game::reply_gang() {
     for (int i = 1; i < 4; i++) {
         int l = (_model.lunban + i) % 4;
         const auto& reply = get_reply(l);
-        if (reply.msg == "hule" && allow_hule(l)) {
+        if (reply.msg == Message::HULE && allow_hule(l)) {
             if (_rule.maxSimultaneousWinners/*最大同時和了数*/ == 1 && _hule.size())
                 continue;
             _hule.emplace_back(l);
@@ -658,48 +659,42 @@ void Game::reply_pingju() {
 
 // 打牌取得
 std::vector<std::string> Game::get_dapai() {
-    return Game::get_dapai(_rule, _model.shoupai[_model.lunban]);
+    return Game::_get_dapai(_rule, _model.shoupai[_model.lunban]);
 }
 
 // 吃面子取得
 std::vector<std::string> Game::get_chi_mianzi(const int l) {
     const auto d = "_+=-"[(4 + _model.lunban - l) % 4];
-    return Game::get_chi_mianzi(_rule, _model.shoupai[l],
+    return Game::_get_chi_mianzi(_rule, _model.shoupai[l],
         _dapai + d, _model.shan.paishu());
 }
 
 // 碰(ポン)面子取得
 std::vector<std::string> Game::get_peng_mianzi(const int l) {
     const auto d = "_+=-"[(4 + _model.lunban - l) % 4];
-    return Game::get_peng_mianzi(_rule, _model.shoupai[l],
+    return Game::_get_peng_mianzi(_rule, _model.shoupai[l],
         _dapai + d, _model.shan.paishu());
 }
 
 // 杠(槓)面子取得
 std::vector<std::string> Game::get_gang_mianzi(const int l) {
     if (l < 0) {
-        return Game::get_gang_mianzi(_rule, _model.shoupai[_model.lunban],
+        return Game::_get_gang_mianzi(_rule, _model.shoupai[_model.lunban],
             {}, _model.shan.paishu(),
             std::accumulate(_n_gang.begin(), _n_gang.end(), 0));
     }
     else {
         const auto d = "_+=-"[(4 + _model.lunban - l) % 4];
-        return Game::get_gang_mianzi(_rule, _model.shoupai[l],
+        return Game::_get_gang_mianzi(_rule, _model.shoupai[l],
             _dapai + d, _model.shan.paishu(),
             std::accumulate(_n_gang.begin(), _n_gang.end(), 0));
     }
 }
 
 // 立直許可
-bool Game::allow_lizhi(const std::string& p) {
-    return Game::allow_lizhi(_rule, _model.shoupai[_model.lunban],
+std::pair<bool, std::vector<std::string>> Game::allow_lizhi(const std::string& p) {
+    return Game::_allow_lizhi(_rule, _model.shoupai[_model.lunban],
         p, _model.shan.paishu(),
-        _model.defen[_model.player_id[_model.lunban]]);
-}
-
-std::pair<bool, std::vector<std::string>> Game::allow_lizhi() {
-    return Game::allow_lizhi(_rule, _model.shoupai[_model.lunban],
-        _model.shan.paishu(),
         _model.defen[_model.player_id[_model.lunban]]);
 }
 
@@ -709,7 +704,7 @@ bool Game::allow_hule(const int l) {
         const auto hupai = _model.shoupai[_model.lunban].lizhi()
             || _status == Status::GANGZIMO
             || _model.shan.paishu() == 0;
-        return Game::allow_hule(_rule,
+        return Game::_allow_hule(_rule,
             _model.shoupai[_model.lunban], {},
             _model.zhuangfeng, _model.lunban, hupai);
     }
@@ -721,7 +716,7 @@ bool Game::allow_hule(const int l) {
         const auto hupai = _model.shoupai[l].lizhi()
             || _status == Status::GANG
             || _model.shan.paishu() == 0;
-        return Game::allow_hule(_rule,
+        return Game::_allow_hule(_rule,
             _model.shoupai[l], p,
             _model.zhuangfeng, l, hupai,
             _neng_rong[l]);
@@ -730,20 +725,20 @@ bool Game::allow_hule(const int l) {
 
 // 流局可能
 bool Game::allow_pingju() {
-    return Game::allow_pingju(_rule, _model.shoupai[_model.lunban],
+    return Game::_allow_pingju(_rule, _model.shoupai[_model.lunban],
         _diyizimo);
 }
 
 
 
 // 打牌取得
-std::vector<std::string> Game::get_dapai(const Rule& rule, const Shoupai& shoupai) {
+std::vector<std::string> Game::_get_dapai(const Rule& rule, const Shoupai& shoupai) {
     if (rule.canChangePermissionLevel/*喰い替え許可レベル*/ == 0) return shoupai.get_dapai(true);
     if (rule.canChangePermissionLevel/*喰い替え許可レベル*/ == 1
-        && !shoupai.zimo().empty() && shoupai.zimo().size() > 2)
+        && !shoupai.zimo_().empty() && shoupai.zimo_().size() > 2)
     {
-        const auto d = match(shoupai.zimo(), re_get_dapai)[0];
-        const auto deny = shoupai.zimo().substr(0, 1)
+        const auto d = match(shoupai.zimo_(), re_get_dapai)[0];
+        const auto deny = shoupai.zimo_().substr(0, 1)
             + (d == '0' ? '5' : d);
         return filter(shoupai.get_dapai(false),
             [&deny](const auto& p) { return std::regex_replace(p, re_ling, "5") != deny; });
@@ -752,24 +747,24 @@ std::vector<std::string> Game::get_dapai(const Rule& rule, const Shoupai& shoupa
 }
 
 // 吃(チー)面子取得
-std::vector<std::string> Game::get_chi_mianzi(const Rule& rule, const Shoupai& shoupai, const std::string& p, const int paishu) {
+std::vector<std::string> Game::_get_chi_mianzi(const Rule& rule, const Shoupai& shoupai, const std::string& p, const int paishu) {
     auto mianzi = shoupai.get_chi_mianzi(p, rule.canChangePermissionLevel/*喰い替え許可レベル*/ == 0);
     if (mianzi.empty()) return mianzi;
     if (rule.canChangePermissionLevel/*喰い替え許可レベル*/ == 1
-        && shoupai.fulou().size() == 3
+        && shoupai.fulou_().size() == 3
         && shoupai.bingpai(p[0])[to_int(p[1])] == 2) mianzi.clear();
     return paishu == 0 ? std::vector<std::string>{} : mianzi;
 }
 
 // 碰(ポン)面子取得
-std::vector<std::string> Game::get_peng_mianzi(const Rule& rule, const Shoupai& shoupai, const std::string& p, const int paishu) {
+std::vector<std::string> Game::_get_peng_mianzi(const Rule& rule, const Shoupai& shoupai, const std::string& p, const int paishu) {
     auto mianzi = shoupai.get_peng_mianzi(p);
     if (mianzi.empty()) return mianzi;
     return paishu == 0 ? std::vector<std::string>{} : mianzi;
 }
 
 // 杠(槓)面子取得
-std::vector<std::string> Game::get_gang_mianzi(const Rule& rule, const Shoupai& shoupai, const std::string& p, const int paishu, const int n_gang) {
+std::vector<std::string> Game::_get_gang_mianzi(const Rule& rule, const Shoupai& shoupai, const std::string& p, const int paishu, const int n_gang) {
     auto mianzi = p.empty() ? shoupai.get_gang_mianzi() : shoupai.get_gang_mianzi(p);
     if (mianzi.empty()) return mianzi;
 
@@ -778,7 +773,7 @@ std::vector<std::string> Game::get_gang_mianzi(const Rule& rule, const Shoupai& 
         else if (rule.lizhiPostClosedGangPermissionLevel/*リーチ後暗槓許可レベル*/ == 1) {
             int n_hule1 = 0, n_hule2 = 0;
             auto new_shoupai = shoupai;
-            new_shoupai.dapai(shoupai.zimo());
+            new_shoupai.dapai(shoupai.zimo_());
             for (const auto& p : tingpai(new_shoupai)) {
                 n_hule1 += (int)hule_mianzi(new_shoupai, p).size();
             }
@@ -791,7 +786,7 @@ std::vector<std::string> Game::get_gang_mianzi(const Rule& rule, const Shoupai& 
         }
         else {
             auto new_shoupai = shoupai;
-            new_shoupai.dapai(shoupai.zimo());
+            new_shoupai.dapai(shoupai.zimo_());
             int n_tingpai1 = (int)tingpai(new_shoupai).size();
             new_shoupai = shoupai;
             new_shoupai.gang(mianzi[0]);
@@ -804,38 +799,8 @@ std::vector<std::string> Game::get_gang_mianzi(const Rule& rule, const Shoupai& 
 }
 
 // 立直可能
-bool Game::allow_lizhi(const Rule& rule, const Shoupai& shoupai, const std::string& p, const int paishu, const int defen) {
-    if (shoupai.zimo().empty()) return false;
-    if (shoupai.lizhi())        return false;
-    if (!shoupai.menqian())     return false;
-
-    if (!rule.lizhiWithoutTsumoBonus/*ツモ番なしリーチあり*/ && paishu < 4) return false;
-    if (rule.bankruptcyEndAll/*トビ終了あり*/ && defen < 1000)              return false;
-
-    if (xiangting(shoupai) > 0) return false;
-
-    if (!p.empty()) {
-        auto new_shoupai = shoupai;
-        new_shoupai.dapai(p);
-        return xiangting(new_shoupai) == 0
-            && tingpai(new_shoupai).size() > 0;
-    }
-    else {
-        std::vector<std::string> dapai;
-        for (const auto& p : Game::get_dapai(rule, shoupai)) {
-            auto new_shoupai = shoupai;
-            new_shoupai.dapai(p);
-            if (xiangting(new_shoupai) == 0
-                && tingpai(new_shoupai).size() > 0)
-            {
-                dapai.emplace_back(p);
-            }
-        }
-        return dapai.size();
-    }
-}
-std::pair<bool, std::vector<std::string>> Game::allow_lizhi(const Rule& rule, const Shoupai& shoupai, const int paishu, const int defen) {
-    if (shoupai.zimo().empty()) return { false, {} };
+std::pair<bool, std::vector<std::string>> Game::_allow_lizhi(const Rule& rule, const Shoupai& shoupai, const std::string& p, const int paishu, const int defen) {
+    if (shoupai.zimo_().empty()) return { false, {} };
     if (shoupai.lizhi())        return { false, {} };
     if (!shoupai.menqian())     return { false, {} };
 
@@ -844,21 +809,28 @@ std::pair<bool, std::vector<std::string>> Game::allow_lizhi(const Rule& rule, co
 
     if (xiangting(shoupai) > 0) return { false, {} };
 
-    std::vector<std::string> dapai;
-    for (const auto& p : Game::get_dapai(rule, shoupai)) {
+    if (!p.empty()) {
         auto new_shoupai = shoupai;
         new_shoupai.dapai(p);
-        if (xiangting(new_shoupai) == 0
-            && tingpai(new_shoupai).size() > 0)
-        {
-            dapai.emplace_back(p);
-        }
+        return { xiangting(new_shoupai) == 0 && tingpai(new_shoupai).size() > 0, {} };
     }
-    return { dapai.size(), dapai };
+    else {
+        std::vector<std::string> dapai;
+        for (const auto& p : Game::_get_dapai(rule, shoupai)) {
+            auto new_shoupai = shoupai;
+            new_shoupai.dapai(p);
+            if (xiangting(new_shoupai) == 0
+                && tingpai(new_shoupai).size() > 0)
+            {
+                dapai.emplace_back(p);
+            }
+        }
+        return { dapai.size(), dapai };
+    }
 }
 
 // 和了可能
-bool Game::allow_hule(const Rule& rule, const Shoupai& shoupai, const std::string& p, const int zhuangfeng, const int menfeng, const bool hupai, const bool neng_rong) {
+bool Game::_allow_hule(const Rule& rule, const Shoupai& shoupai, const std::string& p, const int zhuangfeng, const int menfeng, const bool hupai, const bool neng_rong) {
     if (!p.empty() && !neng_rong) return false;
 
     auto new_shoupai = shoupai;
@@ -878,8 +850,8 @@ bool Game::allow_hule(const Rule& rule, const Shoupai& shoupai, const std::strin
 }
 
 // 流局可能
-bool Game::allow_pingju(const Rule& rule, const Shoupai& shoupai, const bool diyizimo) {
-    if (!(diyizimo && !shoupai.zimo().empty())) return false;
+bool Game::_allow_pingju(const Rule& rule, const Shoupai& shoupai, const bool diyizimo) {
+    if (!(diyizimo && !shoupai.zimo_().empty())) return false;
     if (!rule.abortiveDraw/*途中流局あり*/) return false;
 
     int n_yaojiu = 0;
@@ -894,8 +866,8 @@ bool Game::allow_pingju(const Rule& rule, const Shoupai& shoupai, const bool diy
 }
 
 // ノーテン宣言可能
-bool Game::allow_no_daopai(const Rule& rule, const Shoupai& shoupai, const int paishu) {
-    if (paishu > 0 || !shoupai.zimo().empty()) return false;
+bool Game::_allow_no_daopai(const Rule& rule, const Shoupai& shoupai, const int paishu) {
+    if (paishu > 0 || !shoupai.zimo_().empty()) return false;
     if (!rule.notenDeclaration/*ノーテン宣言あり*/) return false;
     if (shoupai.lizhi()) return false;
 

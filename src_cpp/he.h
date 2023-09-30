@@ -10,13 +10,12 @@ public:
     He& dapai(const std::string& p);
     // 副露
     He& fulou(const std::string& m);
-    // フリテン
+
     bool find(const std::string& p);
 
     const std::vector<std::string>& pai() const { return _pai; }
 
 private:
     std::vector<std::string> _pai;
-    // フリテン
     std::unordered_set<std::string> _find;
 };

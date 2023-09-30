@@ -22,7 +22,6 @@ He& He::fulou(const std::string& m) {
     return *this;
 }
 
-// フリテン
 bool He::find(const std::string& p) {
     return _find.find(p.substr(0, 1) + (p[1] == '0' ? '5' : p[1])) != _find.end();
 }
