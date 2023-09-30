@@ -424,7 +424,7 @@ TEST(GameTest, hule) {
 		game.dapai("z1");
 		game.set_hule({ 2 });
 		game.hule();
-		EXPECT_TRUE(game.defen().hupai.size());
+		EXPECT_TRUE(game.defen_().hupai.size());
 	}
 	// 通知が伝わること
 	EXPECT_EQ(Game::Status::HULE, game.status());
@@ -439,8 +439,8 @@ TEST(GameTest, hule) {
 		game.dapai("z1");
 		game.set_hule({ 0 });
 		game.hule();
-		EXPECT_TRUE(find_if(game.defen().hupai, [](const auto& h) { return h.name == Hupai::LIZHI; }));
-		EXPECT_TRUE(find_if(game.defen().hupai, [](const auto& h) { return h.name == Hupai::YIPA; }));
+		EXPECT_TRUE(find_if(game.defen_().hupai, [](const auto& h) { return h.name == Hupai::LIZHI; }));
+		EXPECT_TRUE(find_if(game.defen_().hupai, [](const auto& h) { return h.name == Hupai::YIPA; }));
 	}
 	// ダブル立直
 	{
@@ -451,7 +451,7 @@ TEST(GameTest, hule) {
 		game.dapai("z1");
 		game.set_hule({ 0 });
 		game.hule();
-		EXPECT_TRUE(find_if(game.defen().hupai, [](const auto& h) { return h.name == Hupai::DABULIZHI; }));
+		EXPECT_TRUE(find_if(game.defen_().hupai, [](const auto& h) { return h.name == Hupai::DABULIZHI; }));
 	}
 	// 槍槓
 	{
@@ -460,7 +460,7 @@ TEST(GameTest, hule) {
 		game.gang("m111=1");
 		game.set_hule({ 2 });
 		game.hule();
-		EXPECT_TRUE(find_if(game.defen().hupai, [](const auto& h) { return h.name == Hupai::QIANGGANG; }));
+		EXPECT_TRUE(find_if(game.defen_().hupai, [](const auto& h) { return h.name == Hupai::QIANGGANG; }));
 	}
 	// 嶺上開花
 	{
@@ -469,7 +469,7 @@ TEST(GameTest, hule) {
 		game.gang("m111=1");
 		game.gangzimo();
 		game.hule();
-		EXPECT_TRUE(find_if(game.defen().hupai, [](const auto& h) { return h.name == Hupai::LINGSHANGKAIHUA; }));
+		EXPECT_TRUE(find_if(game.defen_().hupai, [](const auto& h) { return h.name == Hupai::LINGSHANGKAIHUA; }));
 	}
 	// 最終牌で嶺上開花
 	{
@@ -480,8 +480,8 @@ TEST(GameTest, hule) {
 		while (game.model().shan.paishu() > 1) game.model().shan.zimo();
 		game.gangzimo();
 		game.hule();
-		EXPECT_TRUE(find_if(game.defen().hupai, [](const auto& h) { return h.name == Hupai::LINGSHANGKAIHUA; }));
-		EXPECT_FALSE(find_if(game.defen().hupai, [](const auto& h) { return h.name == Hupai::HAIDIMOYUE; }));
+		EXPECT_TRUE(find_if(game.defen_().hupai, [](const auto& h) { return h.name == Hupai::LINGSHANGKAIHUA; }));
+		EXPECT_FALSE(find_if(game.defen_().hupai, [](const auto& h) { return h.name == Hupai::HAIDIMOYUE; }));
 	}
 	// 海底摸月
 	{
@@ -490,7 +490,7 @@ TEST(GameTest, hule) {
 		game.zimo();
 		while (game.model().shan.paishu() > 0) game.model().shan.zimo();
 		game.hule();
-		EXPECT_TRUE(find_if(game.defen().hupai, [](const auto& h) { return h.name == Hupai::HAIDIMOYUE; }));
+		EXPECT_TRUE(find_if(game.defen_().hupai, [](const auto& h) { return h.name == Hupai::HAIDIMOYUE; }));
 	}
 	// 河底撈魚
 	{
@@ -501,14 +501,14 @@ TEST(GameTest, hule) {
 		game.dapai("z2");
 		game.set_hule({ 2 });
 		game.hule();
-		EXPECT_TRUE(find_if(game.defen().hupai, [](const auto& h) { return h.name == Hupai::HEDILAOYU; }));
+		EXPECT_TRUE(find_if(game.defen_().hupai, [](const auto& h) { return h.name == Hupai::HEDILAOYU; }));
 	}
 	// 天和
 	{
 		auto game = init_game({}, -1, 0, 0, { "m123p456s789z1122", "", "", "" }, { "z2" });
 		game.zimo();
 		game.hule();
-		EXPECT_TRUE(find_if(game.defen().hupai, [](const auto& h) { return h.name == Hupai::TIANHE; }));
+		EXPECT_TRUE(find_if(game.defen_().hupai, [](const auto& h) { return h.name == Hupai::TIANHE; }));
 	}
 	// 地和
 	{
@@ -517,7 +517,7 @@ TEST(GameTest, hule) {
 		game.dapai("m1_");
 		game.zimo();
 		game.hule();
-		EXPECT_TRUE(find_if(game.defen().hupai, [](const auto& h) { return h.name == Hupai::DIHE; }));
+		EXPECT_TRUE(find_if(game.defen_().hupai, [](const auto& h) { return h.name == Hupai::DIHE; }));
 	}
 	// 槍槓でダブロン
 	{
@@ -527,7 +527,7 @@ TEST(GameTest, hule) {
 		game.set_hule({1, 2});
 		game.hule();
 		game.hule();
-		EXPECT_TRUE(find_if(game.defen().hupai, [](const auto& h) { return h.name == Hupai::QIANGGANG; }));
+		EXPECT_TRUE(find_if(game.defen_().hupai, [](const auto& h) { return h.name == Hupai::QIANGGANG; }));
 	}
 	// 子の和了は輪荘
 	{

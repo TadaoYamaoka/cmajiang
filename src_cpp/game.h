@@ -160,6 +160,11 @@ public:
     static bool _allow_no_daopai(const Rule& rule, const Shoupai& shoupai, const int paishu);
 
     int qijia() const { return _model.qijia; }
+    int zhuangfeng() const { return _model.zhuangfeng; }
+    int jushu() const { return _model.jushu; }
+    int changbang() const { return _model.changbang; }
+    int lizhibang() const { return _model.lizhibang; }
+    const std::array<int, 4>& defen() const { return _model.defen; }
     const Shan& shan() const { return _model.shan; }
 
     const std::array<Shoupai, 4>& shoupai() const { return _model.shoupai; }
@@ -167,6 +172,9 @@ public:
 
     const std::array<He, 4>& he() const { return _model.he; }
     const He& he_(const int l) const { return _model.he[l]; }
+
+    const std::array<int, 4>& player_id() const { return _model.player_id; }
+    int lunban() const { return _model.lunban; }
 
     int max_jushu() const { return _max_jushu; }
 
@@ -197,7 +205,7 @@ public:
     
     const std::vector<int>& hule_() const { return _hule; }
     void set_hule(const std::vector<int>& hule_) { _hule = hule_; }
-    const Defen& defen() const { return _defen; }
+    const Defen& defen_() const { return _defen; }
     const std::array<int, 4>& rank() const { return _rank; }
     const std::array<float, 4>& point() const { return _point; }
     const Pingju& pingju_() const { return _pingju; }
