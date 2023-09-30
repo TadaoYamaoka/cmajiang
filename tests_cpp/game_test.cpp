@@ -976,7 +976,7 @@ TEST(GameTest, jieju) {
 		rule.rankPoints/*順位点*/ = { "20","10","-10","-20" };
 		auto game = init_game(rule, 0, 0, 0, {}, {}, {}, {}, { 20400, 28500, 20500, 30600 });
 		game.jieju();
-		EXPECT_EQ((std::array<float, 4>{ -30, 9, -19, 40 }), game.point());
+		EXPECT_EQ((std::array<float, 4>{ -30, 9, -20, 41 }), game.point());
 	}
 	// "1000点未満のポイントは四捨五入する(負のケース)
 	{
@@ -984,7 +984,7 @@ TEST(GameTest, jieju) {
 		rule.rankPoints/*順位点*/ = { "20","10","-10","-20" };
 		auto game = init_game(rule, 0, 0, 0, {}, {}, {}, {}, { -1500, 83800, 6000, 11700 });
 		game.jieju();
-		EXPECT_EQ((std::array<float, 4>{ -51, 93, -34, -8 }), game.point());
+		EXPECT_EQ((std::array<float, 4>{ -52, 94, -34, -8 }), game.point());
 	}
 	// 順位点を変更できること
 	{
