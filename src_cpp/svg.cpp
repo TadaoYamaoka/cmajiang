@@ -130,27 +130,25 @@ std::string shoupai_to_svg_with_scale(const Shoupai& shoupai, const double scale
 
     for (const auto s : { 'm', 'p', 's', 'z' }) {
         const auto& bingpai = shoupai.bingpai(s);
-        int n_hongpai = s == 'z' ? 0 : bingpai[0];
+        int n_hongpai = bingpai[0];
         for (int n = 1; n < bingpai.size(); n++) {
             int n_pai = bingpai[n];
-            if (!shoupai.zimo_().empty()) {
-                if (to_string(s, n) == shoupai.zimo_())
-                    n_pai--;
-                if (n == 5 && to_string(s, 0) == shoupai.zimo_()) {
-                    n_pai--;
+            if (to_string(s, n) == shoupai.zimo_())
+                n_pai--;
+            if (n == 5 && to_string(s, 0) == shoupai.zimo_()) {
+                n_pai--;
+                n_hongpai--;
+            }
+            for (int i = 0; i < n_pai; i++) {
+                std::string pai(1, s);
+                if (n == 5 && n_hongpai > 0) {
+                    pai += '0';
                     n_hongpai--;
                 }
-                for (int i = 0; i < n_pai; i++) {
-                    std::string pai(1, s);
-                    if (n == 5 && n_hongpai > 0) {
-                        pai += '0';
-                        n_hongpai--;
-                    }
-                    else
-                        pai += std::to_string(n);
+                else
+                    pai += std::to_string(n);
 
-                    use(pai);
-                }
+                use(pai);
             }
         }
     }
