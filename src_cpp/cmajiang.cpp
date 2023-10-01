@@ -3,6 +3,7 @@
 
 #include "xiangting.h"
 #include "game.h"
+#include "svg.h"
 
 namespace py = pybind11;
 
@@ -128,6 +129,7 @@ PYBIND11_MODULE(_cmajiang, m) {
         .def("z_", &Shoupai::z_)
         .def_property_readonly("_fulou", &Shoupai::fulou_)
         .def_property_readonly("_zimo", &Shoupai::zimo_)
+        .def("_repr_svg_", &shoupai_to_svg)
 		;
 	py::class_<Rule>(m, "Rule")
         .def(py::init<>())

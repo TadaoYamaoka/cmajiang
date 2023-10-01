@@ -179,7 +179,7 @@ Shoupai::Shoupai(const std::string& paistr) :
 std::string Shoupai::toString() const {
     std::string paistr(__ + (_zimo == "_" ? -1 : 0), '_');
 
-    for (const auto s : { 'm', 'p', 's', 'z'}) {
+    for (const auto s : { 'm', 'p', 's', 'z' }) {
         std::string suitstr(1, s);
         const auto& bingpai = this->bingpai(s);
         auto n_hongpai = s == 'z' ? 0 : bingpai[0];
