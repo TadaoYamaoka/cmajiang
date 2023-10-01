@@ -15,9 +15,7 @@ cmajiangは、Pythonの麻雀ライブラリです。
 
 >>> game.shoupai[0] # 手牌
 ```
-```
-m1145p16788s28z25z6
-```
+<image src="https://raw.githubusercontent.com/wiki/TadaoYamaoka/cmajiang/images/shoupai.svg?sanitize=true" />
 
 ## 機能
 
