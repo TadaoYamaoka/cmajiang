@@ -117,15 +117,22 @@ std::string shoupai_to_svg_with_scale(const Shoupai& shoupai, const double scale
     tinyxml2::XMLElement* svgElement = doc.RootElement();
 
     int x = 0;
+    int height = 830;
 
     const auto use = [&doc, svgElement, &x](const std::string& pai) {
         tinyxml2::XMLElement* p = doc.NewElement("use");
-        p->SetAttribute("xlink:href", ("#" + pai).c_str());
-        p->SetAttribute("x", x);
-        p->SetAttribute("y", 830);
+        if (pai.back() == '+') {
+            p->SetAttribute("xlink:href", ("#" + pai.substr(0, pai.size() - 1) + "r").c_str());
+            p->SetAttribute("x", x - 800);
+            p->SetAttribute("y", -550);
+        }
+        else {
+            p->SetAttribute("xlink:href", ("#" + pai).c_str());
+            p->SetAttribute("x", x);
+            p->SetAttribute("y", 0);
+            x += pai.back() == 'r' ? 800 : 550;
+        }
         svgElement->InsertEndChild(p);
-
-        x += pai.back() == 'r' ? 800 : 550;
         };
 
     for (const auto s : { 'm', 'p', 's', 'z' }) {
@@ -183,8 +190,10 @@ std::string shoupai_to_svg_with_scale(const Shoupai& shoupai, const double scale
             }
             std::vector<std::string> pai_r;
             if (jiagang) {
+                // 加槓
                 pai_r.emplace_back(pai[2] + 'r');
-                pai_r.emplace_back(pai[3] + 'r');
+                pai_r.emplace_back(pai[3] + "+");
+                height = 580 * 2 - 30;
             }
             else
                 pai_r.emplace_back(pai.back() + 'r');
@@ -225,8 +234,8 @@ std::string shoupai_to_svg_with_scale(const Shoupai& shoupai, const double scale
     x += 30;
 
     svgElement->SetAttribute("width", std::to_string(x / 10.0 * scale).c_str());
-    svgElement->SetAttribute("height", std::to_string(83 * scale).c_str());
-    svgElement->SetAttribute("viewBox", ("0 0 " + std::to_string(x) + " 830").c_str());
+    svgElement->SetAttribute("height", std::to_string(height / 10.0 * scale).c_str());
+    svgElement->SetAttribute("viewBox", ("0 " + std::to_string(-height) + " " + std::to_string(x) + " " + std::to_string(height)).c_str());
     doc.InsertEndChild(svgElement);
 
     tinyxml2::XMLPrinter printer(0, true);
