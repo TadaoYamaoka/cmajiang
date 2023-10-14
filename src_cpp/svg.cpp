@@ -167,8 +167,8 @@ std::string shoupai_to_svg_with_scale(const Shoupai& shoupai, const double scale
         // 暗槓
         if (std::regex_match(m_, re_angang)) {
             use("_");
-            use(m.substr(0, 1) + m[2]);
             use(m.substr(0, 1) + m[3]);
+            use(m.substr(0, 1) + m[4]);
             use("_");
         }
         // ポン、明槓
