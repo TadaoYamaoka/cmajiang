@@ -82,7 +82,6 @@ private:
     static const std::regex _re_valid_mianzi7;
     static const std::regex _re_valid_mianzi8;
     static const std::regex _re_valid_mianzi9;
-    static const std::regex _re_valid_mianzi10;
     static const std::regex _re_fulou1;
     static const std::regex _re_fulou2;
     static const std::regex _re_fulou3;
@@ -169,5 +168,12 @@ inline char to_char(const int n) {
 
 extern const std::regex re_ling;
 extern const std::regex re_wu;
+extern const std::regex re_digit;
 extern const std::regex re_menqian;
 extern const std::regex re_menqian_end;
+
+extern const std::regex re_angang;
+extern const std::regex re_peng_gang;
+extern const std::regex re_jiagang;
+extern const std::regex re_chi1;
+extern const std::regex re_chi2;

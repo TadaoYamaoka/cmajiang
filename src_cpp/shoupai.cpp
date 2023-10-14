@@ -7,8 +7,15 @@
 
 const std::regex re_ling{ R"(0)" };
 const std::regex re_wu{ R"(5)" };
+const std::regex re_digit{ R"(\d)" };
 const std::regex re_menqian{ R"([\+\=\-])" };
 const std::regex re_menqian_end{ R"([\+\=\-]$)" };
+
+const std::regex re_angang{ R"(^[mpsz](\d)\1\1\1$)" }; // 暗槓
+const std::regex re_peng_gang{ R"(^[mpsz](\d)\1\1\1?[\+\=\-]\1?$)" };
+const std::regex re_jiagang{ R"([\+\=\-]\d$)" }; // 加槓
+const std::regex re_chi1{ R"(\d(?=\-))" };
+const std::regex re_chi2{ R"(\d(?!\-))" };
 
 const std::regex Shoupai::_re_valid_pai{ R"(^(?:[mps]\d|z[1-7])_?\*?[\+\=\-]?$)" };
 const std::regex Shoupai::_re_qipai{ R"([mpsz]\d+)" };
@@ -19,8 +26,7 @@ const std::regex Shoupai::_re_valid_mianzi5{ R"(^[mpsz](\d)\1\1\1[\+\=\-]?$)" };
 const std::regex Shoupai::_re_valid_mianzi6{ R"(\d(?![\+\=\-]))" };
 const std::regex Shoupai::_re_valid_mianzi7{ R"(\d[\+\=\-]$)" };
 const std::regex Shoupai::_re_valid_mianzi8{ R"(^[mps]\d+\-\d*$)" };
-const std::regex Shoupai::_re_valid_mianzi9{ R"(\d)" };
-const std::regex Shoupai::_re_valid_mianzi10{ R"(\d[\+\=\-]?)" };
+const std::regex Shoupai::_re_valid_mianzi9{ R"(\d[\+\=\-]?)" };
 const std::regex Shoupai::_re_fulou1{ R"(\d{4}$)" };
 const std::regex Shoupai::_re_fulou2{ R"(\d{3}[\+\=\-]\d$)" };
 const std::regex Shoupai::_re_fulou3{ R"(\d(?![\+\=\-]))" };
@@ -59,14 +65,14 @@ std::string Shoupai::valid_mianzi(const std::string& m) {
     }
     else if (std::regex_match(h, _re_valid_mianzi8)) {
         std::vector<std::string> nn;
-        for (std::sregex_iterator it(h.begin(), h.end(), _re_valid_mianzi9), end; it != end; ++it) {
+        for (std::sregex_iterator it(h.begin(), h.end(), re_digit), end; it != end; ++it) {
             nn.emplace_back(it->str());
         }
         std::sort(nn.begin(), nn.end());
         if (nn.size() != 3) return {};
         if (nn[0][0] + 1 != nn[1][0] || nn[1][0] + 1 != nn[2][0]) return {};
         std::vector<std::string> matches;
-        for (std::sregex_iterator it(h.begin(), h.end(), _re_valid_mianzi10), end; it != end; ++it) {
+        for (std::sregex_iterator it(h.begin(), h.end(), _re_valid_mianzi9), end; it != end; ++it) {
             matches.emplace_back(it->str());
         }
         std::sort(matches.begin(), matches.end());
@@ -287,7 +293,7 @@ Shoupai& Shoupai::gang(const std::string& m, bool check) {
     if (m != valid_mianzi(m)) throw std::invalid_argument(m);
     const auto s = m[0];
     if (std::regex_search(m, _re_fulou1)) {
-        for (std::sregex_iterator it(m.begin(), m.end(), _re_valid_mianzi9), end; it != end; ++it) {
+        for (std::sregex_iterator it(m.begin(), m.end(), re_digit), end; it != end; ++it) {
             decrease(s, to_int(it->str()[0]));
         }
         _fulou.emplace_back(m);
