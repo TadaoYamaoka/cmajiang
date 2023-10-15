@@ -10,6 +10,7 @@ extern std::mt19937_64 engine;
 // 山
 class Shan {
 public:
+    // 真宝牌(表示牌ではない現物のドラ)
     static std::string zhenbaopai(const std::string& p) {
         if (!Shoupai::valid_pai(p)) throw std::invalid_argument(p);
         const auto s = p[0];
