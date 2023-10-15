@@ -5,8 +5,6 @@
 std::random_device seed_gen;
 std::mt19937_64 engine(seed_gen());
 
-Shan::Shan() : Shan(Rule()) {}
-
 Shan::Shan(const Rule& rule) : _rule(rule), _weikaigang(false), _closed(false) {
     for (const auto s : { 'm', 'p', 's', 'z' }) {
         for (int n = 1; n <= (s == 'z' ? 7 : 9); n++) {

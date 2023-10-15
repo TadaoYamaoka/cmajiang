@@ -20,8 +20,8 @@ public:
             : to_string(s, (n % 9 + 1));
     }
 
-    Shan();
     Shan(const Rule& rule);
+    Shan() : Shan(Rule()) {}
 
     std::vector<std::string>& pai() { return _pai; }
     void set_pai(const std::vector<std::string>& pai) { _pai = pai; }
