@@ -29,16 +29,16 @@ struct Param {
 
 struct Hupai {
     enum Name {
-        CHANGFENG = 0,            // 場風
-        CHANGFENGDONG = 0,        // 場風 東
-        CHANGFENGNAN,             // 場風 南
-        CHANGFENGXI,              // 場風 西
-        CHANGFENGBEI,             // 場風 北
-        ZIFENG = 4,               // 自風
-        ZIFENGDONG = 4,           // 自風 東
-        ZIFENGNAN,                // 自風 南
-        ZIFENGXI,                 // 自風 西
-        ZIFENGBEI,                // 自風 北
+        ZHUANGFENG = 0,            // 場風
+        ZHUANGFENGDONG = 0,        // 場風 東
+        ZHUANGFENGNAN,             // 場風 南
+        ZHUANGFENGXI,              // 場風 西
+        ZHUANGFENGBEI,             // 場風 北
+        MENFENG = 4,               // 自風
+        MENFENGDONG = 4,           // 自風 東
+        MENFENGNAN,                // 自風 南
+        MENFENGXI,                 // 自風 西
+        MENFENGBEI,                // 自風 北
         FANPAI = 8,               // 翻牌
         FANPAIBAI = 8,            // 翻牌 白
         FANPAIFA,                 // 翻牌 發

@@ -6,14 +6,14 @@
 #include <map>
 
 std::map<const std::string, Hupai::Name> HUPAI_MAP = {
-    { u8"場風 東", Hupai::CHANGFENGDONG },
-    { u8"場風 南", Hupai::CHANGFENGNAN },
-    { u8"場風 西", Hupai::CHANGFENGXI },
-    { u8"場風 北", Hupai::CHANGFENGBEI },
-    { u8"自風 東", Hupai::ZIFENGDONG },
-    { u8"自風 南", Hupai::ZIFENGNAN },
-    { u8"自風 西", Hupai::ZIFENGXI },
-    { u8"自風 北", Hupai::ZIFENGBEI },
+    { u8"場風 東", Hupai::ZHUANGFENGDONG },
+    { u8"場風 南", Hupai::ZHUANGFENGNAN },
+    { u8"場風 西", Hupai::ZHUANGFENGXI },
+    { u8"場風 北", Hupai::ZHUANGFENGBEI },
+    { u8"自風 東", Hupai::MENFENGDONG },
+    { u8"自風 南", Hupai::MENFENGNAN },
+    { u8"自風 西", Hupai::MENFENGXI },
+    { u8"自風 北", Hupai::MENFENGBEI },
     { u8"翻牌 白", Hupai::FANPAIBAI },
     { u8"翻牌 發", Hupai::FANPAIFA },
     { u8"翻牌 中", Hupai::FANPAIZHONG },
@@ -345,14 +345,14 @@ TEST(HuleTest, hule) {
     // 和了役: 場風 東
     {
         auto hule_ = hule(Shoupai("m345567s3378z111"), "s9=", {});
-        EXPECT_EQ((std::vector<Hupai>{ Hupai{ Hupai::CHANGFENGDONG, 1 } }), hule_.hupai);
+        EXPECT_EQ((std::vector<Hupai>{ Hupai{ Hupai::ZHUANGFENGDONG, 1 } }), hule_.hupai);
     }
     // 和了役: 自風 西
     {
         Param param;
         param.menfeng = 2;
         auto hule_ = hule(Shoupai("m345567s33789,z333+"), {}, param);
-        EXPECT_EQ((std::vector<Hupai>{ Hupai{ Hupai::ZIFENGXI, 1 } }), hule_.hupai);
+        EXPECT_EQ((std::vector<Hupai>{ Hupai{ Hupai::MENFENGXI, 1 } }), hule_.hupai);
     }
     // 和了役: 連風牌 南
     {
@@ -360,8 +360,8 @@ TEST(HuleTest, hule) {
         param.zhuangfeng = 1;
         auto hule_ = hule(Shoupai("m345567s33z22,s789-"), "z2=", param);
         EXPECT_EQ((std::vector<Hupai>{
-            Hupai{ Hupai::CHANGFENGNAN, 1 },
-                Hupai{ Hupai::ZIFENGNAN, 1 } }), hule_.hupai);
+            Hupai{ Hupai::ZHUANGFENGNAN, 1 },
+                Hupai{ Hupai::MENFENGNAN, 1 } }), hule_.hupai);
     }
     // 和了役: 翻牌 白
     {
@@ -646,7 +646,7 @@ TEST(HuleTest, hule) {
         Param param;
         param.baopai = { "s1" };
         auto hule_ = hule(Shoupai("p55m234s78,m4-56,z111+"), "s9=", param);
-        EXPECT_EQ((std::vector<Hupai>{ Hupai{ Hupai::CHANGFENGDONG, 1 } }), hule_.hupai);
+        EXPECT_EQ((std::vector<Hupai>{ Hupai{ Hupai::ZHUANGFENGDONG, 1 } }), hule_.hupai);
     }
     // ドラ: 手牌内: 1
     {
@@ -654,7 +654,7 @@ TEST(HuleTest, hule) {
         param.baopai = { "m2" };
         auto hule_ = hule(Shoupai("p55m234s78,m4-56,z111+"), "s9=", param);
         EXPECT_EQ((std::vector<Hupai>{
-            Hupai{ Hupai::CHANGFENGDONG, 1 },
+            Hupai{ Hupai::ZHUANGFENGDONG, 1 },
             Hupai{ Hupai::BAOPAI, 1 } }), hule_.hupai);
     }
     // ドラ: 手牌内: 2
@@ -663,7 +663,7 @@ TEST(HuleTest, hule) {
         param.baopai = { "p4" };
         auto hule_ = hule(Shoupai("p55m234s78,m4-56,z111+"), "s9=", param);
         EXPECT_EQ((std::vector<Hupai>{
-            Hupai{ Hupai::CHANGFENGDONG, 1 },
+            Hupai{ Hupai::ZHUANGFENGDONG, 1 },
             Hupai{ Hupai::BAOPAI, 2 } }), hule_.hupai);
     }
     // ドラ: 手牌内: 1, 副露内: 1
@@ -672,7 +672,7 @@ TEST(HuleTest, hule) {
         param.baopai = { "m3" };
         auto hule_ = hule(Shoupai("p55m23s789,m4-56,z111+"), "m4=", param);
         EXPECT_EQ((std::vector<Hupai>{
-            Hupai{ Hupai::CHANGFENGDONG, 1 },
+            Hupai{ Hupai::ZHUANGFENGDONG, 1 },
             Hupai{ Hupai::BAOPAI, 2 } }), hule_.hupai);
     }
     // ドラ: 槓ドラ: 1
@@ -681,7 +681,7 @@ TEST(HuleTest, hule) {
         param.baopai = { "s1", "m2" };
         auto hule_ = hule(Shoupai("p55m234s78,m4-56,z111+"), "s9=", param);
         EXPECT_EQ((std::vector<Hupai>{
-            Hupai{ Hupai::CHANGFENGDONG, 1 },
+            Hupai{ Hupai::ZHUANGFENGDONG, 1 },
             Hupai{ Hupai::BAOPAI, 1 } }), hule_.hupai);
     }
     // ドラ: 赤ドラ: 2
@@ -690,7 +690,7 @@ TEST(HuleTest, hule) {
         param.baopai = { "s4" };
         auto hule_ = hule(Shoupai("p50m234s78,m4-06,z111+"), "s9=", param);
         EXPECT_EQ((std::vector<Hupai>{
-            Hupai{ Hupai::CHANGFENGDONG, 1 },
+            Hupai{ Hupai::ZHUANGFENGDONG, 1 },
                 Hupai{ Hupai::CHIBAOPAI, 2 } }), hule_.hupai);
     }
     // ドラ: 赤のダブドラ
@@ -699,7 +699,7 @@ TEST(HuleTest, hule) {
         param.baopai = { "m4" };
         auto hule_ = hule(Shoupai("p55m234s78,m4-06,z111+"), "s9=", param);
         EXPECT_EQ((std::vector<Hupai>{
-            Hupai{ Hupai::CHANGFENGDONG, 1 },
+            Hupai{ Hupai::ZHUANGFENGDONG, 1 },
                 Hupai{ Hupai::BAOPAI, 1 },
                 Hupai{ Hupai::CHIBAOPAI, 1 } }), hule_.hupai);
     }
@@ -709,7 +709,7 @@ TEST(HuleTest, hule) {
         param.baopai = { "m0" };
         auto hule_ = hule(Shoupai("p55m234s78,m4-56,z111+"), "s9=", param);
         EXPECT_EQ((std::vector<Hupai>{
-            Hupai{ Hupai::CHANGFENGDONG, 1 },
+            Hupai{ Hupai::ZHUANGFENGDONG, 1 },
                 Hupai{ Hupai::BAOPAI, 1 } }), hule_.hupai);
     }
     // ドラ: 裏ドラなし
@@ -853,7 +853,7 @@ TEST(HuleTest, hule) {
         param.menfeng = 0;
         EXPECT_EQ((Defen{ std::vector<Hupai>{
                 Hupai{ Hupai::MENQIANQINGZIMOHE, 1 },
-                Hupai{ Hupai::ZIFENGDONG, 1 },
+                Hupai{ Hupai::MENFENGDONG, 1 },
                 Hupai{ Hupai::YIBEIKOU, 1 } },
             30, 3, 0, 6000,
             std::array<int, 4>{ 6000, -2000, -2000, -2000 } }),
@@ -863,7 +863,7 @@ TEST(HuleTest, hule) {
     {
         EXPECT_EQ((Defen{ std::vector<Hupai>{
                 Hupai{ Hupai::MENQIANQINGZIMOHE, 1 },
-                Hupai{ Hupai::CHANGFENGDONG, 1 },
+                Hupai{ Hupai::ZHUANGFENGDONG, 1 },
                 Hupai{ Hupai::HUNQUANDAIYAOJIU, 2 } },
             30, 4, 0, 7900,
             std::array<int, 4>{ -3900,  7900, -2000, -2000 } }),
@@ -894,7 +894,7 @@ TEST(HuleTest, hule) {
         param.zhuangfeng = 1;
         param.menfeng = 0;
         EXPECT_EQ((Defen{ std::vector<Hupai>{
-                Hupai{ Hupai::CHANGFENGNAN, 1 },
+                Hupai{ Hupai::ZHUANGFENGNAN, 1 },
                 Hupai{ Hupai::DUIDUIHU, 2 } },
             40, 3, 0, 7800,
             std::array<int, 4>{ 7800, -2600, -2600, -2600 } }),
@@ -905,8 +905,8 @@ TEST(HuleTest, hule) {
         Param param;
         param.zhuangfeng = 1;
         EXPECT_EQ((Defen{ std::vector<Hupai>{
-                Hupai{ Hupai::CHANGFENGNAN, 1 },
-                Hupai{ Hupai::ZIFENGNAN, 1 },
+                Hupai{ Hupai::ZHUANGFENGNAN, 1 },
+                Hupai{ Hupai::MENFENGNAN, 1 },
                 Hupai{ Hupai::DUIDUIHU, 2 } },
             40, 4, 0, 8000,
             std::array<int, 4>{ -4000,  8000, -2000, -2000 } }),
@@ -918,7 +918,7 @@ TEST(HuleTest, hule) {
         param.zhuangfeng = 1;
         param.menfeng = 0;
         EXPECT_EQ((Defen{ std::vector<Hupai>{
-                Hupai{ Hupai::CHANGFENGNAN, 1 } },
+                Hupai{ Hupai::ZHUANGFENGNAN, 1 } },
             50, 1, 0, 2400,
             std::array<int, 4>{ 2400,     0, -2400,     0 } }),
             hule(Shoupai("m123p456s789z2227"), "z7=", param));
@@ -928,8 +928,8 @@ TEST(HuleTest, hule) {
         Param param;
         param.zhuangfeng = 1;
         EXPECT_EQ((Defen{ std::vector<Hupai>{
-                Hupai{ Hupai::CHANGFENGNAN, 1 },
-                Hupai{ Hupai::ZIFENGNAN, 1 } },
+                Hupai{ Hupai::ZHUANGFENGNAN, 1 },
+                Hupai{ Hupai::MENFENGNAN, 1 } },
             50, 2, 0, 3200,
             std::array<int, 4>{ -3200,  3200,     0,     0 } }),
             hule(Shoupai("m123p456s789z2227"), "z7-", param));
@@ -940,7 +940,7 @@ TEST(HuleTest, hule) {
         param.zhuangfeng = 1;
         param.menfeng = 0;
         EXPECT_EQ((Defen{ std::vector<Hupai>{
-                Hupai{ Hupai::CHANGFENGNAN, 1 },
+                Hupai{ Hupai::ZHUANGFENGNAN, 1 },
                 Hupai{ Hupai::SANANKE, 2 } },
             50, 3, 0, 9600,
             std::array<int, 4>{ 9600, -3200, -3200, -3200 } }),
@@ -951,8 +951,8 @@ TEST(HuleTest, hule) {
         Param param;
         param.zhuangfeng = 1;
         EXPECT_EQ((Defen{ std::vector<Hupai>{
-                Hupai{ Hupai::CHANGFENGNAN, 1 },
-                Hupai{ Hupai::ZIFENGNAN, 1 },
+                Hupai{ Hupai::ZHUANGFENGNAN, 1 },
+                Hupai{ Hupai::MENFENGNAN, 1 },
                 Hupai{ Hupai::SANANKE, 2 } },
             50, 4, 0, 8000,
             std::array<int, 4>{ -4000,  8000, -2000, -2000 } }),
@@ -964,7 +964,7 @@ TEST(HuleTest, hule) {
         param.zhuangfeng = 1;
         param.menfeng = 0;
         EXPECT_EQ((Defen{ std::vector<Hupai>{
-                Hupai{ Hupai::CHANGFENGNAN, 1 } },
+                Hupai{ Hupai::ZHUANGFENGNAN, 1 } },
             60, 1, 0, 2900,
             std::array<int, 4>{ 2900,     0, -2900,     0 } }),
             hule(Shoupai("s789z2227,m2222,p111="), "z7=", param));
@@ -974,8 +974,8 @@ TEST(HuleTest, hule) {
         Param param;
         param.zhuangfeng = 1;
         EXPECT_EQ((Defen{ std::vector<Hupai>{
-                Hupai{ Hupai::CHANGFENGNAN, 1 },
-                Hupai{ Hupai::ZIFENGNAN, 1 } },
+                Hupai{ Hupai::ZHUANGFENGNAN, 1 },
+                Hupai{ Hupai::MENFENGNAN, 1 } },
             60, 2, 0, 3900,
             std::array<int, 4>{ -3900,  3900,     0,     0 } }),
             hule(Shoupai("s789z2227,m2222,p111="), "z7-", param));
@@ -986,7 +986,7 @@ TEST(HuleTest, hule) {
         param.zhuangfeng = 1;
         param.menfeng = 0;
         EXPECT_EQ((Defen{ std::vector<Hupai>{
-                Hupai{ Hupai::CHANGFENGNAN, 1 },
+                Hupai{ Hupai::ZHUANGFENGNAN, 1 },
                 Hupai{ Hupai::HUNYISE, 2 } },
             60, 3, 0, 11700,
             std::array<int, 4>{ 11700, -3900, -3900, -3900 } }),
@@ -997,8 +997,8 @@ TEST(HuleTest, hule) {
         Param param;
         param.zhuangfeng = 1;
         EXPECT_EQ((Defen{ std::vector<Hupai>{
-                Hupai{ Hupai::CHANGFENGNAN, 1 },
-                Hupai{ Hupai::ZIFENGNAN, 1 },
+                Hupai{ Hupai::ZHUANGFENGNAN, 1 },
+                Hupai{ Hupai::MENFENGNAN, 1 },
                 Hupai{ Hupai::HUNYISE, 2 } },
             60, 4, 0, 8000,
             std::array<int, 4>{ -4000,  8000, -2000, -2000 } }),
@@ -1010,7 +1010,7 @@ TEST(HuleTest, hule) {
         param.zhuangfeng = 1;
         param.menfeng = 0;
         EXPECT_EQ((Defen{ std::vector<Hupai>{
-                Hupai{ Hupai::CHANGFENGNAN, 1 } },
+                Hupai{ Hupai::ZHUANGFENGNAN, 1 } },
             70, 1, 0, 3400,
             std::array<int, 4>{ 3400,     0, -3400,     0 } }),
             hule(Shoupai("m12377p456s78,z2222"), "s9=", param));
@@ -1020,8 +1020,8 @@ TEST(HuleTest, hule) {
         Param param;
         param.zhuangfeng = 1;
         EXPECT_EQ((Defen{ std::vector<Hupai>{
-                Hupai{ Hupai::CHANGFENGNAN, 1 },
-                Hupai{ Hupai::ZIFENGNAN, 1 } },
+                Hupai{ Hupai::ZHUANGFENGNAN, 1 },
+                Hupai{ Hupai::MENFENGNAN, 1 } },
             70, 2, 0, 4500,
             std::array<int, 4>{ -4500,  4500,     0,     0 } }),
             hule(Shoupai("m12377p456s78,z2222"), "s9-", param));
@@ -1033,7 +1033,7 @@ TEST(HuleTest, hule) {
         param.menfeng = 0;
         EXPECT_EQ((Defen{ std::vector<Hupai>{
                 Hupai{ Hupai::MENQIANQINGZIMOHE, 1 },
-                Hupai{ Hupai::CHANGFENGNAN, 1 },
+                Hupai{ Hupai::ZHUANGFENGNAN, 1 },
                 Hupai{ Hupai::YIBEIKOU, 1 } },
             70, 3, 0, 12000,
             std::array<int, 4>{ 12000, -4000, -4000, -4000 } }),
@@ -1045,7 +1045,7 @@ TEST(HuleTest, hule) {
         param.zhuangfeng = 1;
         param.menfeng = 0;
         EXPECT_EQ((Defen{ std::vector<Hupai>{
-                Hupai{ Hupai::CHANGFENGNAN, 1 } },
+                Hupai{ Hupai::ZHUANGFENGNAN, 1 } },
             80, 1, 0, 3900,
             std::array<int, 4>{ 3900,     0, -3900,     0 } }),
             hule(Shoupai("m22s888p34,z222+2,z4444"), "p5=", param));
@@ -1055,8 +1055,8 @@ TEST(HuleTest, hule) {
         Param param;
         param.zhuangfeng = 1;
         EXPECT_EQ((Defen{ std::vector<Hupai>{
-                Hupai{ Hupai::CHANGFENGNAN, 1 },
-                Hupai{ Hupai::ZIFENGNAN, 1 } },
+                Hupai{ Hupai::ZHUANGFENGNAN, 1 },
+                Hupai{ Hupai::MENFENGNAN, 1 } },
             80, 2, 0, 5200,
             std::array<int, 4>{ -5200,  5200,     0,     0 } }),
             hule(Shoupai("m22s888p34,z222+2,z4444"), "p5-", param));
@@ -1067,8 +1067,8 @@ TEST(HuleTest, hule) {
         param.zhuangfeng = 1;
         param.menfeng = 0;
         EXPECT_EQ((Defen{ std::vector<Hupai>{
-                Hupai{ Hupai::CHANGFENGNAN, 1 },
-                Hupai{ Hupai::ZIFENGDONG, 1 },
+                Hupai{ Hupai::ZHUANGFENGNAN, 1 },
+                Hupai{ Hupai::MENFENGDONG, 1 },
                 Hupai{ Hupai::HUNQUANDAIYAOJIU, 1 } },
             80, 3, 0, 12000,
             std::array<int, 4>{ 12000, -4000, -4000, -4000 } }),
@@ -1080,7 +1080,7 @@ TEST(HuleTest, hule) {
         param.zhuangfeng = 1;
         param.menfeng = 0;
         EXPECT_EQ((Defen{ std::vector<Hupai>{
-                Hupai{ Hupai::CHANGFENGNAN, 1 } },
+                Hupai{ Hupai::ZHUANGFENGNAN, 1 } },
             90, 1, 0, 4400,
             std::array<int, 4>{ 4400,     0, -4400,     0 } }),
             hule(Shoupai("p88m123s99,s6666,z2222"), "s9=", param));
@@ -1090,8 +1090,8 @@ TEST(HuleTest, hule) {
         Param param;
         param.zhuangfeng = 1;
         EXPECT_EQ((Defen{ std::vector<Hupai>{
-                Hupai{ Hupai::CHANGFENGNAN, 1 },
-                Hupai{ Hupai::ZIFENGNAN, 1 } },
+                Hupai{ Hupai::ZHUANGFENGNAN, 1 },
+                Hupai{ Hupai::MENFENGNAN, 1 } },
             90, 2, 0, 5800,
             std::array<int, 4>{ -5800,  5800,     0,     0 } }),
             hule(Shoupai("p88m123s99,s6666,z2222"), "s9-", param));
@@ -1102,7 +1102,7 @@ TEST(HuleTest, hule) {
         param.zhuangfeng = 1;
         param.menfeng = 0;
         EXPECT_EQ((Defen{ std::vector<Hupai>{
-                Hupai{ Hupai::CHANGFENGNAN, 1 },
+                Hupai{ Hupai::ZHUANGFENGNAN, 1 },
                 Hupai{ Hupai::FANPAIBAI, 1 },
                 Hupai{ Hupai::FANPAIFA, 1 } },
             90, 3, 0, 12000,
@@ -1115,7 +1115,7 @@ TEST(HuleTest, hule) {
         param.zhuangfeng = 1;
         param.menfeng = 0;
         EXPECT_EQ((Defen{ std::vector<Hupai>{
-                Hupai{ Hupai::CHANGFENGNAN, 1 } },
+                Hupai{ Hupai::ZHUANGFENGNAN, 1 } },
             100, 1, 0, 4800,
             std::array<int, 4>{ 4800,     0, -4800,     0 } }),
             hule(Shoupai("m22p345s67,z2222,s9999"), "s8=", param));
@@ -1125,8 +1125,8 @@ TEST(HuleTest, hule) {
         Param param;
         param.zhuangfeng = 1;
         EXPECT_EQ((Defen{ std::vector<Hupai>{
-                Hupai{ Hupai::CHANGFENGNAN, 1 },
-                Hupai{ Hupai::ZIFENGNAN, 1 } },
+                Hupai{ Hupai::ZHUANGFENGNAN, 1 },
+                Hupai{ Hupai::MENFENGNAN, 1 } },
             100, 2, 0, 6400,
             std::array<int, 4>{ -6400,  6400,     0,     0 } }),
             hule(Shoupai("m22p345s67,z2222,s9999"), "s8-", param));
@@ -1207,7 +1207,7 @@ TEST(HuleTest, hule) {
         param.zhuangfeng = 1;
         param.menfeng = 0;
         EXPECT_EQ((Defen{ std::vector<Hupai>{
-                Hupai{ Hupai::CHANGFENGNAN, 1 },
+                Hupai{ Hupai::ZHUANGFENGNAN, 1 },
                 Hupai{ Hupai::DUIDUIHU, 2 },
                 Hupai{ Hupai::HUNLAOTOU, 2 },
                 Hupai{ Hupai::HUNYISE, 2 } },
@@ -1220,8 +1220,8 @@ TEST(HuleTest, hule) {
         Param param;
         param.zhuangfeng = 1;
         EXPECT_EQ((Defen{ std::vector<Hupai>{
-                Hupai{ Hupai::CHANGFENGNAN, 1 },
-                Hupai{ Hupai::ZIFENGNAN, 1 },
+                Hupai{ Hupai::ZHUANGFENGNAN, 1 },
+                Hupai{ Hupai::MENFENGNAN, 1 },
                 Hupai{ Hupai::DUIDUIHU, 2 },
                 Hupai{ Hupai::HUNLAOTOU, 2 },
                 Hupai{ Hupai::HUNYISE, 2 } },

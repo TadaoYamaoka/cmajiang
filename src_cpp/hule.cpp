@@ -414,10 +414,10 @@ std::vector<Hupai> get_hupai(const std::vector<std::string>& mianzi, const Hudi&
         std::vector<Hupai> fanpai_all;
         // 場風
         if (hudi.kezi_z[hudi.zhuangfeng + 1])
-            fanpai_all.emplace_back(Hupai::Name(Hupai::CHANGFENG + hudi.zhuangfeng), 1);
+            fanpai_all.emplace_back(Hupai::Name(Hupai::ZHUANGFENG + hudi.zhuangfeng), 1);
         // 自風
         if (hudi.kezi_z[hudi.menfeng + 1])
-            fanpai_all.emplace_back(Hupai::Name(Hupai::ZIFENG + hudi.menfeng), 1);
+            fanpai_all.emplace_back(Hupai::Name(Hupai::MENFENG + hudi.menfeng), 1);
         // 翻牌
         if (hudi.kezi_z[5]) fanpai_all.emplace_back(Hupai::FANPAIBAI, 1);
         if (hudi.kezi_z[6]) fanpai_all.emplace_back(Hupai::FANPAIFA, 1);
