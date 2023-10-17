@@ -1,8 +1,10 @@
 ﻿#include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include <pybind11/numpy.h>
 
 #include "xiangting.h"
 #include "game.h"
+#include "feature.h"
 #include "svg.h"
 
 namespace py = pybind11;
@@ -345,10 +347,11 @@ PYBIND11_MODULE(_cmajiang, m) {
 	py::class_<Shan>(m, "Shan")
 		.def(py::init<>())
 		.def(py::init<const Rule&>())
-        .def_property("pai", &Shan::pai, &Shan::set_pai)
+        .def_property("pai", [](Shan& shan) { return shan.pai(); }, [](const Shan& shan) { return shan.pai(); })
         .def_property_readonly("paishu", &Shan::paishu)
         .def_property_readonly("baopai", &Shan::baopai)
         .def_property_readonly("libaopai", &Shan::libaopai)
+        .def_property_readonly("_libaopai", &Shan::libaopai_)
         .def("zimo", &Shan::zimo)
         .def("gangzimo", &Shan::gangzimo)
         .def("kaigang", &Shan::kaigang)
@@ -474,4 +477,60 @@ PYBIND11_MODULE(_cmajiang, m) {
         .def_property_readonly("rule", &Game::rule)
         .def_property_readonly("status", &Game::status)
         ;
+    m.attr("N_CHANNELS_STATUS") = N_CHANNELS_STATUS;
+    m.attr("N_CHANNELS_SHOUPAI") = N_CHANNELS_SHOUPAI;
+    m.attr("N_CHANNELS_FULOU") = N_CHANNELS_FULOU;
+    m.attr("N_CHANNELS_PAI") = N_CHANNELS_PAI;
+    m.attr("N_CHANNELS_PAI") = N_CHANNELS_PAI;
+    m.attr("N_CHANNELS_TINGPAI") = N_CHANNELS_TINGPAI;
+    m.attr("N_CHANNELS_LIZHI") = N_CHANNELS_LIZHI;
+    m.attr("N_CHANNELS_HE") = N_CHANNELS_HE;
+    m.attr("N_CHANNELS_TAJIADAPAI") = N_CHANNELS_TAJIADAPAI;
+    m.attr("N_CHANNELS_BAOPAI") = N_CHANNELS_BAOPAI;
+    m.attr("N_CHANNELS_MENFENG") = N_CHANNELS_MENFENG;
+    m.attr("N_CHANNELS_ZHUANGFENG") = N_CHANNELS_ZHUANGFENG;
+    m.attr("N_CHANNELS_PAISHU") = N_CHANNELS_PAISHU;
+    m.attr("N_CHANNELS_SHAN") = N_CHANNELS_SHAN;
+    m.attr("N_CHANNELS_PUBLIC") = N_CHANNELS_PUBLIC;
+    m.attr("N_CHANNELS_PRIVATE") = N_CHANNELS_PRIVATE;
+    m.def("status_featuers", [](const Game& game, const int lunban, py::array_t<float> ndarray) {
+        auto data = static_cast<float*>(ndarray.request().ptr);
+        status_featuers(game, lunban, reinterpret_cast<float(*)[9][4]>(data));
+    });
+    m.def("shoupai_features", [](const Shoupai& shoupai, py::array_t<float> ndarray) {
+        auto data = static_cast<float*>(ndarray.request().ptr);
+        shoupai_features(shoupai, reinterpret_cast<float(*)[9][4]>(data));
+    });
+    m.def("fulou_features", [](const Shoupai& shoupai, py::array_t<float> ndarray) {
+        auto data = static_cast<float*>(ndarray.request().ptr);
+        fulou_features(shoupai, reinterpret_cast<float(*)[9][4]>(data));
+    });
+    m.def("pai_features", [](const std::string& pai, py::array_t<float> ndarray) {
+        auto data = static_cast<float*>(ndarray.request().ptr);
+        pai_features(pai, reinterpret_cast<float(*)[9][4]>(data));
+    });
+    m.def("he_features", [](const He& he, py::array_t<float> ndarray) {
+        auto data = static_cast<float*>(ndarray.request().ptr);
+        he_features(he, reinterpret_cast<float(*)[9][4]>(data));
+    });
+    m.def("tajiadapai_features", [](const Game& game, const int lunban, py::array_t<float> ndarray) {
+        auto data = static_cast<float*>(ndarray.request().ptr);
+        tajiadapai_features(game, lunban, reinterpret_cast<float(*)[9][4]>(data));
+    });
+    m.def("baopai_features", [](const std::vector<std::string>& baopai, py::array_t<float> ndarray) {
+        auto data = static_cast<float*>(ndarray.request().ptr);
+        baopai_features(baopai, reinterpret_cast<float(*)[9][4]>(data));
+    });
+    m.def("shan_features", [](const Shan& shan, py::array_t<float> ndarray) {
+        auto data = static_cast<float*>(ndarray.request().ptr);
+        shan_features(shan, reinterpret_cast<float(*)[9][4]>(data));
+    });
+    m.def("game_public_features", [](const Game& game, const int lunban, py::array_t<float> ndarray) {
+        auto data = static_cast<float*>(ndarray.request().ptr);
+        game_public_features(game, lunban, reinterpret_cast<float(*)[9][4]>(data));
+    });
+    m.def("game_private_features", [](const Game& game, const int lunban, py::array_t<float> ndarray) {
+        auto data = static_cast<float*>(ndarray.request().ptr);
+        game_private_features(game, lunban, reinterpret_cast<float(*)[9][4]>(data));
+    });
 }

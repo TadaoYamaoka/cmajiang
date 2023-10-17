@@ -134,6 +134,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="feature.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="he.h" />
     <ClInclude Include="hule.h" />
@@ -144,6 +145,7 @@
     <ClInclude Include="xiangting.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="feature.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="he.cpp" />
     <ClCompile Include="hule.cpp" />

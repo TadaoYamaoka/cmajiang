@@ -21,10 +21,11 @@ public:
     }
 
     Shan(const Rule& rule);
+    Shan(std::vector<std::string>& pai, const Rule& rule = {});
     Shan() : Shan(Rule()) {}
 
     std::vector<std::string>& pai() { return _pai; }
-    void set_pai(const std::vector<std::string>& pai) { _pai = pai; }
+    const std::vector<std::string>& pai() const { return _pai; }
     // 牌数
     int paishu() const { return (int)_pai.size() - 14; }
     // 宝牌(ドラ)
@@ -42,6 +43,9 @@ public:
         if (!_closed) return {};
         if (!_libaopai.empty()) return _libaopai;
         return {};
+    }
+    const std::vector<std::string>& libaopai_() const {
+        return _libaopai;
     }
 
     // 自摸
