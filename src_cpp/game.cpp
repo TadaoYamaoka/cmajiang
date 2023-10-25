@@ -38,6 +38,56 @@ Game::Game(const Rule& rule) : _rule(rule) {
     _model.defen = { _rule.startingPoints, _rule.startingPoints, _rule.startingPoints, _rule.startingPoints };
 }
 
+Game::Game(const Rule& rule, const std::vector<Shoupai>& shoupai, std::vector<He>& he, const Shan& shan, const int lunban, const int qijia) :
+    Game{ rule } {
+    kaiju(qijia);
+    _model.shan = shan;
+    for (int l = 0; l < 4; l++) {
+        _model.shoupai[l] = shoupai[l];
+        _model.he[l] = he[l];
+        _model.player_id[l] = (_model.qijia + _model.jushu + l) % 4;
+    }
+    _model.lunban = he[0].pai().size() == 0 ? -1 : (lunban + 3) % 4;
+
+    _diyizimo = he[0].pai().size() <= 1
+        && he[1].pai().size() <= 1
+        && he[2].pai().size() <= 1
+        && he[3].pai().size() == 0;
+    // 途中流局あり
+    _fengpai = _rule.abortiveDraw;
+
+    _dapai = he[lunban].pai().size() > 0 ? he[lunban].pai().back() : "";
+    _fulou.clear();
+    _gang.clear();
+
+    _lizhi = { shoupai[0].lizhi(), shoupai[1].lizhi(), shoupai[2].lizhi(), shoupai[3].lizhi() };
+    _yifa = {
+        he[0].pai().size() > 0 && he[0].pai().back().back() == '*',
+        he[1].pai().size() > 0 && he[1].pai().back().back() == '*',
+        he[2].pai().size() > 0 && he[2].pai().back().back() == '*',
+        he[3].pai().size() > 0 && he[3].pai().back().back() == '*',
+    };
+    _n_gang = {
+        (int)std::count_if(shoupai[0].fulou_().begin(), shoupai[0].fulou_().end(), [](const auto& m) { return std::regex_match(m, re_gang); }),
+        (int)std::count_if(shoupai[1].fulou_().begin(), shoupai[1].fulou_().end(), [](const auto& m) { return std::regex_match(m, re_gang); }),
+        (int)std::count_if(shoupai[2].fulou_().begin(), shoupai[2].fulou_().end(), [](const auto& m) { return std::regex_match(m, re_gang); }),
+        (int)std::count_if(shoupai[3].fulou_().begin(), shoupai[3].fulou_().end(), [](const auto& m) { return std::regex_match(m, re_gang); }),
+    };
+    _neng_rong = { true, true, true, true };
+
+    _hule.clear();
+    _hule_option = HuleOption::NONE;
+    _no_game = false;
+    _lianzhuang = false;
+    _changbang = _model.changbang;
+    _fenpei = { 0, 0, 0, 0 };
+
+    _defen = {};
+    _rank = {};
+    _point = {};
+    _pingju = {};
+}
+
 void Game::call_players(const Status type) {
     _status = type;
     _reply = {};

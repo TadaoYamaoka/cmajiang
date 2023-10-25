@@ -5,7 +5,10 @@
 #include "xiangting.h"
 #include "game.h"
 #include "feature.h"
+#include "random.h"
 #include "svg.h"
+
+#include <functional>
 
 namespace py = pybind11;
 
@@ -97,6 +100,32 @@ Rule create_rule(
         roundUpManguan
     };
 }
+
+extern std::mt19937_64 engine;
+std::map<std::string, int> init_rest(const Rule& rule) {
+    std::map<std::string, int> rest{
+        { "m1", 4 }, { "m2", 4 }, { "m3", 4 }, { "m4", 4 }, { "m5", 4 }, { "m6", 4 }, { "m7", 4 }, { "m8", 4 }, { "m9", 4 },
+        { "p1", 4 }, { "p2", 4 }, { "p3", 4 }, { "p4", 4 }, { "p5", 4 }, { "p6", 4 }, { "p7", 4 }, { "p8", 4 }, { "p9", 4 },
+        { "s1", 4 }, { "s2", 4 }, { "s3", 4 }, { "s4", 4 }, { "s5", 4 }, { "s6", 4 }, { "s7", 4 }, { "s8", 4 }, { "s9", 4 },
+        { "z1", 4 }, { "z2", 4 }, { "z3", 4 }, { "z4", 4 }, { "z5", 4 }, { "z6", 4 }, { "z7", 4 }
+    };
+    for (const auto s : { 'm', 'p', 's' }) {
+        for (int i = 0; i < rule.hongpai_(s); i++) {
+            rest[to_string(s, 5)]--;
+            rest[to_string(s, 0)]++;
+        }
+    }
+    return rest;
+}
+Shoupai random_setup(const Rule& rule, const std::function<void(std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, const Rule& rule, std::mt19937_64& mt)>& setup_func) {
+    std::vector<std::string> pai;
+    std::vector<std::string> fulou;
+    std::map<std::string, int> rest = init_rest(rule);
+    setup_func(pai, rest, fulou, rule, engine);
+    std::shuffle(pai.begin(), pai.end(), engine);
+    return Shoupai{ pai, fulou };
+}
+
 
 PYBIND11_MODULE(_cmajiang, m) {
 	m.doc() = "cmajiang module";
@@ -533,4 +562,142 @@ PYBIND11_MODULE(_cmajiang, m) {
         auto data = static_cast<float*>(ndarray.request().ptr);
         game_private_features(game, lunban, reinterpret_cast<float(*)[9][4]>(data));
     });
+    m.def("random_zhuangfeng", [](const int zhuangfeng, const Rule& rule) {
+        return random_setup(rule, [zhuangfeng](std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, const Rule& rule, std::mt19937_64& mt) {
+            setup_zhuangfeng(pai, rest, fulou, zhuangfeng, rule, mt);
+        });
+    }, py::arg("zhuangfeng") = 0, py::arg("rule") = Rule{}
+    );
+    m.def("random_menfeng", [](const int menfeng, const Rule& rule) {
+        return random_setup(rule, [menfeng](std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, const Rule& rule, std::mt19937_64& mt) {
+            setup_menfeng(pai, rest, fulou, menfeng, rule, mt);
+        });
+    }, py::arg("menfeng") = 0, py::arg("rule") = Rule{}
+    );
+    m.def("random_fanpai", [](const Rule& rule) {
+        return random_setup(rule, setup_fanpai);
+    }, py::arg("rule") = Rule{}
+    );
+    m.def("random_pinghe", [](const int zhuangfeng, const int menfeng, const Rule& rule) {
+        return random_setup(rule, [zhuangfeng, menfeng](std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, const Rule& rule, std::mt19937_64& mt) {
+            setup_pinghe(pai, rest, zhuangfeng, menfeng, rule, mt);
+        });
+    }, py::arg("zhuangfeng") = 0, py::arg("menfeng") = 0, py::arg("rule") = Rule{}
+    );
+    m.def("random_duanyaojiu", [](const Rule& rule) {
+        return random_setup(rule, [](std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, const Rule& rule, std::mt19937_64& mt) {
+            setup_duanyaojiu(pai, rest, rule, mt);
+        });
+    }, py::arg("rule") = Rule{}
+    );
+    m.def("random_yibeikou", [](const Rule& rule) {
+        return random_setup(rule, [](std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, const Rule& rule, std::mt19937_64& mt) {
+            setup_yibeikou(pai, rest, rule, mt);
+        });
+    }, py::arg("rule") = Rule{}
+    );
+    m.def("random_sansetongshun", [](const Rule& rule) {
+        return random_setup(rule, setup_sansetongshun);
+    }, py::arg("rule") = Rule{}
+    );
+    m.def("random_yiqitongguan", [](const Rule& rule) {
+        return random_setup(rule, setup_yiqitongguan);
+    }, py::arg("rule") = Rule{}
+    );
+    m.def("random_hunquandaiyaojiu", [](const Rule& rule) {
+        return random_setup(rule, setup_hunquandaiyaojiu);
+    }, py::arg("rule") = Rule{}
+    );
+    m.def("random_qiduizi", [](const Rule& rule) {
+        return random_setup(rule, [](std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, const Rule& rule, std::mt19937_64& mt) {
+            setup_qiduizi(pai, rest, rule, mt);
+        });
+    }, py::arg("rule") = Rule{}
+    );
+    m.def("random_duiduihu", [](const Rule& rule) {
+        return random_setup(rule, setup_duiduihu);
+    }, py::arg("rule") = Rule{}
+    );
+    m.def("random_sananke", [](const Rule& rule) {
+        return random_setup(rule, setup_sananke);
+    }, py::arg("rule") = Rule{}
+    );
+    m.def("random_sangangzi", [](const Rule& rule) {
+        return random_setup(rule, setup_sangangzi);
+    }, py::arg("rule") = Rule{}
+    );
+    m.def("random_sansetongke", [](const Rule& rule) {
+        return random_setup(rule, setup_sansetongke);
+    }, py::arg("rule") = Rule{}
+    );
+    m.def("random_hunlaotou", [](const Rule& rule) {
+        return random_setup(rule, setup_hunlaotou);
+    }, py::arg("rule") = Rule{}
+    );
+    m.def("random_xiaosanyuan", [](const Rule& rule) {
+        return random_setup(rule, setup_xiaosanyuan);
+    }, py::arg("rule") = Rule{}
+    );
+    m.def("random_hunyise", [](const Rule& rule) {
+        return random_setup(rule, setup_hunyise);
+    }, py::arg("rule") = Rule{}
+    );
+    m.def("random_chunquandaiyaojiu", [](const Rule& rule) {
+        return random_setup(rule, setup_chunquandaiyaojiu);
+    }, py::arg("rule") = Rule{}
+    );
+    m.def("random_erbeikou", [](const Rule& rule) {
+        return random_setup(rule, setup_erbeikou);
+    }, py::arg("rule") = Rule{}
+    );
+    m.def("random_qingyise", [](const Rule& rule) {
+        return random_setup(rule, setup_qingyise);
+    }, py::arg("rule") = Rule{}
+    );
+    m.def("random_guoshiwushuang", [](const Rule& rule) {
+        return random_setup(rule, [](std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, const Rule& rule, std::mt19937_64& mt) {
+            setup_guoshiwushuang(pai, rest, rule, mt);
+        });
+    }, py::arg("rule") = Rule{}
+    );
+    m.def("random_sianke", [](const Rule& rule) {
+        return random_setup(rule, [](std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, const Rule& rule, std::mt19937_64& mt) {
+            setup_sianke(pai, rest, rule, mt);
+        });
+    }, py::arg("rule") = Rule{}
+    );
+    m.def("random_dasanyuan", [](const Rule& rule) {
+        return random_setup(rule, setup_dasanyuan);
+    }, py::arg("rule") = Rule{}
+    );
+    m.def("random_xiaosixi", [](const Rule& rule) {
+        return random_setup(rule, setup_xiaosixi);
+    }, py::arg("rule") = Rule{}
+    );
+    m.def("random_dasixi", [](const Rule& rule) {
+        return random_setup(rule, setup_dasixi);
+    }, py::arg("rule") = Rule{}
+    );
+    m.def("random_ziyise", [](const Rule& rule) {
+        return random_setup(rule, setup_ziyise);
+    }, py::arg("rule") = Rule{}
+    );
+    m.def("random_lvyise", [](const Rule& rule) {
+        return random_setup(rule, setup_lvyise);
+    }, py::arg("rule") = Rule{}
+    );
+    m.def("random_qinglaotou", [](const Rule& rule) {
+        return random_setup(rule, setup_qinglaotou);
+    }, py::arg("rule") = Rule{}
+    );
+    m.def("random_sigangzi", [](const Rule& rule) {
+        return random_setup(rule, setup_sigangzi);
+    }, py::arg("rule") = Rule{}
+    );
+    m.def("random_jiulianbaodeng", [](const Rule& rule) {
+        return random_setup(rule, [](std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, const Rule& rule, std::mt19937_64& mt) {
+            setup_jiulianbaodeng(pai, rest, rule, mt);
+        });
+    }, py::arg("rule") = Rule{}
+    );
 }

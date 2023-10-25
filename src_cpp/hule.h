@@ -121,4 +121,4 @@ struct Defen {
 
 std::vector<std::vector<std::string>> hule_mianzi_yiban(Shoupai& shoupai, const std::string& hulepai);
 std::vector<std::vector<std::string>> hule_mianzi(const Shoupai& shoupai, const std::string& rongpai = {});
-Defen hule(const Shoupai& shoupai, std::string rongpai, const Param& param);
+Defen hule(const Shoupai& shoupai, std::string rongpai = {}, const Param& param = {});

@@ -17,6 +17,7 @@ public:
     Shoupai();
     Shoupai(const std::vector<std::string>& qipai);
     Shoupai(const std::string& paistr);
+    Shoupai(const std::vector<std::string>& pai, const std::vector<std::string>& fulou);
 
     std::string toString() const;
     operator std::string() const {
@@ -41,6 +42,7 @@ public:
     bool menqian() const;
     // 立直
     bool lizhi() const { return _lizhi; }
+    void set_lizhi(const bool lizhi) { _lizhi = lizhi; }
     // 打牌取得
     std::vector<std::string> get_dapai(bool check = true) const;
     // 吃(チー)面子取得
@@ -177,3 +179,4 @@ extern const std::regex re_peng_gang;
 extern const std::regex re_jiagang;
 extern const std::regex re_chi1;
 extern const std::regex re_chi2;
+extern const std::regex re_gang;

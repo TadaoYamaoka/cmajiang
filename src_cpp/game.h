@@ -67,6 +67,7 @@ public:
 
     Game(const Rule& rule);
     Game() : Game(Rule{}) {};
+    Game(const Rule& rule, const std::vector<Shoupai>& shoupai, std::vector<He>& he, const Shan& shan, const int lunban, const int qijia = -1);
 
     void call_players(const Status type);
     void reply(const int id, const Message msg, const std::string& arg = {});
@@ -202,7 +203,7 @@ public:
 
     const std::string& fulou_() const { return _fulou; }
     const std::string& gang_() const { return _gang; }
-    
+
     const std::vector<int>& hule_() const { return _hule; }
     void set_hule(const std::vector<int>& hule_) { _hule = hule_; }
     const Defen& defen_() const { return _defen; }
@@ -262,7 +263,7 @@ private:
     bool _lianzhuang;
     // 场棒(積み棒)
     int _changbang;
-    // テンパイ
+    // 分配(局単位に精算する得点)
     std::array<int, 4> _fenpei;
 };
 

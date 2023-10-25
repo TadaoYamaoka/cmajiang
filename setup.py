@@ -26,6 +26,7 @@ ext_modules = [
             "src_cpp/shoupai.cpp",
             "src_cpp/xiangting.cpp",
             "src_cpp/feature.cpp",
+            "src_cpp/random.cpp",
             "src_cpp/svg.cpp",
             "src_cpp/tinyxml2.cpp",
         ],

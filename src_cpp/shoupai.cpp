@@ -16,6 +16,7 @@ const std::regex re_peng_gang{ R"(^[mpsz](\d)\1\1\1?[\+\=\-]\1?$)" };
 const std::regex re_jiagang{ R"([\+\=\-]\d$)" }; // 加槓
 const std::regex re_chi1{ R"(\d(?=\-))" };
 const std::regex re_chi2{ R"(\d(?!\-))" };
+const std::regex re_gang{ R"(^[mpsz]\d\d\d[\+\=\-]?\d[\+\=\-]?$)" };
 
 const std::regex Shoupai::_re_valid_pai{ R"(^(?:[mps]\d|z[1-7])_?\*?[\+\=\-]?$)" };
 const std::regex Shoupai::_re_qipai{ R"([mpsz]\d+)" };
@@ -180,6 +181,12 @@ Shoupai::Shoupai(const std::string& paistr) :
         _zimo = std::move(zimo);
     }
     _lizhi = bingpai.size() > 0 && bingpai.back() == '*';
+}
+
+Shoupai::Shoupai(const std::vector<std::string>& pai, const std::vector<std::string>& fulou) :
+    __{}, _m(10), _p(10), _s(10), _z(8), _lizhi{ false }, _fulou{ fulou } {
+    _set(pai);
+    _zimo = pai.back();
 }
 
 std::string Shoupai::toString() const {

@@ -138,6 +138,7 @@
     <ClInclude Include="game.h" />
     <ClInclude Include="he.h" />
     <ClInclude Include="hule.h" />
+    <ClInclude Include="random.h" />
     <ClInclude Include="rule.h" />
     <ClInclude Include="shan.h" />
     <ClInclude Include="shoupai.h" />
@@ -149,6 +150,7 @@
     <ClCompile Include="game.cpp" />
     <ClCompile Include="he.cpp" />
     <ClCompile Include="hule.cpp" />
+    <ClCompile Include="random.cpp" />
     <ClCompile Include="shan.cpp" />
     <ClCompile Include="shoupai.cpp" />
     <ClCompile Include="svg.cpp" />
