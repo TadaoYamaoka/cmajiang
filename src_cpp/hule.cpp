@@ -54,6 +54,16 @@ T&& concat(T&& m1, T&& m2) {
     m1.insert(m1.end(), std::make_move_iterator(m2.begin()), std::make_move_iterator(m2.end()));
     return std::move(m1);
 }
+template<typename T>
+T&& concat(T& m1, const T& m2) {
+    m1.insert(m1.end(), m2.begin(), m2.end());
+    return std::move(m1);
+}
+template<typename T>
+T&& concat(T&& m1, const T& m2) {
+    m1.insert(m1.end(), m2.begin(), m2.end());
+    return std::move(m1);
+}
 
 // 面子
 std::vector<std::vector<std::string>> mianzi(const char s, std::vector<int>& bingpai, const int n = 1) {
@@ -111,7 +121,9 @@ std::vector<std::vector<std::string>> mianzi_all(const Shoupai& shoupai) {
     }
 
     for (auto& shupai : shupai_all) {
-        concat(concat(shupai, zipai), fulou);
+        concat(
+            concat(shupai, const_cast<const std::vector<std::string>&>(zipai)),
+            const_cast<const std::vector<std::string>&>(fulou));
     }
 
     return shupai_all;
@@ -149,7 +161,7 @@ std::vector<std::vector<std::string>> hule_mianzi_yiban(Shoupai& shoupai, const 
         for (int n = 1; n < bingpai.size(); n++) {
             if (bingpai[n] < 2) continue;
             bingpai[n] -= 2;
-            auto jiangpai = to_string(s, n, n);
+            const auto jiangpai = to_string(s, n, n);
             for (auto& mm : mianzi_all(shoupai)) {
                 mm.emplace(mm.begin(), jiangpai);
                 if (mm.size() != 5) continue;
