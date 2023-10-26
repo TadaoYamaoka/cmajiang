@@ -1,5 +1,7 @@
 ﻿#include "xiangting.h"
 
+#include <climits>
+
 static const std::vector<int> zipai_n = { 1, 2, 3, 4, 5, 6, 7 };
 static const std::vector<int> yaojiu_n = { 1, 9 };
 
