@@ -35,34 +35,12 @@ const std::regex re_get_post_hupai{ R"([mpsz][^mpsz,]*)" };
 
 
 template<typename T>
-T&& concat(T& m1, T& m2) {
+void concat(T& m1, T& m2) {
     m1.insert(m1.end(), std::make_move_iterator(m2.begin()), std::make_move_iterator(m2.end()));
-    return std::move(m1);
 }
 template<typename T>
-T&& concat(T& m1, T&& m2) {
-    m1.insert(m1.end(), std::make_move_iterator(m2.begin()), std::make_move_iterator(m2.end()));
-    return std::move(m1);
-}
-template<typename T>
-T&& concat(T&& m1, T& m2) {
-    m1.insert(m1.end(), std::make_move_iterator(m2.begin()), std::make_move_iterator(m2.end()));
-    return std::move(m1);
-}
-template<typename T>
-T&& concat(T&& m1, T&& m2) {
-    m1.insert(m1.end(), std::make_move_iterator(m2.begin()), std::make_move_iterator(m2.end()));
-    return std::move(m1);
-}
-template<typename T>
-T&& concat(T& m1, const T& m2) {
+void concat(T& m1, const T& m2) {
     m1.insert(m1.end(), m2.begin(), m2.end());
-    return std::move(m1);
-}
-template<typename T>
-T&& concat(T&& m1, const T& m2) {
-    m1.insert(m1.end(), m2.begin(), m2.end());
-    return std::move(m1);
 }
 
 // 面子
@@ -91,7 +69,8 @@ std::vector<std::vector<std::string>> mianzi(const char s, std::vector<int>& bin
         }
     }
 
-    return concat(shunzi, kezi);
+    concat(shunzi, kezi);
+    return shunzi;
 }
 
 std::vector<std::vector<std::string>> mianzi_all(const Shoupai& shoupai) {
@@ -101,7 +80,9 @@ std::vector<std::vector<std::string>> mianzi_all(const Shoupai& shoupai) {
         for (auto& mm : shupai_all) {
             auto bingpai = shoupai.bingpai(s);
             for (auto& nn : mianzi(s, bingpai)) {
-                new_mianzi.emplace_back(concat(mm, nn));
+                auto new_mm = mm;
+                concat(new_mm, nn);
+                new_mianzi.emplace_back(std::move(new_mm));
             }
         }
         shupai_all = std::move(new_mianzi);
@@ -121,9 +102,8 @@ std::vector<std::vector<std::string>> mianzi_all(const Shoupai& shoupai) {
     }
 
     for (auto& shupai : shupai_all) {
-        concat(
-            concat(shupai, const_cast<const std::vector<std::string>&>(zipai)),
-            const_cast<const std::vector<std::string>&>(fulou));
+        concat(shupai, const_cast<const std::vector<std::string>&>(zipai));
+        concat(shupai, const_cast<const std::vector<std::string>&>(fulou));
     }
 
     return shupai_all;
@@ -265,11 +245,12 @@ std::vector<std::vector<std::string>> hule_mianzi(const Shoupai& shoupai, const 
     if (new_shoupai.zimo_().empty() || new_shoupai.zimo_().size() > 2) return {};
     const auto hulepai = std::regex_replace(rongpai.empty() ? new_shoupai.zimo_() + '_' : rongpai, re_ling, "5");
 
-    return concat(concat(concat(
-        hule_mianzi_yiban(new_shoupai, hulepai),
-        hule_mianzi_qidui(new_shoupai, hulepai)),
-        hule_mianzi_guoshi(new_shoupai, hulepai)),
-        hule_mianzi_jiulian(new_shoupai, hulepai));
+
+    auto mianzi = hule_mianzi_yiban(new_shoupai, hulepai);
+    concat(mianzi, hule_mianzi_qidui(new_shoupai, hulepai));
+    concat(mianzi, hule_mianzi_guoshi(new_shoupai, hulepai));
+    concat(mianzi, hule_mianzi_jiulian(new_shoupai, hulepai));
+    return mianzi;
 }
 
 // 胡底(符計算の際に得た面子の情報)
@@ -637,16 +618,15 @@ std::vector<Hupai> get_hupai(const std::vector<std::string>& mianzi, const Hudi&
 
     auto damanguan = (pre_hupai.size() > 0 && pre_hupai[0].fanshu < 0)
         ? pre_hupai : std::vector<Hupai>{};
-    damanguan = concat(concat(concat(concat(concat(concat(concat(concat(concat(damanguan,
-        guoshiwushuang()),
-        sianke()),
-        dasanyuan()),
-        sixihu()),
-        ziyise()),
-        lvyise()),
-        qinglaotou()),
-        sigangzi()),
-        jiulianbaodeng());
+    concat(damanguan, guoshiwushuang());
+    concat(damanguan, sianke());
+    concat(damanguan, dasanyuan());
+    concat(damanguan, sixihu());
+    concat(damanguan, ziyise());
+    concat(damanguan, lvyise());
+    concat(damanguan, qinglaotou());
+    concat(damanguan, sigangzi());
+    concat(damanguan, jiulianbaodeng());
 
     for (auto& hupai : damanguan) {
         // ダブル役満あり
@@ -657,26 +637,25 @@ std::vector<Hupai> get_hupai(const std::vector<std::string>& mianzi, const Hudi&
     if (damanguan.size() > 0) return damanguan;
 
     auto hupai = pre_hupai;
-    hupai = concat(concat(concat(concat(concat(concat(concat(concat(concat(concat(concat(concat(concat(concat(concat(concat(concat(concat(concat(hupai,
-        menqianqing()),
-        fanpai()),
-        pinghu()),
-        duanyaojiu()),
-        yibeikou()),
-        sansetongshun()),
-        yiqitongguan()),
-        hunquandaiyaojiu()),
-        qiduizi()),
-        duiduihu()),
-        sananke()),
-        sangangzi()),
-        sansetongke()),
-        hunlaotou()),
-        xiaosanyuan()),
-        hunyise()),
-        chunquandaiyaojiu()),
-        erbeikou()),
-        qingyise());
+    concat(hupai, menqianqing());
+    concat(hupai, fanpai());
+    concat(hupai, pinghu());
+    concat(hupai, duanyaojiu());
+    concat(hupai, yibeikou());
+    concat(hupai, sansetongshun());
+    concat(hupai, yiqitongguan());
+    concat(hupai, hunquandaiyaojiu());
+    concat(hupai, qiduizi());
+    concat(hupai, duiduihu());
+    concat(hupai, sananke());
+    concat(hupai, sangangzi());
+    concat(hupai, sansetongke());
+    concat(hupai, hunlaotou());
+    concat(hupai, xiaosanyuan());
+    concat(hupai, hunyise());
+    concat(hupai, chunquandaiyaojiu());
+    concat(hupai, erbeikou());
+    concat(hupai, qingyise());
 
     if (hupai.size() > 0) hupai.insert(hupai.end(), post_hupai.begin(), post_hupai.end());
 
