@@ -5,6 +5,7 @@
 #include "hule.h"
 
 #include <array>
+#include <climits>
 
 class Game {
 public:
