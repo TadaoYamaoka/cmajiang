@@ -700,4 +700,8 @@ PYBIND11_MODULE(_cmajiang, m) {
         });
     }, py::arg("rule") = Rule{}
     );
+    m.def("random_game_state", [](const int n_xiangting, const int zhuangfeng, const Rule& rule) {
+        return random_game_state(n_xiangting, zhuangfeng, rule, engine);
+    }, py::arg("n_xiangting") = 1, py::arg("zhuangfeng") = 0, py::arg("rule") = Rule{}
+    );
 }

@@ -86,6 +86,11 @@ Game::Game(const Rule& rule, const std::vector<Shoupai>& shoupai, std::vector<He
     _rank = {};
     _point = {};
     _pingju = {};
+
+    if (_dapai.empty())
+        _status = Status::QIPAI;
+    else
+        _status = Status::DAPAI;
 }
 
 void Game::call_players(const Status type) {

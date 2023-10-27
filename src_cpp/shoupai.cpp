@@ -186,7 +186,8 @@ Shoupai::Shoupai(const std::string& paistr) :
 Shoupai::Shoupai(const std::vector<std::string>& pai, const std::vector<std::string>& fulou) :
     __{}, _m(10), _p(10), _s(10), _z(8), _lizhi{ false }, _fulou{ fulou } {
     _set(pai);
-    _zimo = pai.back();
+    if (pai.size() + fulou.size() * 3 == 14)
+        _zimo = pai.back();
 }
 
 std::string Shoupai::toString() const {

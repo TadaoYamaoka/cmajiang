@@ -1,7 +1,6 @@
 ﻿#include "random.h"
 #include "xiangting.h"
 
-#include <random>
 #include <set>
 #include <cassert>
 
@@ -613,7 +612,7 @@ bool setup_pinghe(std::vector<std::string>& pai, std::map<std::string, int>& res
             kefeng.emplace_back(i);
     }
     constexpr int N = 9;
-    const int M = N * 3 + kefeng.size();
+    const int M = N * 3 + (int)kefeng.size();
     std::uniform_int_distribution<int> jiangpai_dist(0, M - 1);
     int start = jiangpai_dist(mt);
     for (int i = 0; i < M; i++) {
@@ -1342,31 +1341,93 @@ bool make_hule(std::vector<std::string>& pai, std::map<std::string, int>& rest, 
     return false;
 }
 
-
-// β分布
-class BetaDistribution {
-private:
-    std::gamma_distribution<double> gamma1;
-    std::gamma_distribution<double> gamma2;
-    int max;
-
-public:
-    BetaDistribution(const int avr, const int max)
-        : gamma1{ (double)avr, 1.0 }, gamma2{ (double)(max - avr), 1.0 }, max(max) {}
-
-    int operator()(std::mt19937_64& mt) {
-        const double x = gamma1(mt);
-        const double y = gamma2(mt);
-
-        const double z = x / (x + y);
-        return (int)(z * max);
+// 1枚捨てて聴牌にする
+void discard_one(std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, std::mt19937_64& mt) {
+    static std::uniform_int_distribution<int> dist14(0, 13);
+    const int discard_i = dist14(mt);
+    if (discard_i < pai.size()) {
+        const auto& p = pai[discard_i];
+        rest[p]++;
+        pai.erase(pai.begin() + discard_i);
     }
-};
+    else {
+        // 副露も対象にする
+        const int fulou_i = (discard_i - (int)pai.size()) / 3;
+        const int fulou_j = (discard_i - (int)pai.size()) % 3;
+        auto& m = fulou[fulou_i];
+        int j = 0;
+        for (std::sregex_iterator it(m.begin() + 1, m.end(), re_digit), end; it != end; ++it, j++) {
+            const auto p = m[0] + it->str();
+            if (j == fulou_j)
+                rest[p]++;
+            else if (j == 3) // 槓
+                rest[p]++;
+            else
+                pai.emplace_back(p);
+        }
+        fulou.erase(fulou.begin() + fulou_i);
+    }
+}
 
+// N向聴にする
+void make_n_xiangting(std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, BetaDistribution& xiangting_dist, std::mt19937_64& mt) {
+    // ベータ分布からNをサンプリングし、牌山と入れ替える
+
+    // 牌山シャッフル
+    std::vector<std::string> rest_pai;
+    for (auto itr = rest.begin(); itr != rest.end(); ++itr) {
+        for (int i = 0; i < itr->second; i++) {
+            rest_pai.emplace_back(itr->first);
+        }
+    }
+    std::shuffle(rest_pai.begin(), rest_pai.end(), mt);
+
+    // N枚を牌山と入れ替え 副露も対象にする
+    const int N = std::min(xiangting_dist(mt), (int)(pai.size() - 1));
+    const int pai_size = (int)pai.size();
+    std::vector<int> indexes{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+    std::shuffle(indexes.begin(), indexes.end(), mt);
+    std::set<int> erace_fulou_i;
+    std::vector<std::vector<std::string>> fulou_pai;
+    for (const auto& m : fulou) {
+        auto& pai_ = fulou_pai.emplace_back();
+        for (std::sregex_iterator it(m.begin() + 1, m.end(), re_digit), end; it != end; ++it) {
+            pai_.emplace_back(m[0] + it->str());
+        }
+    }
+    for (int n = 0; n < N; n++) {
+        const int exchange_i = indexes[n];
+        if (exchange_i < pai_size) {
+            const auto& p = pai[exchange_i];
+            rest[p]++;
+            pai[exchange_i] = rest_pai[n];
+            rest[pai[exchange_i]]--;
+        }
+        else {
+            const int fulou_i = (exchange_i - pai_size) / 3;
+            const int fulou_j = (exchange_i - pai_size) % 3;
+            auto& pai_ = fulou_pai[fulou_i];
+
+            const auto& p = pai_[fulou_j];
+            rest[p]++;
+            pai_[fulou_j] = rest_pai[n];
+            rest[pai_[fulou_j]]--;
+
+            erace_fulou_i.emplace(fulou_i);
+        }
+    }
+    for (auto itr = erace_fulou_i.rbegin(); itr != erace_fulou_i.rend(); ++itr) {
+        const int fulou_i = *itr;
+        auto& pai_ = fulou_pai[fulou_i];
+        for (const auto& p : pai_) {
+            pai.emplace_back(p);
+        }
+        fulou.erase(fulou.begin() + fulou_i);
+    }
+}
 
 // ランダムな役のN向聴の状態から開始するゲームを生成する
-Game randomGameState(const int n_xiangting, const int zhuangfeng, const Rule& rule, const uint64_t seed = 0) {
-    std::mt19937_64 mt{ seed };
+Game random_game_state(const int n_xiangting, const int zhuangfeng, const Rule& rule, std::mt19937_64& mt) {
     std::map<std::string, int> rest{
         { "m1", 4 }, { "m2", 4 }, { "m3", 4 }, { "m4", 4 }, { "m5", 4 }, { "m6", 4 }, { "m7", 4 }, { "m8", 4 }, { "m9", 4 },
         { "p1", 4 }, { "p2", 4 }, { "p3", 4 }, { "p4", 4 }, { "p5", 4 }, { "p6", 4 }, { "p7", 4 }, { "p8", 4 }, { "p9", 4 },
@@ -1386,54 +1447,59 @@ Game randomGameState(const int n_xiangting, const int zhuangfeng, const Rule& ru
 
     struct PlayerState {
         std::vector<std::string> pai;
-        std::vector<std::string> tingpai;
         std::vector<std::string> fulou;
         std::vector<std::string> he;
+        std::vector<std::string> tingpai;
+        std::vector<std::string> tingpai_fulou;
     };
 
     // ランダムな役の手牌を生成
     std::array<PlayerState, 4> player_state;
     int start = dist4(mt);
+    int n_gang = 0;
     for (int i = 0; i < 4; i++) {
         int l = (start + i) % 4;
         auto& pai = player_state[l].pai;
         auto& fulou = player_state[l].fulou;
-        pai.clear();
-        fulou.clear();
-        while (!make_hule(pai, rest, fulou, zhuangfeng, l, rule, mt))
-            ;
+        while (true) {
+            auto rest_tmp = rest;
+            if (make_hule(pai, rest, fulou, zhuangfeng, l, rule, mt)) {
+                // 槓は3まで
+                auto n = (int)count_if(fulou, [](const auto& m) { return std::regex_match(m, re_gang); });
+                if (n == 4) {
+                    // 四槓子は副露を1つ戻す
+                    const auto& m = fulou.back();
+                    const auto p = std::string(1, m[0]) + m[1];
+                    rest[p]++;
+                    for (std::sregex_iterator it(m.begin() + 2, m.end(), re_digit), end; it != end; ++it) {
+                        const auto p = m[0] + it->str();
+                        pai.emplace_back(p);
+                    }
+                    fulou.pop_back();
+                    n = 3;
+                }
+                if (n_gang + n < 4) {
+                    n_gang += n;
+                    break;
+                }
+            }
+            pai.clear();
+            fulou.clear();
+            rest = rest_tmp;
+        }
 
         // 1枚捨てて聴牌にする
-        std::shuffle(pai.begin(), pai.end(), mt);
-        {
-            const auto& p = pai.back();
-            rest[p]++;
-        }
-        pai.pop_back();
+        discard_one(pai, rest, fulou, mt);
         player_state[l].tingpai = pai;
+        player_state[l].tingpai_fulou = fulou;
 
         // N向聴にする
-        // ベータ分布からNをサンプリングし、牌山と入れ替える
-        // 牌山シャッフル
-        std::vector<std::string> rest_pai;
-        for (auto itr = rest.begin(); itr != rest.end(); ++itr) {
-            for (int i = 0; i < itr->second; i++) {
-                rest_pai.emplace_back(itr->first);
-            }
-        }
-        std::shuffle(rest_pai.begin(), rest_pai.end(), mt);
-        // N枚を牌山と入れ替え
-        const int n = std::min(xiangting_dist(mt), (int)(pai.size() - 1));
-        for (int j = 0; j < n; j++) {
-            rest[pai[j]]++;
-            pai[j] = rest_pai[j];
-            rest[pai[j]]--;
-        }
+        make_n_xiangting(pai, rest, fulou, xiangting_dist, mt);
     }
 
     // 捨て牌を生成
     // 平均9巡で聴牌すると仮定し、向聴数から捨て牌の基本枚数を決める
-    BetaDistribution he_dist{ std::max(9 - n_xiangting * 9 / 12, 0), 15 };
+    BetaDistribution he_dist{ std::max(9 - n_xiangting * 9 / 12, 1), 15 };
     const int base_he_num = he_dist(mt);
     // 副露と矛盾しないようにする
     int he_num[4]{};
@@ -1451,12 +1517,12 @@ Game randomGameState(const int n_xiangting, const int zhuangfeng, const Rule& ru
                     he_num[i]++;
                 else if (d == '=') {
                     he_num[i]++;
-                    he_num[i + 1]++;
+                    he_num[(i + 1) % 4]++;
                 }
                 else if (d == '-') {
                     he_num[i]++;
-                    he_num[i + 1]++;
-                    he_num[i + 2]++;
+                    he_num[(i + 1) % 4]++;
+                    he_num[(i + 2) % 4]++;
                 }
             }
         }
@@ -1475,7 +1541,7 @@ Game randomGameState(const int n_xiangting, const int zhuangfeng, const Rule& ru
     // 聴牌の待ち牌を除いて河を生成
     for (int i = 0; i < 4; i++) {
         std::set<std::string> except;
-        Shoupai shoupai_{ player_state[i].tingpai, player_state[i].fulou };
+        Shoupai shoupai_{ player_state[i].tingpai, player_state[i].tingpai_fulou };
         for (const auto& p : tingpai(shoupai_))
             except.emplace(p);
 

@@ -2,6 +2,27 @@
 
 #include "game.h"
 #include <map>
+#include <random>
+
+// β分布
+class BetaDistribution {
+private:
+    std::gamma_distribution<double> gamma1;
+    std::gamma_distribution<double> gamma2;
+    int max;
+
+public:
+    BetaDistribution(const int avr, const int max)
+        : gamma1{ (double)avr, 1.0 }, gamma2{ (double)(max - avr), 1.0 }, max(max) {}
+
+    int operator()(std::mt19937_64& mt) {
+        const double x = gamma1(mt);
+        const double y = gamma2(mt);
+
+        const double z = x / (x + y);
+        return (int)(z * max);
+    }
+};
 
 bool setup_zhuangfeng(std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, const int zhuangfeng, const Rule& rule, std::mt19937_64& mt);
 bool setup_menfeng(std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, const int l, const Rule& rule, std::mt19937_64& mt);
@@ -33,3 +54,7 @@ bool setup_lvyise(std::vector<std::string>& pai, std::map<std::string, int>& res
 bool setup_qinglaotou(std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, const Rule& rule, std::mt19937_64& mt);
 bool setup_sigangzi(std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, const Rule& rule, std::mt19937_64& mt);
 bool setup_jiulianbaodeng(std::vector<std::string>& pai, std::map<std::string, int>& rest, const Rule& rule, std::mt19937_64& mt);
+bool make_hule(std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, const int zhuangfeng, const int l, const Rule& rule, std::mt19937_64& mt);
+void discard_one(std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, std::mt19937_64& mt);
+void make_n_xiangting(std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, BetaDistribution& xiangting_dist, std::mt19937_64& mt);
+Game random_game_state(const int n_xiangting, const int zhuangfeng, const Rule& rule, std::mt19937_64& mt);
