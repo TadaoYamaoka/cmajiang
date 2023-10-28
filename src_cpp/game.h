@@ -76,6 +76,13 @@ public:
 
     // 手番のプレイヤーID
     int lunban_player_id() const { return _model.player_id[_model.lunban]; }
+    // プレイヤーの手番
+    int player_lunban(const int player_id) const {
+        if (_model.player_id[0] == player_id) return 0;
+        if (_model.player_id[1] == player_id) return 1;
+        if (_model.player_id[2] == player_id) return 2;
+        return 3;
+    }
 
     // 开局(半荘の開始)
     void kaiju(const int qijia = -1);
@@ -108,7 +115,7 @@ public:
         Message msg;
         std::string arg;
     };
-    Reply get_reply(const int l);
+    const Reply& get_reply(const int l) const;
 
     // 结局(終局)の応答
     void reply_kaiju();

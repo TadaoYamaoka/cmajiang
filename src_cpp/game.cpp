@@ -499,7 +499,7 @@ void Game::jieju() {
 
 
 // 応答取得
-Game::Reply Game::get_reply(const int l) {
+const Game::Reply& Game::get_reply(const int l) const {
     return _reply[_model.player_id[l]];
 }
 
