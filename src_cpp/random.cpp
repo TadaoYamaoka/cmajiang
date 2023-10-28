@@ -24,10 +24,10 @@ bool pick_shunzi(std::vector<std::string>& pai, std::map<std::string, int>& rest
         std::string p[] = { to_string(s, n + 1), to_string(s, n + 2), to_string(s, n + 3) };
         if (rule.hongpai[s_i] && n >= 2 && n <= 4 && dist4(mt) == 0) {
             const auto hongpai = to_string(s, 0);
-            if (rest[hongpai])
+            if (rest[hongpai] > 0)
                 p[4 - n] = hongpai;
         }
-        if (rest[p[0]] && rest[p[1]] && rest[p[2]]) {
+        if (rest[p[0]] > 0 && rest[p[1]] > 0 && rest[p[2]] > 0) {
             pai.emplace_back(p[0]);
             pai.emplace_back(p[1]);
             pai.emplace_back(p[2]);
@@ -55,7 +55,7 @@ bool pick_shunzi<false, true>(std::vector<std::string>& pai, std::map<std::strin
         const auto p1 = to_string(s, n + 1);
         const auto p2 = to_string(s, n + 2);
         const auto p3 = to_string(s, n + 3);
-        if (rest[p1] && rest[p2] && rest[p3]) {
+        if (rest[p1] > 0 && rest[p2] > 0 && rest[p3] > 0) {
             pai.emplace_back(p1);
             pai.emplace_back(p2);
             pai.emplace_back(p3);
@@ -97,10 +97,10 @@ bool pick_shunzi(const int s_i, std::vector<std::string>& pai, std::map<std::str
         std::string p[] = { to_string(s, n + 1), to_string(s, n + 2), to_string(s, n + 3) };
         if (rule.hongpai[s_i] && n >= 2 && n <= 4 && dist4(mt) == 0) {
             const auto hongpai = to_string(s, 0);
-            if (rest[hongpai])
+            if (rest[hongpai] > 0)
                 p[4 - n] = hongpai;
         }
-        if (rest[p[0]] && rest[p[1]] && rest[p[2]]) {
+        if (rest[p[0]] > 0 && rest[p[1]] > 0 && rest[p[2]] > 0) {
             pai.emplace_back(p[0]);
             pai.emplace_back(p[1]);
             pai.emplace_back(p[2]);
@@ -127,7 +127,7 @@ bool pick_kezi(std::vector<std::string>& pai, std::map<std::string, int>& rest, 
         const int n = j % N + (DUANYAOJIU ? 1 : 0);
         const auto hongpai = to_string(s, 0);
         const auto p = to_string(s, n + 1);
-        if (s != 'z' && rule.hongpai[s_i] && n == 4 && rest[hongpai] && dist4(mt) == 0 && rest[p] >= 2) {
+        if (s != 'z' && rule.hongpai[s_i] && n == 4 && rest[hongpai] > 0 && dist4(mt) == 0 && rest[p] >= 2) {
             pai.emplace_back(p);
             pai.emplace_back(p);
             pai.emplace_back(hongpai);
@@ -267,7 +267,7 @@ bool pick_kezi(const int s_i, std::vector<std::string>& pai, std::map<std::strin
         const int n = ZIPAI && s == 'z' ? j - 9 : j;
         const auto hongpai = to_string(s, 0);
         const auto p = to_string(s, n + 1);
-        if ((!ZIPAI || s != 'z') && rule.hongpai[s_i] && n == 4 && rest[hongpai] && dist4(mt) == 0 && rest[p] >= 2) {
+        if ((!ZIPAI || s != 'z') && rule.hongpai[s_i] && n == 4 && rest[hongpai] > 0 && dist4(mt) == 0 && rest[p] >= 2) {
             pai.emplace_back(p);
             pai.emplace_back(p);
             pai.emplace_back(hongpai);
@@ -300,7 +300,7 @@ bool pick_jiangpai(std::vector<std::string>& pai, std::map<std::string, int>& re
         const int n = j % N + (DUANYAOJIU ? 1 : 0);
         const auto hongpai = to_string(s, 0);
         const auto p = to_string(s, n + 1);
-        if (s != 'z' && rule.hongpai[s_i] && n == 4 && rest[hongpai] && dist4(mt) == 0 && rest[p] >= 1) {
+        if (s != 'z' && rule.hongpai[s_i] && n == 4 && rest[hongpai] > 0 && dist4(mt) == 0 && rest[p] >= 1) {
             pai.emplace_back(p);
             pai.emplace_back(hongpai);
             rest[p]--;
@@ -433,7 +433,7 @@ bool pick_jiangpai(const int s_i, std::vector<std::string>& pai, std::map<std::s
         const int n = ZIPAI && s == 'z' ? j - 9 : j;
         const auto hongpai = to_string(s, 0);
         const auto p = to_string(s, n + 1);
-        if ((!ZIPAI || s != 'z') && rule.hongpai[s_i] && n == 4 && rest[hongpai] && dist4(mt) == 0 && rest[p] >= 1) {
+        if ((!ZIPAI || s != 'z') && rule.hongpai[s_i] && n == 4 && rest[hongpai] > 0 && dist4(mt) == 0 && rest[p] >= 1) {
             pai.emplace_back(p);
             pai.emplace_back(hongpai);
             rest[p]--;
@@ -507,10 +507,10 @@ std::string make_pong_gang(const std::string& p1, const std::string& p2, const s
     if (GANG && gang_dist(mt) == 0) {
         auto p = p1[1] == '0' ? to_string(p1[0], 5) : p1;
         // 赤牌
-        if (p1[1] == '5' && p2[1] == '5' && p3[1] == '5' && dist4(mt) == 0 && rest[to_string(p1[0], 0)]) {
+        if (p1[1] == '5' && p2[1] == '5' && p3[1] == '5' && dist4(mt) == 0 && rest[to_string(p1[0], 0)] > 0) {
             p = to_string(p1[0], 0);
         }
-        if (rest[p]) {
+        if (rest[p] > 0) {
             rest[p]--;
             return make_gang(p1, p2, p3, p, mt);
         }
@@ -622,7 +622,7 @@ bool setup_pinghe(std::vector<std::string>& pai, std::map<std::string, int>& res
         const int n = s == 'z' ? kefeng[j - N * 3] : j % N;
         const auto hongpai = to_string(s, 0);
         const auto p = to_string(s, n + 1);
-        if (s != 'z' && rule.hongpai[s_i] && n == 4 && rest[hongpai] && dist4(mt) == 0 && rest[p] >= 1) {
+        if (s != 'z' && rule.hongpai[s_i] && n == 4 && rest[hongpai] > 0 && dist4(mt) == 0 && rest[p] >= 1) {
             pai.emplace_back(p);
             pai.emplace_back(hongpai);
             rest[p]--;
@@ -659,7 +659,11 @@ bool setup_beikou(std::vector<std::string>& pai, std::map<std::string, int>& res
         const auto p2 = to_string(s, n + 2);
         const auto p3 = to_string(s, n + 3);
         const auto hongpai = to_string(s, 0);
-        if (rule.hongpai[s_i] && n >= 2 && n <= 4 && rest[hongpai] && dist4(mt) == 0) {
+        if (rule.hongpai[s_i] && n >= 2 && n <= 4 && rest[hongpai] > 0 && dist4(mt) == 0) {
+            std::array<int, 3> n_pai{ 2, 2, 2 };
+            n_pai[4 - n]--;
+            if (rest[p1] < n_pai[0] || rest[p2] < n_pai[1] || rest[p3] < n_pai[2])
+                continue;
             pai.emplace_back(p1);
             if (n != 4) {
                 pai.emplace_back(p1);
@@ -729,10 +733,10 @@ bool setup_sansetongshun(std::vector<std::string>& pai, std::map<std::string, in
         if (rule.hongpai[0] && rule.hongpai[1] && rule.hongpai[2] && n >= 2 && n <= 4 && dist4(mt) == 0) {
             const int hongpai_s = suit_dist(mt);
             const auto hongpai = to_string(suit[hongpai_s], 0);
-            if (rest[hongpai])
+            if (rest[hongpai] > 0)
                 p[hongpai_s][4 - n] = hongpai;
         }
-        if (rest[p[0][0]] && rest[p[0][1]] && rest[p[0][2]] && rest[p[1][0]] && rest[p[1][1]] && rest[p[1][2]] && rest[p[2][0]] && rest[p[2][1]] && rest[p[2][2]]) {
+        if (rest[p[0][0]] > 0 && rest[p[0][1]] > 0 && rest[p[0][2]] > 0 && rest[p[1][0]] > 0 && rest[p[1][1]] > 0 && rest[p[1][2]] > 0 && rest[p[2][0]] > 0 && rest[p[2][1]] > 0 && rest[p[2][2]] > 0) {
             pai.emplace_back(p[0][0]); pai.emplace_back(p[0][1]); pai.emplace_back(p[0][2]);
             pai.emplace_back(p[1][0]); pai.emplace_back(p[1][1]); pai.emplace_back(p[1][2]);
             pai.emplace_back(p[2][0]); pai.emplace_back(p[2][1]); pai.emplace_back(p[2][2]);
@@ -758,7 +762,7 @@ bool setup_yiqitongguan(std::vector<std::string>& pai, std::map<std::string, int
         const int j = (start + i) % 3;
         const char s = suit[j];
         const auto hongpai = to_string(s, 0);
-        const bool is_hongpai = rule.hongpai[j] && rest[hongpai] && dist4(mt) == 0;
+        const bool is_hongpai = rule.hongpai[j] && rest[hongpai] > 0 && dist4(mt) == 0;
         const auto p1 = to_string(s, 1);
         const auto p2 = to_string(s, 2);
         const auto p3 = to_string(s, 3);
@@ -768,7 +772,7 @@ bool setup_yiqitongguan(std::vector<std::string>& pai, std::map<std::string, int
         const auto p7 = to_string(s, 7);
         const auto p8 = to_string(s, 8);
         const auto p9 = to_string(s, 9);
-        if (rest[p1] && rest[p2] && rest[p3] && rest[p4] && rest[p5] && rest[p6] && rest[p7] && rest[p8] && rest[p9]) {
+        if (rest[p1] > 0 && rest[p2] > 0 && rest[p3] > 0 && rest[p4] > 0 && rest[p5] > 0 && rest[p6] > 0 && rest[p7] > 0 && rest[p8] > 0 && rest[p9] > 0) {
             pai.emplace_back(p1); pai.emplace_back(p2); pai.emplace_back(p3); pai.emplace_back(p4); pai.emplace_back(p5); pai.emplace_back(p6); pai.emplace_back(p7); pai.emplace_back(p8); pai.emplace_back(p9);
             rest[p1]--; rest[p2]--; rest[p3]--; rest[p4]--; rest[p5]--; rest[p6]--; rest[p7]--; rest[p8]--; rest[p9]--;
             break;
@@ -802,24 +806,24 @@ bool setup_hunquandaiyaojiu(std::vector<std::string>& pai, std::map<std::string,
 bool setup_qiduizi(std::vector<std::string>& pai, std::map<std::string, int>& rest, const Rule& rule, std::mt19937_64& mt) {
     // 同じ牌4枚は七対子にならないため、一時的に牌山から除く
     if (!pick_jiangpai(pai, rest, rule, mt)) return false;
-    rest[pai[0]] -= 2; rest[pai[1]] -= 2;
+    rest[pai[0]]--; rest[pai[1]]--;
     if (!pick_jiangpai(pai, rest, rule, mt)) return false;
-    rest[pai[2]] -= 2; rest[pai[3]] -= 2;
+    rest[pai[2]]--; rest[pai[3]]--;
     if (!pick_jiangpai(pai, rest, rule, mt)) return false;
-    rest[pai[4]] -= 2; rest[pai[5]] -= 2;
+    rest[pai[4]]--; rest[pai[5]]--;
     if (!pick_jiangpai(pai, rest, rule, mt)) return false;
-    rest[pai[6]] -= 2; rest[pai[7]] -= 2;
+    rest[pai[6]]--; rest[pai[7]]--;
     if (!pick_jiangpai(pai, rest, rule, mt)) return false;
-    rest[pai[8]] -= 2; rest[pai[9]] -= 2;
+    rest[pai[8]]--; rest[pai[9]]--;
     if (!pick_jiangpai(pai, rest, rule, mt)) return false;
-    rest[pai[10]] -= 2; rest[pai[11]] -= 2;
+    rest[pai[10]]--; rest[pai[11]]--;
     if (!pick_jiangpai(pai, rest, rule, mt)) return false;
-    rest[pai[0]] += 2; rest[pai[1]] += 2;
-    rest[pai[2]] += 2; rest[pai[3]] += 2;
-    rest[pai[4]] += 2; rest[pai[5]] += 2;
-    rest[pai[6]] += 2; rest[pai[6]] += 2;
-    rest[pai[8]] += 2; rest[pai[7]] += 2;
-    rest[pai[10]] += 2; rest[pai[11]] += 2;
+    rest[pai[0]]++; rest[pai[1]]++;
+    rest[pai[2]]++; rest[pai[3]]++;
+    rest[pai[4]]++; rest[pai[5]]++;
+    rest[pai[6]]++; rest[pai[7]]++;
+    rest[pai[8]]++; rest[pai[9]]++;
+    rest[pai[10]]++; rest[pai[11]]++;
     return true;
 }
 
@@ -866,10 +870,10 @@ bool setup_sangangzi(std::vector<std::string>& pai, std::map<std::string, int>& 
     auto p1 = pai[0][1] == '0' ? to_string(pai[0][0], 5) : pai[0];
     auto p2 = pai[3][1] == '0' ? to_string(pai[3][0], 5) : pai[3];
     auto p3 = pai[6][1] == '0' ? to_string(pai[6][0], 5) : pai[6];
-    if (pai[0][1] == '5' && pai[1][1] == '5' && pai[2][1] == '5' && rest[to_string(p1[0], 0)]) p1 = to_string(p1[0], 0);
-    if (pai[3][1] == '5' && pai[4][1] == '5' && pai[5][1] == '5' && rest[to_string(p2[0], 0)]) p2 = to_string(p2[0], 0);
-    if (pai[6][1] == '5' && pai[7][1] == '5' && pai[8][1] == '5' && rest[to_string(p3[0], 0)]) p3 = to_string(p3[0], 0);
-    if (rest[p1] && rest[p2] && rest[p3]) {
+    if (pai[0][1] == '5' && pai[1][1] == '5' && pai[2][1] == '5' && rest[to_string(p1[0], 0)] > 0) p1 = to_string(p1[0], 0);
+    if (pai[3][1] == '5' && pai[4][1] == '5' && pai[5][1] == '5' && rest[to_string(p2[0], 0)] > 0) p2 = to_string(p2[0], 0);
+    if (pai[6][1] == '5' && pai[7][1] == '5' && pai[8][1] == '5' && rest[to_string(p3[0], 0)] > 0) p3 = to_string(p3[0], 0);
+    if (rest[p1] > 0 && rest[p2] > 0 && rest[p3] > 0) {
         rest[p1]--;
         rest[p2]--;
         rest[p3]--;
@@ -911,7 +915,7 @@ bool setup_sansetongke(std::vector<std::string>& pai, std::map<std::string, int>
             int n_pai[] = { 3, 3, 3 };
             const int hongpai_s = suit_dist(mt);
             const auto hongpai = to_string(suit[hongpai_s], 0);
-            const bool is_hongpai = rest[hongpai] && dist4(mt) == 0;
+            const bool is_hongpai = rest[hongpai] > 0 && dist4(mt) == 0;
             if (is_hongpai)
                 n_pai[hongpai_s]--;
             if (rest[p1] >= n_pai[0] && rest[p2] >= n_pai[1] && rest[p3] >= n_pai[2]) {
@@ -1083,12 +1087,12 @@ bool setup_guoshiwushuang(std::vector<std::string>& pai, std::map<std::string, i
     static std::uniform_int_distribution<int> guoshi_dist(0, 11);
     static const std::string guoshi[] = { "m1", "m9", "p1", "p9", "s1", "s9", "z1", "z2", "z3", "z4", "z5", "z6", "z7" };
     for (const auto& p : guoshi) {
-        if (!rest[p]) return false;
+        if (rest[p] < 1) return false;
         pai.emplace_back(p);
         rest[p]--;
     }
     const auto& p = guoshi[guoshi_dist(mt)];
-    if (!rest[p]) return false;
+    if (rest[p] < 1) return false;
     pai.emplace_back(p);
     rest[p]--;
     return true;
@@ -1195,11 +1199,11 @@ bool setup_sigangzi(std::vector<std::string>& pai, std::map<std::string, int>& r
     auto p2 = pai[3][1] == '0' ? to_string(pai[3][0], 5) : pai[3];
     auto p3 = pai[6][1] == '0' ? to_string(pai[6][0], 5) : pai[6];
     auto p4 = pai[9][1] == '0' ? to_string(pai[9][0], 5) : pai[9];
-    if (pai[0][1] == '5' && pai[1][1] == '5' && pai[2][1] == '5' && rest[to_string(p1[0], 0)]) p1 = to_string(p1[0], 0);
-    if (pai[3][1] == '5' && pai[4][1] == '5' && pai[5][1] == '5' && rest[to_string(p2[0], 0)]) p2 = to_string(p2[0], 0);
-    if (pai[6][1] == '5' && pai[7][1] == '5' && pai[8][1] == '5' && rest[to_string(p3[0], 0)]) p3 = to_string(p3[0], 0);
-    if (pai[9][1] == '5' && pai[10][1] == '5' && pai[11][1] == '5' && rest[to_string(p4[0], 0)]) p4 = to_string(p4[0], 0);
-    if (rest[p1] && rest[p2] && rest[p3] && rest[p4]) {
+    if (pai[0][1] == '5' && pai[1][1] == '5' && pai[2][1] == '5' && rest[to_string(p1[0], 0)] > 0) p1 = to_string(p1[0], 0);
+    if (pai[3][1] == '5' && pai[4][1] == '5' && pai[5][1] == '5' && rest[to_string(p2[0], 0)] > 0) p2 = to_string(p2[0], 0);
+    if (pai[6][1] == '5' && pai[7][1] == '5' && pai[8][1] == '5' && rest[to_string(p3[0], 0)] > 0) p3 = to_string(p3[0], 0);
+    if (pai[9][1] == '5' && pai[10][1] == '5' && pai[11][1] == '5' && rest[to_string(p4[0], 0)] > 0) p4 = to_string(p4[0], 0);
+    if (rest[p1] > 0 && rest[p2] > 0 && rest[p3] > 0 && rest[p4] > 0) {
         fulou.emplace_back(make_gang<true>(pai[0], pai[1], pai[2], p1, mt));
         fulou.emplace_back(make_gang<true>(pai[3], pai[4], pai[5], p2, mt));
         fulou.emplace_back(make_gang<true>(pai[6], pai[7], pai[8], p3, mt));
@@ -1559,10 +1563,10 @@ Game random_game_state(const int n_xiangting, const int zhuangfeng, const Rule& 
 
         auto& he = player_state[i].he;
         for (int j = 0; j < he_num[i]; j++) {
-            for (auto itr = rest_pai.begin(); itr != rest_pai.end(); ++itr) {
+            for (auto itr = rest_pai.rbegin(); itr != rest_pai.rend(); ++itr) {
                 if (except.find(*itr) == except.end()) {
                     he.emplace_back(*itr);
-                    rest_pai.erase(itr);
+                    rest_pai.erase((++itr).base());
                     break;
                 }
             }
@@ -1597,8 +1601,9 @@ Game random_game_state(const int n_xiangting, const int zhuangfeng, const Rule& 
     for (int i = 0; i < 4; i++) {
         for (const auto& m : player_state[i].fulou) {
             if (std::regex_match(m, re_gang)) {
-                shan.gangzimo();
+                auto p = shan.gangzimo();
                 shan.kaigang();
+                shan.pai().emplace_back(std::move(p));
             }
         }
     }
