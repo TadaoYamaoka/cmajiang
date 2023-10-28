@@ -6,6 +6,15 @@
 
 #include <array>
 
+template<typename T>
+void concat(T& m1, T& m2) {
+    m1.insert(m1.end(), std::make_move_iterator(m2.begin()), std::make_move_iterator(m2.end()));
+}
+template<typename T>
+void concat(T& m1, const T& m2) {
+    m1.insert(m1.end(), m2.begin(), m2.end());
+}
+
 struct Param {
     Rule rule;
     int zhuangfeng = 0;

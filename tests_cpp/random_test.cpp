@@ -977,6 +977,7 @@ TEST(RandomTest, discard_one) {
         setup_duanyaojiu(pai, rest, rule, mt);
         discard_one(pai, rest, fulou, mt);
         Shoupai shoupai{ pai, fulou };
+        EXPECT_TRUE(shoupai.zimo_().empty());
         EXPECT_EQ(0, xiangting(shoupai));
         EXPECT_EQ(init_rest(rule), count_pai(pai, fulou, rest));
     }
@@ -991,6 +992,7 @@ TEST(RandomTest, discard_one) {
         EXPECT_EQ(1, fulou.size());
         discard_one(pai, rest, fulou, mt);
         Shoupai shoupai{ pai, fulou };
+        EXPECT_TRUE(shoupai.zimo_().empty());
         EXPECT_EQ(0, fulou.size());
         EXPECT_EQ(0, xiangting(shoupai));
         EXPECT_EQ(init_rest(rule), count_pai(pai, fulou, rest));
@@ -1006,6 +1008,7 @@ TEST(RandomTest, discard_one) {
         EXPECT_EQ(3, fulou.size());
         discard_one(pai, rest, fulou, mt);
         Shoupai shoupai{ pai, fulou };
+        EXPECT_TRUE(shoupai.zimo_().empty());
         EXPECT_EQ(2, fulou.size());
         EXPECT_EQ(0, xiangting(shoupai));
         EXPECT_EQ(init_rest(rule), count_pai(pai, fulou, rest));
@@ -1026,6 +1029,7 @@ TEST(RandomTest, make_n_xiangting) {
         discard_one(pai, rest, fulou, mt);
         make_n_xiangting(pai, rest, fulou, xiangting_dist, mt);
         Shoupai shoupai{ pai, fulou };
+        EXPECT_TRUE(shoupai.zimo_().empty());
         EXPECT_EQ(2, xiangting(shoupai));
         EXPECT_EQ(init_rest(rule), count_pai(pai, fulou, rest));
     }
@@ -1042,6 +1046,7 @@ TEST(RandomTest, make_n_xiangting) {
         EXPECT_EQ(2, fulou.size());
         make_n_xiangting(pai, rest, fulou, xiangting_dist, mt);
         Shoupai shoupai{ pai, fulou };
+        EXPECT_TRUE(shoupai.zimo_().empty());
         EXPECT_EQ(0, fulou.size());
         EXPECT_EQ(2, xiangting(shoupai));
         EXPECT_EQ(init_rest(rule), count_pai(pai, fulou, rest));
@@ -1059,8 +1064,9 @@ TEST(RandomTest, make_n_xiangting) {
         EXPECT_EQ(2, fulou.size());
         make_n_xiangting(pai, rest, fulou, xiangting_dist, mt);
         Shoupai shoupai{ pai, fulou };
+        EXPECT_TRUE(shoupai.zimo_().empty());
         EXPECT_EQ(1, fulou.size());
-        EXPECT_EQ(1, xiangting(shoupai));
+        EXPECT_EQ(2, xiangting(shoupai));
         EXPECT_EQ(init_rest(rule), count_pai(pai, fulou, rest));
     }
 }
@@ -1070,23 +1076,23 @@ TEST(RandomTest, random_game_state) {
     {
         int n_xiangting = 1;
         int zhuangfeng = 0;
-        std::mt19937_64 mt{ 0 };
+        std::mt19937_64 mt{ 2 };
         Game game = random_game_state(n_xiangting, zhuangfeng, rule, mt);
         EXPECT_EQ(Game::Status::DAPAI, game.status());
-        EXPECT_EQ(3, game.lunban());
-        EXPECT_EQ(1, xiangting(game.shoupai_(0)));
+        EXPECT_EQ(2, game.lunban());
+        EXPECT_EQ(2, xiangting(game.shoupai_(0)));
         EXPECT_EQ(0, xiangting(game.shoupai_(1)));
-        EXPECT_EQ(1, xiangting(game.shoupai_(2)));
-        EXPECT_EQ(0, xiangting(game.shoupai_(3)));
+        EXPECT_EQ(0, xiangting(game.shoupai_(2)));
+        EXPECT_EQ(1, xiangting(game.shoupai_(3)));
         EXPECT_FALSE(game.shoupai_(0).lizhi());
         EXPECT_FALSE(game.shoupai_(1).lizhi());
-        EXPECT_FALSE(game.shoupai_(2).lizhi());
-        EXPECT_TRUE(game.shoupai_(3).lizhi());
-        EXPECT_EQ(16, game.he_(0).pai().size());
-        EXPECT_EQ(16, game.he_(1).pai().size());
-        EXPECT_EQ(15, game.he_(2).pai().size());
-        EXPECT_EQ(15, game.he_(3).pai().size());
-        EXPECT_EQ(11, game.shan().paishu());
+        EXPECT_TRUE(game.shoupai_(2).lizhi());
+        EXPECT_FALSE(game.shoupai_(3).lizhi());
+        EXPECT_EQ(14, game.he_(0).pai().size());
+        EXPECT_EQ(14, game.he_(1).pai().size());
+        EXPECT_EQ(14, game.he_(2).pai().size());
+        EXPECT_EQ(13, game.he_(3).pai().size());
+        EXPECT_EQ(16, game.shan().paishu());
         EXPECT_NO_THROW(game.zimo());
     }
     {
@@ -1126,11 +1132,11 @@ TEST(RandomTest, random_game_state) {
         EXPECT_FALSE(game.shoupai_(1).lizhi());
         EXPECT_FALSE(game.shoupai_(2).lizhi());
         EXPECT_FALSE(game.shoupai_(3).lizhi());
-        EXPECT_EQ(5, game.he_(0).pai().size());
-        EXPECT_EQ(5, game.he_(1).pai().size());
-        EXPECT_EQ(5, game.he_(2).pai().size());
-        EXPECT_EQ(4, game.he_(3).pai().size());
-        EXPECT_EQ(51, game.shan().paishu());
+        EXPECT_EQ(6, game.he_(0).pai().size());
+        EXPECT_EQ(6, game.he_(1).pai().size());
+        EXPECT_EQ(6, game.he_(2).pai().size());
+        EXPECT_EQ(5, game.he_(3).pai().size());
+        EXPECT_EQ(47, game.shan().paishu());
         EXPECT_NO_THROW(game.zimo());
     }
     {
@@ -1141,9 +1147,9 @@ TEST(RandomTest, random_game_state) {
         EXPECT_EQ(Game::Status::DAPAI, game.status());
         EXPECT_EQ(1, game.lunban());
         EXPECT_EQ(3, xiangting(game.shoupai_(0)));
-        EXPECT_EQ(5, xiangting(game.shoupai_(1)));
+        EXPECT_EQ(4, xiangting(game.shoupai_(1)));
         EXPECT_EQ(3, xiangting(game.shoupai_(2)));
-        EXPECT_EQ(3, xiangting(game.shoupai_(3)));
+        EXPECT_EQ(4, xiangting(game.shoupai_(3)));
         EXPECT_FALSE(game.shoupai_(0).lizhi());
         EXPECT_FALSE(game.shoupai_(1).lizhi());
         EXPECT_FALSE(game.shoupai_(2).lizhi());
@@ -1152,7 +1158,40 @@ TEST(RandomTest, random_game_state) {
         EXPECT_EQ(2, game.he_(1).pai().size());
         EXPECT_EQ(1, game.he_(2).pai().size());
         EXPECT_EQ(1, game.he_(3).pai().size());
-        EXPECT_EQ(63, game.shan().paishu());
+        EXPECT_EQ(64, game.shan().paishu());
         EXPECT_NO_THROW(game.zimo());
+    }
+}
+
+TEST(RandomTest, random_game) {
+    Rule rule;
+    int n_xiangting = 1;
+    int zhuangfeng = 0;
+    for (size_t seed = 0; seed < 100; seed++) {
+        std::mt19937_64 mt{ seed };
+        Game game = random_game_state(n_xiangting, zhuangfeng, rule, mt);
+        EXPECT_EQ(Game::Status::DAPAI, game.status());
+        // 他家の応答 ロン、副露
+        for (int player_id = 0; player_id < 4; player_id++) {
+            if (player_id == game.lunban_player_id())
+                continue;
+            int player_lunban = game.player_lunban(player_id);
+            if (game.allow_hule(player_lunban)) {
+                // ロン
+                game.reply(player_id, Game::Message::HULE);
+            }
+            else {
+                // 副露
+                std::vector<std::string> mianzi;
+                concat(mianzi, game.get_chi_mianzi(player_lunban));
+                concat(mianzi, game.get_peng_mianzi(player_lunban));
+                concat(mianzi, game.get_gang_mianzi(player_lunban));
+                if (mianzi.size()) {
+                    std::uniform_int_distribution<int> dist(0, (int)mianzi.size() - 1);
+                    game.reply(player_id, Game::Message::FULOU, mianzi[dist(mt)]);
+                }
+            }
+        }
+        EXPECT_NO_THROW(game.next());
     }
 }

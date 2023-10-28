@@ -1419,8 +1419,12 @@ void make_n_xiangting(std::vector<std::string>& pai, std::map<std::string, int>&
     for (auto itr = erace_fulou_i.rbegin(); itr != erace_fulou_i.rend(); ++itr) {
         const int fulou_i = *itr;
         auto& pai_ = fulou_pai[fulou_i];
-        for (const auto& p : pai_) {
-            pai.emplace_back(p);
+        for (int j = 0; j < pai_.size(); j++) {
+            const auto& p = pai_[j];
+            if (j == 3) // 槓
+                rest[p]++;
+            else
+                pai.emplace_back(p);
         }
         fulou.erase(fulou.begin() + fulou_i);
     }
@@ -1499,11 +1503,12 @@ Game random_game_state(const int n_xiangting, const int zhuangfeng, const Rule& 
 
     // 捨て牌を生成
     // 平均9巡で聴牌すると仮定し、向聴数から捨て牌の基本枚数を決める
-    BetaDistribution he_dist{ std::max(9 - n_xiangting * 9 / 12, 1), 15 };
-    const int base_he_num = he_dist(mt);
+    BetaDistribution he_dist{ std::max(9 - n_xiangting * 9 / 12, 1), 12 };
+    const int base_he_num = he_dist(mt) + 1;
     // 副露と矛盾しないようにする
-    int he_num[4]{};
+    std::array<int, 4> he_num{};
     static const std::regex re_fulou{ R"(\d[\+\=\-])" };
+    int max_he_num = 0;
     for (int i = 0; i < 4; i++) {
         for (const auto& m : player_state[i].fulou) {
             std::smatch match;
@@ -1529,7 +1534,14 @@ Game random_game_state(const int n_xiangting, const int zhuangfeng, const Rule& 
         he_num[i] += base_he_num;
         if (i < lunban)
             he_num[i]++;
+        if (he_num[i] > max_he_num)
+            max_he_num = he_num[i];
     }
+    if (max_he_num > 14) {
+        for (auto& num : he_num)
+            num -= max_he_num - 14;
+    }
+
     // 牌山シャッフル
     std::vector<std::string> rest_pai;
     for (auto itr = rest.begin(); itr != rest.end(); ++itr) {

@@ -56,7 +56,7 @@ Game::Game(const Rule& rule, const std::vector<Shoupai>& shoupai, std::vector<He
     // 途中流局あり
     _fengpai = _rule.abortiveDraw;
 
-    _dapai = he[lunban].pai().size() > 0 ? he[lunban].pai().back() : "";
+    _dapai = he[_model.lunban].pai().size() > 0 ? he[_model.lunban].pai().back() : "";
     _fulou.clear();
     _gang.clear();
 

@@ -34,15 +34,6 @@ const std::regex re_jiulianbaodeng{ R"(^[mpsz]1112345678999)" };
 const std::regex re_get_post_hupai{ R"([mpsz][^mpsz,]*)" };
 
 
-template<typename T>
-void concat(T& m1, T& m2) {
-    m1.insert(m1.end(), std::make_move_iterator(m2.begin()), std::make_move_iterator(m2.end()));
-}
-template<typename T>
-void concat(T& m1, const T& m2) {
-    m1.insert(m1.end(), m2.begin(), m2.end());
-}
-
 // 面子
 std::vector<std::vector<std::string>> mianzi(const char s, std::vector<int>& bingpai, const int n = 1) {
     if (n > 9) return std::vector<std::vector<std::string>>(1);
