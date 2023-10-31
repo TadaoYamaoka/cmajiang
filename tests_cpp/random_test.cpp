@@ -46,7 +46,7 @@ std::map<std::string, int> count_pai(const Game& game) {
         const auto& shoupai = game.shoupai_(l);
         for (const auto s : { 'm', 'p', 's', 'z' }) {
             auto bingpai = shoupai.bingpai(s);
-            for (size_t n = 0; n < bingpai.size(); n++) {
+            for (int n = 0; n < (int)bingpai.size(); n++) {
                 if (bingpai[n] > 0) {
                     const auto p = to_string(s, n);
                     count[p] += bingpai[n];
