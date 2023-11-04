@@ -34,29 +34,29 @@ T filter(const T& v, F f) {
 }
 
 
-Game::Game(const Rule& rule) : _rule(rule) {
+Game::Game(const Rule& rule, const bool paipu) : _rule{ rule }, _paipu{} {
     _model.defen = { _rule.startingPoints, _rule.startingPoints, _rule.startingPoints, _rule.startingPoints };
+    if (paipu) {
+        _paipu = std::make_unique<Paipu>();
+        _paipu->rule = rule;
+    }
 }
 
-Game::Game(const Rule& rule, const std::vector<Shoupai>& shoupai, std::vector<He>& he, const Shan& shan, const int lunban, const int qijia) :
-    Game{ rule } {
-    kaiju(qijia);
+void Game::set(const std::array<Shoupai, 4>& shoupai, const std::array<He, 4>& he, const Shan& shan, const int lunban) {
     _model.shan = shan;
     for (int l = 0; l < 4; l++) {
         _model.shoupai[l] = shoupai[l];
         _model.he[l] = he[l];
         _model.player_id[l] = (_model.qijia + _model.jushu + l) % 4;
     }
-    _model.lunban = he[0].pai().size() == 0 ? -1 : (lunban + 3) % 4;
+    _model.lunban = he[0].pai().size() == 0 ? -1 : lunban;
 
     _diyizimo = he[0].pai().size() <= 1
         && he[1].pai().size() <= 1
         && he[2].pai().size() <= 1
         && he[3].pai().size() == 0;
-    // 途中流局あり
-    _fengpai = _rule.abortiveDraw;
 
-    _dapai = he[_model.lunban].pai().size() > 0 ? he[_model.lunban].pai().back() : "";
+    _dapai = _model.lunban >= 0 && he[_model.lunban].pai().size() > 0 ? he[_model.lunban].pai().back() : "";
     _fulou.clear();
     _gang.clear();
 
@@ -83,14 +83,30 @@ Game::Game(const Rule& rule, const std::vector<Shoupai>& shoupai, std::vector<He
     _fenpei = { 0, 0, 0, 0 };
 
     _defen = {};
-    _rank = {};
-    _point = {};
     _pingju = {};
+
+    if (_paipu) {
+        if (_status != Status::QIPAI)
+            _paipu->rounds.emplace_back();
+        auto& round = _paipu->rounds.back();
+        round.model = _model;
+    }
 
     if (_dapai.empty())
         _status = Status::QIPAI;
     else
         _status = Status::DAPAI;
+}
+
+void Game::set(const Paipu::Round& round) {
+    set(round.model.shoupai, round.model.he, round.model.shan, round.model.lunban);
+    _model.qijia = round.model.qijia;
+    _model.zhuangfeng = round.model.zhuangfeng;
+    _model.jushu = round.model.jushu;
+    _model.changbang = round.model.changbang;
+    _model.lizhibang = round.model.lizhibang;
+    _model.defen = round.model.defen;
+    _model.player_id = round.model.player_id;
 }
 
 void Game::call_players(const Status type) {
@@ -146,6 +162,12 @@ void Game::kaiju(const int qijia) {
     // 場数
     _max_jushu = _rule.roundsType == 0 ? 0 : _rule.roundsType * 4 - 1;
 
+    if (_paipu) {
+        _paipu->rounds = {};
+        _paipu->rank = {};
+        _paipu->point = {};
+    }
+
     call_players(Status::KAIJU);
 }
 
@@ -187,6 +209,11 @@ void Game::qipai_(const Shan& shan) {
     _rank = {};
     _point = {};
     _pingju = {};
+
+    if (_paipu) {
+        auto& round = _paipu->rounds.emplace_back();
+        round.model = _model;
+    }
 
     call_players(Status::QIPAI);
 }
@@ -239,6 +266,9 @@ void Game::dapai(const std::string& p) {
 
     if (!_gang.empty()) kaigang();
 
+    if (_paipu)
+        _paipu->rounds.back().moves.emplace_back(Reply{ Message::DAPAI, p });
+
     call_players(Status::DAPAI);
 }
 
@@ -261,6 +291,9 @@ void Game::fulou(const std::string& m) {
 
     _fulou = m;
 
+    if (_paipu)
+        _paipu->rounds.back().moves.emplace_back(Reply{ Message::FULOU, m });
+
     call_players(Status::FULOU);
 }
 
@@ -272,6 +305,9 @@ void Game::gang(const std::string& m) {
 
     _gang = m;
     _n_gang[_model.lunban]++;
+
+    if (_paipu)
+        _paipu->rounds.back().moves.emplace_back(Reply{ Message::GANG, m });
 
     call_players(Status::GANG);
 }
@@ -342,6 +378,11 @@ void Game::hule() {
     if (_rule.dealerContinuationType > 0 && menfeng == 0) _lianzhuang = true;
     if (_rule.roundsType == 0) _lianzhuang = false;
     _fenpei = _defen.fenpei;
+
+    if (_paipu) {
+        _paipu->rounds.back().moves.emplace_back(Reply{ Game::Message::HULE, rongpai });
+        _paipu->rounds.back().defen = _defen;
+    }
 
     call_players(Status::HULE);
 }
@@ -419,6 +460,11 @@ void Game::pingju(Pingju::Name name, std::array<std::string, 4> shoupai) {
 
     _pingju.name = name;
     _pingju.shoupai = shoupai;
+
+    if (_paipu) {
+        _paipu->rounds.back().defen.fenpei = fenpei;
+        _paipu->rounds.back().pingju = _pingju.name;
+    }
 
     call_players(Status::PINGJU);
 }

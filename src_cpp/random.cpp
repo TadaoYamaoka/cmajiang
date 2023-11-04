@@ -1435,7 +1435,7 @@ void make_n_xiangting(std::vector<std::string>& pai, std::map<std::string, int>&
 }
 
 // ランダムな役のN向聴の状態から開始するゲームを生成する
-Game random_game_state(const int n_xiangting, const int zhuangfeng, const Rule& rule, std::mt19937_64& mt) {
+void random_game_state(Game& game, const int n_xiangting, std::mt19937_64& mt) {
     std::map<std::string, int> rest{
         { "m1", 4 }, { "m2", 4 }, { "m3", 4 }, { "m4", 4 }, { "m5", 4 }, { "m6", 4 }, { "m7", 4 }, { "m8", 4 }, { "m9", 4 },
         { "p1", 4 }, { "p2", 4 }, { "p3", 4 }, { "p4", 4 }, { "p5", 4 }, { "p6", 4 }, { "p7", 4 }, { "p8", 4 }, { "p9", 4 },
@@ -1443,7 +1443,7 @@ Game random_game_state(const int n_xiangting, const int zhuangfeng, const Rule& 
         { "z1", 4 }, { "z2", 4 }, { "z3", 4 }, { "z4", 4 }, { "z5", 4 }, { "z6", 4 }, { "z7", 4 }
     };
     for (const auto s : { 'm', 'p', 's' }) {
-        for (int i = 0; i < rule.hongpai_(s); i++) {
+        for (int i = 0; i < game.rule().hongpai_(s); i++) {
             rest[to_string(s, 5)]--;
             rest[to_string(s, 0)]++;
         }
@@ -1471,7 +1471,7 @@ Game random_game_state(const int n_xiangting, const int zhuangfeng, const Rule& 
         auto& fulou = player_state[l].fulou;
         while (true) {
             auto rest_tmp = rest;
-            if (make_hule(pai, rest, fulou, zhuangfeng, l, rule, mt)) {
+            if (make_hule(pai, rest, fulou, game.zhuangfeng(), l, game.rule(), mt)) {
                 // 槓は3まで
                 auto n = (int)count_if(fulou, [](const auto& m) { return std::regex_match(m, re_gang); });
                 if (n == 4) {
@@ -1576,9 +1576,10 @@ Game random_game_state(const int n_xiangting, const int zhuangfeng, const Rule& 
     }
 
     // 手牌を生成
-    std::vector<Shoupai> shoupai;
+    std::array<Shoupai, 4> shoupai;
     for (int i = 0; i < 4; i++) {
-        auto& shoupai_ = shoupai.emplace_back(player_state[i].pai, player_state[i].fulou);
+        shoupai[i] = { player_state[i].pai, player_state[i].fulou };
+        auto& shoupai_ = shoupai[i];
         // 聴牌している場合、確率的に立直
         if (bool_dist(mt) == 0 && xiangting(shoupai_) == 0) {
             shoupai_.set_lizhi(true);
@@ -1587,16 +1588,16 @@ Game random_game_state(const int n_xiangting, const int zhuangfeng, const Rule& 
     }
 
     // 河を生成
-    std::vector<He> he;
+    std::array<He, 4> he;
     for (int i = 0; i < 4; i++) {
-        auto& he_ = he.emplace_back();
+        auto& he_ = he[i];
         for (const auto& p : player_state[i].he) {
             he_.dapai(p);
         }
     }
 
     // 牌山を生成
-    Shan shan{ rest_pai, rule };
+    Shan shan{ rest_pai, game.rule()};
     // 槓自摸、開槓の処理
     for (int i = 0; i < 4; i++) {
         for (const auto& m : player_state[i].fulou) {
@@ -1608,5 +1609,5 @@ Game random_game_state(const int n_xiangting, const int zhuangfeng, const Rule& 
         }
     }
 
-    return Game{ rule, shoupai, he, shan, lunban };
+    game.set(shoupai, he, shan, (lunban + 3) % 4);
 }

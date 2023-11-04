@@ -57,4 +57,4 @@ bool setup_jiulianbaodeng(std::vector<std::string>& pai, std::map<std::string, i
 bool make_hule(std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, const int zhuangfeng, const int l, const Rule& rule, std::mt19937_64& mt);
 void discard_one(std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, std::mt19937_64& mt);
 void make_n_xiangting(std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, BetaDistribution& xiangting_dist, std::mt19937_64& mt);
-Game random_game_state(const int n_xiangting, const int zhuangfeng, const Rule& rule, std::mt19937_64& mt);
+void random_game_state(Game& game, const int n_xiangting, std::mt19937_64& mt);

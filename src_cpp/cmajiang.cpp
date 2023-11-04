@@ -128,18 +128,18 @@ Shoupai random_setup(const Rule& rule, const std::function<void(std::vector<std:
 
 
 PYBIND11_MODULE(_cmajiang, m) {
-	m.doc() = "cmajiang module";
-	py::class_<Shoupai>(m, "Shoupai")
-		.def(py::init<>())
-		.def(py::init<const std::vector<std::string>&>())
-		.def(py::init<const std::string&>())
-		.def("__repr__",
-				[](const Shoupai& shoupai) {
-					return shoupai.toString();
-				}
-			)
+    m.doc() = "cmajiang module";
+    py::class_<Shoupai>(m, "Shoupai")
+        .def(py::init<>())
+        .def(py::init<const std::vector<std::string>&>())
+        .def(py::init<const std::string&>())
+        .def("__repr__",
+                [](const Shoupai& shoupai) {
+                    return shoupai.toString();
+                }
+            )
         .def("clone", &Shoupai::clone)
-		.def("zimo", &Shoupai::zimo, py::arg("p"), py::arg("check") = true)
+        .def("zimo", &Shoupai::zimo, py::arg("p"), py::arg("check") = true)
         .def("dapai", &Shoupai::dapai, py::arg("p"), py::arg("check") = true)
         .def("fulou", &Shoupai::fulou, py::arg("m"), py::arg("check") = true)
         .def("gang", &Shoupai::gang, py::arg("m"), py::arg("check") = true)
@@ -161,8 +161,8 @@ PYBIND11_MODULE(_cmajiang, m) {
         .def_property_readonly("_fulou", &Shoupai::fulou_)
         .def_property_readonly("_zimo", &Shoupai::zimo_)
         .def("_repr_svg_", &shoupai_to_svg)
-		;
-	py::class_<Rule>(m, "Rule")
+        ;
+    py::class_<Rule>(m, "Rule")
         .def(py::init<>())
         .def(py::init(&create_rule),
             py::arg("startingPoints") = 25000,
@@ -194,60 +194,60 @@ PYBIND11_MODULE(_cmajiang, m) {
             py::arg("damanguanPao") = true,
             py::arg("roundUpManguan") = false
         )
-		.def_readwrite("startingPoints", &Rule::startingPoints)
-		.def_readwrite("rankPoints", &Rule::rankPoints)
-		.def_readwrite("doubleWindTileScore", &Rule::doubleWindTileScore)
-		.def_readwrite("hongpai", &Rule::hongpai)
+        .def_readwrite("startingPoints", &Rule::startingPoints)
+        .def_readwrite("rankPoints", &Rule::rankPoints)
+        .def_readwrite("doubleWindTileScore", &Rule::doubleWindTileScore)
+        .def_readwrite("hongpai", &Rule::hongpai)
         .def("hongpai_", &Rule::hongpai_)
-		.def_readwrite("canduan", &Rule::canduan)
-		.def_readwrite("canChangePermissionLevel", &Rule::canChangePermissionLevel)
-		.def_readwrite("roundsType", &Rule::roundsType)
-		.def_readwrite("abortiveDraw", &Rule::abortiveDraw)
-		.def_readwrite("liujumanguan", &Rule::liujumanguan)
-		.def_readwrite("notenDeclaration", &Rule::notenDeclaration)
-		.def_readwrite("notenPenalty", &Rule::notenPenalty)
-		.def_readwrite("maxSimultaneousWinners", &Rule::maxSimultaneousWinners)
-		.def_readwrite("dealerContinuationType", &Rule::dealerContinuationType)
-		.def_readwrite("bankruptcyEndAll", &Rule::bankruptcyEndAll)
-		.def_readwrite("lastRoundStop", &Rule::lastRoundStop)
-		.def_readwrite("overtimeType", &Rule::overtimeType)
-		.def_readwrite("yifa", &Rule::yifa)
-		.def_readwrite("libaopai", &Rule::libaopai)
-		.def_readwrite("gangbaopai", &Rule::gangbaopai)
-		.def_readwrite("ganglibaopai", &Rule::ganglibaopai)
-		.def_readwrite("gangbaopaiPostAddition", &Rule::gangbaopaiPostAddition)
-		.def_readwrite("lizhiWithoutTsumoBonus", &Rule::lizhiWithoutTsumoBonus)
-		.def_readwrite("lizhiPostClosedGangPermissionLevel", &Rule::lizhiPostClosedGangPermissionLevel)
-		.def_readwrite("damanguanCombination", &Rule::damanguanCombination)
-		.def_readwrite("doubleDamanguan", &Rule::doubleDamanguan)
-		.def_readwrite("countedDamanguan", &Rule::countedDamanguan)
-		.def_readwrite("damanguanPao", &Rule::damanguanPao)
-		.def_readwrite("roundUpManguan", &Rule::roundUpManguan)
-		;
-	py::class_<Param::Hupai>(m, "ParamHupai")
-        .def(py::init<>())
-		.def_readwrite("lizhi", &Param::Hupai::lizhi)
-		.def_readwrite("yifa", &Param::Hupai::yifa)
-		.def_readwrite("qianggang", &Param::Hupai::qianggang)
-		.def_readwrite("lingshang", &Param::Hupai::lingshang)
-		.def_readwrite("haidi", &Param::Hupai::haidi)
-		.def_readwrite("tianhu", &Param::Hupai::tianhu)
+        .def_readwrite("canduan", &Rule::canduan)
+        .def_readwrite("canChangePermissionLevel", &Rule::canChangePermissionLevel)
+        .def_readwrite("roundsType", &Rule::roundsType)
+        .def_readwrite("abortiveDraw", &Rule::abortiveDraw)
+        .def_readwrite("liujumanguan", &Rule::liujumanguan)
+        .def_readwrite("notenDeclaration", &Rule::notenDeclaration)
+        .def_readwrite("notenPenalty", &Rule::notenPenalty)
+        .def_readwrite("maxSimultaneousWinners", &Rule::maxSimultaneousWinners)
+        .def_readwrite("dealerContinuationType", &Rule::dealerContinuationType)
+        .def_readwrite("bankruptcyEndAll", &Rule::bankruptcyEndAll)
+        .def_readwrite("lastRoundStop", &Rule::lastRoundStop)
+        .def_readwrite("overtimeType", &Rule::overtimeType)
+        .def_readwrite("yifa", &Rule::yifa)
+        .def_readwrite("libaopai", &Rule::libaopai)
+        .def_readwrite("gangbaopai", &Rule::gangbaopai)
+        .def_readwrite("ganglibaopai", &Rule::ganglibaopai)
+        .def_readwrite("gangbaopaiPostAddition", &Rule::gangbaopaiPostAddition)
+        .def_readwrite("lizhiWithoutTsumoBonus", &Rule::lizhiWithoutTsumoBonus)
+        .def_readwrite("lizhiPostClosedGangPermissionLevel", &Rule::lizhiPostClosedGangPermissionLevel)
+        .def_readwrite("damanguanCombination", &Rule::damanguanCombination)
+        .def_readwrite("doubleDamanguan", &Rule::doubleDamanguan)
+        .def_readwrite("countedDamanguan", &Rule::countedDamanguan)
+        .def_readwrite("damanguanPao", &Rule::damanguanPao)
+        .def_readwrite("roundUpManguan", &Rule::roundUpManguan)
         ;
-	py::class_<Param::Jicun>(m, "Jicun")
+    py::class_<Param::Hupai>(m, "ParamHupai")
         .def(py::init<>())
-		.def_readwrite("changbang", &Param::Jicun::changbang)
-		.def_readwrite("lizhibang", &Param::Jicun::lizhibang)
+        .def_readwrite("lizhi", &Param::Hupai::lizhi)
+        .def_readwrite("yifa", &Param::Hupai::yifa)
+        .def_readwrite("qianggang", &Param::Hupai::qianggang)
+        .def_readwrite("lingshang", &Param::Hupai::lingshang)
+        .def_readwrite("haidi", &Param::Hupai::haidi)
+        .def_readwrite("tianhu", &Param::Hupai::tianhu)
         ;
-	py::class_<Param>(m, "Param")
+    py::class_<Param::Jicun>(m, "Jicun")
         .def(py::init<>())
-		.def_readwrite("rule", &Param::rule)
-		.def_readwrite("zhuangfeng", &Param::zhuangfeng)
-		.def_readwrite("menfeng", &Param::menfeng)
-		.def_readwrite("hupai", &Param::hupai)
-		.def_readwrite("baopai", &Param::baopai)
-		.def_readwrite("libaopai", &Param::libaopai)
-		.def_readwrite("jicun", &Param::jicun)
-		;
+        .def_readwrite("changbang", &Param::Jicun::changbang)
+        .def_readwrite("lizhibang", &Param::Jicun::lizhibang)
+        ;
+    py::class_<Param>(m, "Param")
+        .def(py::init<>())
+        .def_readwrite("rule", &Param::rule)
+        .def_readwrite("zhuangfeng", &Param::zhuangfeng)
+        .def_readwrite("menfeng", &Param::menfeng)
+        .def_readwrite("hupai", &Param::hupai)
+        .def_readwrite("baopai", &Param::baopai)
+        .def_readwrite("libaopai", &Param::libaopai)
+        .def_readwrite("jicun", &Param::jicun)
+        ;
     py::enum_<Hupai::Name>(m, "HupaiName")
         .value("ZHUANGFENG", Hupai::Name::ZHUANGFENG, u8"場風")
         .value("ZHUANGFENGDONG", Hupai::Name::ZHUANGFENGDONG, u8"場風 東")
@@ -308,24 +308,24 @@ PYBIND11_MODULE(_cmajiang, m) {
         .value("DIHE", Hupai::Name::DIHE, u8"地和")
         .export_values()
         ;
-	py::class_<Hupai>(m, "Hupai")
-		.def(py::init<const Hupai::Name, const int, const char>())
-		.def(py::init<const Hupai::Name, const int>())
-		.def_readwrite("name", &Hupai::name)
-		.def_readwrite("fanshu", &Hupai::fanshu)
-		.def_readwrite("baojia", &Hupai::baojia)
+    py::class_<Hupai>(m, "Hupai")
+        .def(py::init<const Hupai::Name, const int, const char>())
+        .def(py::init<const Hupai::Name, const int>())
+        .def_readwrite("name", &Hupai::name)
+        .def_readwrite("fanshu", &Hupai::fanshu)
+        .def_readwrite("baojia", &Hupai::baojia)
         ;
-	py::class_<Defen>(m, "Defen")
+    py::class_<Defen>(m, "Defen")
         .def(py::init<>())
-		.def_readwrite("hupai", &Defen::hupai)
-		.def_readwrite("fu", &Defen::fu)
-		.def_readwrite("fanshu", &Defen::fanshu)
-		.def_readwrite("damanguan", &Defen::damanguan)
-		.def_readwrite("defen", &Defen::defen)
-		.def_readwrite("fenpei", &Defen::fenpei)
+        .def_readwrite("hupai", &Defen::hupai)
+        .def_readwrite("fu", &Defen::fu)
+        .def_readwrite("fanshu", &Defen::fanshu)
+        .def_readwrite("damanguan", &Defen::damanguan)
+        .def_readwrite("defen", &Defen::defen)
+        .def_readwrite("fenpei", &Defen::fenpei)
         .def_readwrite("menfeng", &Defen::menfeng)
-		.def("__repr__",
-				[](const Defen& defen) {
+        .def("__repr__",
+                [](const Defen& defen) {
                     constexpr char* name[] = {
                         u8"場風 東", u8"場風 南", u8"場風 西", u8"場風 北", u8"自風 東", u8"自風 南", u8"自風 西", u8"自風 北", u8"翻牌 白", u8"翻牌 發", u8"翻牌 中", u8"ドラ", u8"赤ドラ", u8"裏ドラ", u8"立直", u8"ダブル立直", u8"一発", u8"海底摸月", u8"河底撈魚", u8"嶺上開花", u8"槍槓", u8"門前清自摸和", u8"平和", u8"断幺九", u8"一盃口", u8"三色同順", u8"一気通貫", u8"混全帯幺九", u8"七対子", u8"対々和", u8"三暗刻", u8"三槓子", u8"三色同刻", u8"混老頭", u8"小三元", u8"混一色", u8"純全帯幺九", u8"二盃口", u8"清一色", u8"国士無双", u8"国士無双十三面", u8"四暗刻", u8"四暗刻単騎", u8"大三元", u8"小四喜", u8"大四喜", u8"字一色", u8"緑一色", u8"清老頭", u8"四槓子", u8"九蓮宝燈", u8"純正九蓮宝燈", u8"天和", u8"地和"
                     };
@@ -352,11 +352,11 @@ PYBIND11_MODULE(_cmajiang, m) {
                     else if (manguan >= 1)     ss << u8"満貫 ";
 
                     ss << defen.defen << u8"点\n";
-					return ss.str();
-				}
-			)
+                    return ss.str();
+                }
+            )
         ;
-	m.def("hule", &__hule, py::arg("shoupai"), py::arg("rongpai") = std::string{},
+    m.def("hule", &__hule, py::arg("shoupai"), py::arg("rongpai") = std::string{},
         py::arg("rule") = Rule{},
         py::arg("zhuangfeng") = 0,
         py::arg("menfeng") = 1,
@@ -373,9 +373,9 @@ PYBIND11_MODULE(_cmajiang, m) {
     );
     m.def("xiangting", &xiangting);
     m.def("tingpai", &__tingpai);
-	py::class_<Shan>(m, "Shan")
-		.def(py::init<>())
-		.def(py::init<const Rule&>())
+    py::class_<Shan>(m, "Shan")
+        .def(py::init<>())
+        .def(py::init<const Rule&>())
         .def_property("pai", [](Shan& shan) { return shan.pai(); }, [](const Shan& shan) { return shan.pai(); })
         .def_property_readonly("paishu", &Shan::paishu)
         .def_property_readonly("baopai", &Shan::baopai)
@@ -386,8 +386,8 @@ PYBIND11_MODULE(_cmajiang, m) {
         .def("kaigang", &Shan::kaigang)
         .def("close", &Shan::close)
         ;
-	py::class_<He>(m, "He")
-		.def(py::init<>())
+    py::class_<He>(m, "He")
+        .def(py::init<>())
         .def("dapai", &He::dapai)
         .def("fulou", &He::fulou)
         .def("find", &He::find)
@@ -403,11 +403,11 @@ PYBIND11_MODULE(_cmajiang, m) {
         .value("FENG4", Game::Pingju::Name::FENG4, u8"四風連打")
         .value("GANG4", Game::Pingju::Name::GANG4, u8"四槓散了")
         ;
-	py::class_<Game::Model>(m, "Model")
-		.def(py::init<>())
-		.def_readwrite("qijia", &Game::Model::qijia)
-		.def_readwrite("zhuangfeng", &Game::Model::zhuangfeng)
-		.def_readwrite("jushu", &Game::Model::jushu)
+    py::class_<Game::Model>(m, "Model")
+        .def(py::init<>())
+        .def_readwrite("qijia", &Game::Model::qijia)
+        .def_readwrite("zhuangfeng", &Game::Model::zhuangfeng)
+        .def_readwrite("jushu", &Game::Model::jushu)
         .def_readwrite("changbang", &Game::Model::changbang)
         .def_readwrite("lizhibang", &Game::Model::lizhibang)
         .def_readwrite("defen", &Game::Model::defen)
@@ -417,7 +417,7 @@ PYBIND11_MODULE(_cmajiang, m) {
         .def_readwrite("player_id", &Game::Model::player_id)
         .def_readwrite("lunban", &Game::Model::lunban)
         ;
-	py::enum_<Game::Message>(m, "Message")
+    py::enum_<Game::Message>(m, "Message")
         .value("NONE", Game::Message::NONE)
         .value("DAOPAI", Game::Message::DAOPAI, u8"倒牌")
         .value("FULOU", Game::Message::FULOU, u8"副露")
@@ -425,7 +425,7 @@ PYBIND11_MODULE(_cmajiang, m) {
         .value("GANG", Game::Message::GANG, u8"槓")
         .value("DAPAI", Game::Message::DAPAI, u8"打牌")
         ;
-	py::enum_<Game::Status>(m, "Status")
+    py::enum_<Game::Status>(m, "Status")
         .value("NONE", Game::Status::NONE)
         .value("KAIJU", Game::Status::KAIJU, u8"開始")
         .value("QIPAI", Game::Status::QIPAI, u8"配牌")
@@ -438,13 +438,26 @@ PYBIND11_MODULE(_cmajiang, m) {
         .value("PINGJU", Game::Status::PINGJU, u8"流局")
         .value("JIEJI", Game::Status::JIEJI, u8"終局")
         ;
-	py::class_<Game::Reply>(m, "Reply")
-		.def(py::init<>())
-		.def_readwrite("msg", &Game::Reply::msg)
+    py::class_<Game::Reply>(m, "Reply")
+        .def(py::init<>())
+        .def_readwrite("msg", &Game::Reply::msg)
         .def_readwrite("arg", &Game::Reply::arg)
         ;
-	py::class_<Game>(m, "Game")
-		.def(py::init<>())
+    py::class_<Game::Paipu::Round>(m, "Round")
+        .def(py::init<>())
+        .def_readwrite("model", &Game::Paipu::Round::model)
+        .def_readwrite("moves", &Game::Paipu::Round::moves)
+        .def_readwrite("defen", &Game::Paipu::Round::defen)
+        .def_readwrite("pingju", &Game::Paipu::Round::pingju)
+        ;
+    py::class_<Game::Paipu>(m, "Paipu")
+        .def(py::init<>())
+        .def_readwrite("rounds", &Game::Paipu::rounds)
+        .def_readwrite("rank", &Game::Paipu::rank)
+        .def_readwrite("point", &Game::Paipu::point)
+        ;
+    py::class_<Game>(m, "Game")
+        .def(py::init<>())
         .def(py::init<const Rule&>())
         .def("reply", &Game::reply, py::arg("id"), py::arg("msg"), py::arg("arg") = std::string{})
         .def("next", &Game::next)
@@ -513,6 +526,7 @@ PYBIND11_MODULE(_cmajiang, m) {
         .def_property_readonly("model", &Game::model)
         .def_property_readonly("rule", &Game::rule)
         .def_property_readonly("status", &Game::status)
+        .def_property_readonly("paipu", &Game::paipu)
         ;
     m.attr("N_CHANNELS_STATUS") = N_CHANNELS_STATUS;
     m.attr("N_CHANNELS_SHOUPAI") = N_CHANNELS_SHOUPAI;
@@ -708,8 +722,8 @@ PYBIND11_MODULE(_cmajiang, m) {
         });
     }, py::arg("rule") = Rule{}
     );
-    m.def("random_game_state", [](const int n_xiangting, const int zhuangfeng, const Rule& rule) {
-        return random_game_state(n_xiangting, zhuangfeng, rule, engine);
-    }, py::arg("n_xiangting") = 1, py::arg("zhuangfeng") = 0, py::arg("rule") = Rule{}
+    m.def("random_game_state", [](Game& game, const int n_xiangting) {
+        random_game_state(game, n_xiangting, engine);
+    }, py::arg("game"), py::arg("n_xiangting") = 1
     );
 }

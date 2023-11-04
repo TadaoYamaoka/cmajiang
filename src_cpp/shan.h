@@ -6,6 +6,7 @@
 #include <random>
 
 extern std::mt19937_64 engine;
+void set_seed(const size_t seed);
 
 // 山
 class Shan {

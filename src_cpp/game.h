@@ -39,11 +39,11 @@ public:
 
     enum class Message {
         NONE,
-        DAOPAI, // 倒牌
-        FULOU,  // 副露
-        HULE,   // 和了
-        GANG,   // 杠(槓)
         DAPAI,  // 打牌
+        FULOU,  // 副露
+        GANG,   // 杠(槓)
+        HULE,   // 和了
+        DAOPAI, // 倒牌
     };
 
     enum class Status {
@@ -66,9 +66,29 @@ public:
         LINGSHANG
     };
 
-    Game(const Rule& rule);
-    Game() : Game(Rule{}) {};
-    Game(const Rule& rule, const std::vector<Shoupai>& shoupai, std::vector<He>& he, const Shan& shan, const int lunban, const int qijia = -1);
+    struct Reply {
+        Message msg;
+        std::string arg;
+    };
+
+    struct Paipu {
+        Rule rule;
+        struct Round {
+            Model model;
+            std::vector<Reply> moves;
+            Defen defen;
+            Pingju::Name pingju;
+        };
+        std::vector<Round> rounds;
+        std::array<int, 4> rank;
+        std::array<float, 4> point;
+    };
+
+    Game(const Rule& rule, const bool paipu = true);
+    Game() : Game(Rule{}, true) {};
+
+    void set(const std::array<Shoupai, 4>& shoupai, const std::array<He, 4>& he, const Shan& shan, const int lunban);
+    void set(const Paipu::Round& round);
 
     void call_players(const Status type);
     void reply(const int id, const Message msg, const std::string& arg = {});
@@ -111,10 +131,6 @@ public:
     void jieju();
 
     // 応答取得
-    struct Reply {
-        Message msg;
-        std::string arg;
-    };
     const Reply& get_reply(const int l) const;
 
     // 结局(終局)の応答
@@ -231,6 +247,8 @@ public:
 
     const Status status() const { return _status; }
 
+    const Paipu& paipu() const { return *_paipu; }
+
 private:
     Rule _rule;
     Model _model;
@@ -241,6 +259,8 @@ private:
     std::array<float, 4> _point;
     Pingju _pingju;
     std::array<Reply, 4> _reply;
+
+    std::unique_ptr<Paipu> _paipu;
 
     // 最大局数
     int _max_jushu;

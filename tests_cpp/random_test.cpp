@@ -1120,9 +1120,9 @@ TEST(RandomTest, random_game_state) {
     Rule rule;
     {
         int n_xiangting = 1;
-        int zhuangfeng = 0;
         std::mt19937_64 mt{ 2 };
-        Game game = random_game_state(n_xiangting, zhuangfeng, rule, mt);
+        Game game{ rule };
+        random_game_state(game, n_xiangting, mt);
         EXPECT_EQ(Game::Status::DAPAI, game.status());
         EXPECT_EQ(2, game.lunban());
         EXPECT_EQ(2, xiangting(game.shoupai_(0)));
@@ -1143,9 +1143,9 @@ TEST(RandomTest, random_game_state) {
     }
     {
         int n_xiangting = 3;
-        int zhuangfeng = 0;
         std::mt19937_64 mt{ 1 };
-        Game game = random_game_state(n_xiangting, zhuangfeng, rule, mt);
+        Game game{ rule };
+        random_game_state(game, n_xiangting, mt);
         EXPECT_EQ(Game::Status::DAPAI, game.status());
         EXPECT_EQ(3, game.lunban());
         EXPECT_EQ(0, xiangting(game.shoupai_(0)));
@@ -1166,9 +1166,9 @@ TEST(RandomTest, random_game_state) {
     }
     {
         int n_xiangting = 5;
-        int zhuangfeng = 0;
         std::mt19937_64 mt{ 2 };
-        Game game = random_game_state(n_xiangting, zhuangfeng, rule, mt);
+        Game game{ rule };
+        random_game_state(game, n_xiangting, mt);
         EXPECT_EQ(Game::Status::DAPAI, game.status());
         EXPECT_EQ(2, game.lunban());
         EXPECT_EQ(3, xiangting(game.shoupai_(0)));
@@ -1189,9 +1189,9 @@ TEST(RandomTest, random_game_state) {
     }
     {
         int n_xiangting = 11;
-        int zhuangfeng = 0;
         std::mt19937_64 mt{ 3 };
-        Game game = random_game_state(n_xiangting, zhuangfeng, rule, mt);
+        Game game{ rule };
+        random_game_state(game, n_xiangting, mt);
         EXPECT_EQ(Game::Status::DAPAI, game.status());
         EXPECT_EQ(1, game.lunban());
         EXPECT_EQ(3, xiangting(game.shoupai_(0)));
@@ -1212,9 +1212,9 @@ TEST(RandomTest, random_game_state) {
     }
     {
         int n_xiangting = 3;
-        int zhuangfeng = 0;
         std::mt19937_64 mt{ 4286 };
-        Game game = random_game_state(n_xiangting, zhuangfeng, rule, mt);
+        Game game{ rule };
+        random_game_state(game, n_xiangting, mt);
         EXPECT_EQ(Game::Status::DAPAI, game.status());
         EXPECT_EQ(1, game.lunban());
         EXPECT_EQ(2, xiangting(game.shoupai_(0)));
@@ -1235,9 +1235,9 @@ TEST(RandomTest, random_game_state) {
     }
     {
         int n_xiangting = 3;
-        int zhuangfeng = 0;
         std::mt19937_64 mt{ 135 };
-        Game game = random_game_state(n_xiangting, zhuangfeng, rule, mt);
+        Game game{ rule };
+        random_game_state(game, n_xiangting, mt);
         EXPECT_EQ(Game::Status::DAPAI, game.status());
         EXPECT_EQ(3, game.lunban());
         EXPECT_EQ(2, xiangting(game.shoupai_(0)));
@@ -1258,9 +1258,9 @@ TEST(RandomTest, random_game_state) {
     }
     {
         int n_xiangting = 3;
-        int zhuangfeng = 0;
         std::mt19937_64 mt{ 3660 };
-        Game game = random_game_state(n_xiangting, zhuangfeng, rule, mt);
+        Game game{ rule };
+        random_game_state(game, n_xiangting, mt);
         EXPECT_EQ(Game::Status::DAPAI, game.status());
         EXPECT_EQ(2, game.lunban());
         EXPECT_EQ(2, xiangting(game.shoupai_(0)));
@@ -1285,9 +1285,9 @@ TEST(RandomTest, random_game) {
     const auto random_game = [](const size_t seed) {
         Rule rule;
         int n_xiangting = 3;
-        int zhuangfeng = 0;
         std::mt19937_64 mt{ seed };
-        Game game = random_game_state(n_xiangting, zhuangfeng, rule, mt);
+        Game game{ rule };
+        random_game_state(game, n_xiangting, mt);
         // 他家の応答 ロン、副露
         for (int player_id = 0; player_id < 4; player_id++) {
             if (player_id == game.lunban_player_id())

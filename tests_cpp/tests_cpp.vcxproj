@@ -105,6 +105,7 @@
     <ClCompile Include="game_test.cpp" />
     <ClCompile Include="he_test.cpp" />
     <ClCompile Include="hule_test.cpp" />
+    <ClCompile Include="paipu_test.cpp" />
     <ClCompile Include="random_test.cpp" />
     <ClCompile Include="shan_test.cpp" />
     <ClCompile Include="shoupai_test.cpp" />
