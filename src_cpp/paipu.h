@@ -2,9 +2,9 @@
 
 #include "game.h"
 
-class PaipuPalyer {
+class PaipuReplay {
 public:
-    PaipuPalyer(const Game::Paipu& paipu);
+    PaipuReplay(const Game::Paipu& paipu);
 
     void next();
 
@@ -22,3 +22,6 @@ private:
 
     void qipai();
 };
+
+std::ostream& operator<<(std::ostream& os, const Game::Paipu& paipu);
+std::istream& operator>>(std::istream& is, Game::Paipu& paipu);

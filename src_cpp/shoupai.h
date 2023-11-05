@@ -5,6 +5,8 @@
 #include <regex>
 #include <functional>
 #include <stdexcept>
+#include <ostream>
+#include <istream>
 
 // 手牌
 class Shoupai {
@@ -18,6 +20,8 @@ public:
     Shoupai(const std::vector<std::string>& qipai);
     Shoupai(const std::string& paistr);
     Shoupai(const std::vector<std::string>& pai, const std::vector<std::string>& fulou);
+
+    void set(const std::string& paistr) { *this = { paistr }; }
 
     std::string toString() const;
     operator std::string() const {
@@ -123,6 +127,11 @@ private:
     bool _lizhi;
 
 };
+
+inline std::ostream& operator<<(std::ostream& os, const Shoupai& shoupai) {
+    os << shoupai.toString();
+    return os;
+}
 
 inline std::string to_string(const int n) {
     return std::string(1, n + '0');

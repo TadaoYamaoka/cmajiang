@@ -76,12 +76,8 @@ public:
         struct Round {
             Model model;
             std::vector<Reply> moves;
-            Defen defen;
-            Pingju::Name pingju;
         };
         std::vector<Round> rounds;
-        std::array<int, 4> rank;
-        std::array<float, 4> point;
     };
 
     Game(const Rule& rule, const bool paipu = true);
@@ -243,6 +239,7 @@ public:
     void set_no_game(const bool no_game_) { _no_game = no_game_; }
 
     Model& model() { return _model; }
+    const Model& model() const { return _model; }
     const Rule& rule() const { return _rule; }
 
     const Status status() const { return _status; }
@@ -314,12 +311,6 @@ size_t count_if(const T& v, F f) {
 template <typename T>
 size_t max_index(const T& v) {
     return std::max_element(v.begin(), v.end()) - v.begin();
-}
-
-template <typename T>
-std::ostream& operator<<(std::ostream& os, const std::array<T, 4>& arr) {
-    os << arr[0] << " " << arr[1] << " " << arr[2] << " " << arr[3];
-    return os;
 }
 
 template <typename T>

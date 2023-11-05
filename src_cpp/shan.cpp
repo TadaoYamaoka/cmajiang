@@ -37,6 +37,20 @@ Shan::Shan(std::vector<std::string>& pai, const Rule& rule)
         _libaopai.emplace_back(_pai[9]);
 }
 
+void Shan::set(const std::string& paistr, const Rule& rule) {
+    _rule = rule;
+    _weikaigang = false;
+    _closed = false;
+    _pai.clear();
+    for (size_t i = 0; i < paistr.size(); i += 2) {
+        _pai.emplace_back(paistr.substr(i, 2));
+    }
+    _baopai.emplace_back(_pai[4]);
+    // 裏ドラあり
+    if (rule.libaopai)
+        _libaopai.emplace_back(_pai[9]);
+}
+
 // 自摸
 std::string Shan::zimo() {
     if (_closed)       throw std::runtime_error("closed");

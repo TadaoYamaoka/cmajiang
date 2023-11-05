@@ -21,9 +21,11 @@ public:
             : to_string(s, (n % 9 + 1));
     }
 
+    Shan() {}
     Shan(const Rule& rule);
     Shan(std::vector<std::string>& pai, const Rule& rule = {});
-    Shan() : Shan(Rule()) {}
+
+    void set(const std::string& paistr, const Rule& rule);
 
     std::vector<std::string>& pai() { return _pai; }
     const std::vector<std::string>& pai() const { return _pai; }
@@ -57,6 +59,7 @@ public:
     Shan& kaigang();
 
     Shan& close() { _closed = true; return *this; }
+    const Rule& rule() const { return _rule; }
 
 private:
     Rule _rule;
@@ -66,3 +69,9 @@ private:
     bool _weikaigang;                   // 未开杠(未開槓)
     bool _closed;
 };
+
+inline std::ostream& operator<<(std::ostream& os, const Shan& shan) {
+    for (const auto& p : shan.pai())
+        os << p;
+    return os;
+}

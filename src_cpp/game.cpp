@@ -162,11 +162,8 @@ void Game::kaiju(const int qijia) {
     // 場数
     _max_jushu = _rule.roundsType == 0 ? 0 : _rule.roundsType * 4 - 1;
 
-    if (_paipu) {
+    if (_paipu)
         _paipu->rounds = {};
-        _paipu->rank = {};
-        _paipu->point = {};
-    }
 
     call_players(Status::KAIJU);
 }
@@ -379,10 +376,8 @@ void Game::hule() {
     if (_rule.roundsType == 0) _lianzhuang = false;
     _fenpei = _defen.fenpei;
 
-    if (_paipu) {
+    if (_paipu)
         _paipu->rounds.back().moves.emplace_back(Reply{ Game::Message::HULE, rongpai });
-        _paipu->rounds.back().defen = _defen;
-    }
 
     call_players(Status::HULE);
 }
@@ -460,11 +455,6 @@ void Game::pingju(Pingju::Name name, std::array<std::string, 4> shoupai) {
 
     _pingju.name = name;
     _pingju.shoupai = shoupai;
-
-    if (_paipu) {
-        _paipu->rounds.back().defen.fenpei = fenpei;
-        _paipu->rounds.back().pingju = _pingju.name;
-    }
 
     call_players(Status::PINGJU);
 }

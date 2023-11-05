@@ -73,19 +73,19 @@ TEST(ShanTest, constructor) {
 
 TEST(ShanTest, paishu) {
     // 牌山生成直後の残牌数は122
-    EXPECT_EQ(122, Shan().paishu());
+    EXPECT_EQ(122, Shan(Rule{}).paishu());
 }
 
 TEST(ShanTest, baopai) {
     // 牌山生成直後のドラは1枚
-    EXPECT_EQ(1, Shan().baopai().size());
+    EXPECT_EQ(1, Shan(Rule{}).baopai().size());
 }
 
 TEST(ShanTest, libaopai) {
     // 牌山生成直後は 0 を返す
-    EXPECT_EQ(0, Shan().libaopai().size());
+    EXPECT_EQ(0, Shan(Rule{}).libaopai().size());
     // 牌山固定後は裏ドラを返す
-    EXPECT_EQ(1, Shan().close().libaopai().size());
+    EXPECT_EQ(1, Shan(Rule{}).close().libaopai().size());
     // 裏ドラなしの場合は牌山固定後も 0 を返す
     {
         Rule rule;
@@ -96,57 +96,57 @@ TEST(ShanTest, libaopai) {
 
 TEST(ShanTest, zimo) {
     // 牌山生成直後にツモれること
-    EXPECT_NO_THROW(Shan().zimo());
+    EXPECT_NO_THROW(Shan(Rule{}).zimo());
     // ツモ後に残牌数が減ること
     {
-        Shan shan;
+        Shan shan{ Rule{} };
         const auto paishu = shan.paishu();
         shan.zimo();
         EXPECT_EQ(paishu - 1, shan.paishu());
     }
     // 王牌はツモれないこと
     {
-        Shan shan;
+        Shan shan{ Rule{} };
         while (shan.paishu()) { shan.zimo(); }
         EXPECT_THROW(shan.zimo(), std::runtime_error);
     }
     // 牌山固定後はツモれないこと
-    EXPECT_THROW(Shan().close().zimo(), std::runtime_error);
+    EXPECT_THROW(Shan(Rule{}).close().zimo(), std::runtime_error);
 }
 
 TEST(ShanTest, gangzimo) {
     // 牌山生成直後に槓ツモできること
-    EXPECT_NO_THROW(Shan().gangzimo());
+    EXPECT_NO_THROW(Shan(Rule{}).gangzimo());
     // 槓ツモ後に残牌数が減ること
     {
-        Shan shan;
+        Shan shan{ Rule{} };
         const auto paishu = shan.paishu();
         shan.gangzimo();
         EXPECT_EQ(paishu - 1, shan.paishu());
     }
     // 槓ツモ直後はツモれないこと
     {
-        Shan shan;
+        Shan shan{ Rule{} };
         shan.gangzimo();
         EXPECT_THROW(shan.zimo(), std::runtime_error);
     }
     // 槓ツモ直後に続けて槓ツモできないこと
     {
-        Shan shan;
+        Shan shan{ Rule{} };
         shan.gangzimo();
         EXPECT_THROW(shan.gangzimo(), std::runtime_error);
     }
     // ハイテイで槓ツモできないこと
     {
-        Shan shan;
+        Shan shan{ Rule{} };
         while (shan.paishu()) { shan.zimo(); }
         EXPECT_THROW(shan.gangzimo(), std::runtime_error);
     }
     // 牌山固定後は槓ツモできないこと
-    EXPECT_THROW(Shan().close().gangzimo(), std::runtime_error);
+    EXPECT_THROW(Shan(Rule{}).close().gangzimo(), std::runtime_error);
     // 5つ目の槓ツモができないこと
     {
-        Shan shan;
+        Shan shan{ Rule{} };
         for (int i = 0; i < 4; i++) {
             shan.gangzimo();
             shan.kaigang();
@@ -168,43 +168,43 @@ TEST(ShanTest, gangzimo) {
 
 TEST(ShanTest, kaigang) {
     // 牌山生成直後に開槓できないこと
-    EXPECT_THROW(Shan().kaigang(), std::runtime_error);
+    EXPECT_THROW(Shan(Rule{}).kaigang(), std::runtime_error);
     // 槓ツモ後に開槓できること
     {
-        Shan shan;
+        Shan shan{ Rule{} };
         shan.gangzimo();
         EXPECT_NO_THROW(shan.kaigang());
     }
     // 開槓によりドラが増えること
     {
-        Shan shan;
+        Shan shan{ Rule{} };
         shan.gangzimo();
         const auto expected = shan.baopai().size() + 1;
         EXPECT_EQ(expected, shan.kaigang().baopai().size());
     }
     // 開槓により裏ドラが増えること
     {
-        Shan shan;
+        Shan shan{ Rule{} };
         shan.gangzimo();
         EXPECT_EQ(2, shan.kaigang().close().libaopai().size());
     }
     // 開槓後はツモできること
     {
-        Shan shan;
+        Shan shan{ Rule{} };
         shan.gangzimo();
         EXPECT_NO_THROW(shan.kaigang().zimo());
     }
     // 開槓後は槓ツモできること
     {
-        Shan shan;
+        Shan shan{ Rule{} };
         shan.gangzimo();
         EXPECT_NO_THROW(shan.kaigang().gangzimo());
     }
     // 牌山固定後は開槓できないこと
     {
-        Shan shan;
+        Shan shan{ Rule{} };
         shan.gangzimo();
-        EXPECT_THROW(Shan().close().kaigang(), std::runtime_error);
+        EXPECT_THROW(Shan(Rule{}).close().kaigang(), std::runtime_error);
     }
     // カンドラなしの場合は開槓できないこと
     {

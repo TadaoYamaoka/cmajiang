@@ -84,12 +84,37 @@ struct Rule {
     bool roundUpManguan = false;
 };
 
+
+template <typename T>
+std::ostream& operator<<(std::ostream& os, const std::array<T, 4>& arr) {
+    os << arr[0] << " " << arr[1] << " " << arr[2] << " " << arr[3];
+    return os;
+}
+
+template <typename T>
+std::ostream& operator<<(std::ostream& os, const std::array<T, 3>& arr) {
+    os << arr[0] << " " << arr[1] << " " << arr[2];
+    return os;
+}
+
+template <typename T>
+std::istream& operator>>(std::istream& is, std::array<T, 4>& arr) {
+    is >> arr[0] >> arr[1] >> arr[2] >> arr[3];
+    return is;
+}
+
+template <typename T>
+std::istream& operator>>(std::istream& is, std::array<T, 3>& arr) {
+    is >> arr[0] >> arr[1] >> arr[2];
+    return is;
+}
+
 inline std::ostream& operator<<(std::ostream& os, const Rule& rule) {
-    os << rule.startingPoints << " ";
-    for (const auto& point : rule.rankPoints) os << point << " ";
-    os << rule.doubleWindTileScore << " ";
-    for (const auto& honpai_ : rule.hongpai) os << honpai_ << " ";
-    os << rule.canduan << " "
+    os << rule.startingPoints << " "
+        << rule.rankPoints << " "
+        << rule.doubleWindTileScore << " "
+        << rule.hongpai << " "
+        << rule.canduan << " "
         << rule.canChangePermissionLevel << " "
         << rule.roundsType << " "
         << rule.abortiveDraw << " "
@@ -114,4 +139,36 @@ inline std::ostream& operator<<(std::ostream& os, const Rule& rule) {
         << rule.damanguanPao << " "
         << rule.roundUpManguan;
     return os;
+}
+
+inline std::istream& operator>>(std::istream& is, Rule& rule) {
+    is >> rule.startingPoints
+        >> rule.rankPoints
+        >> rule.doubleWindTileScore
+        >> rule.hongpai
+        >> rule.canduan
+        >> rule.canChangePermissionLevel
+        >> rule.roundsType
+        >> rule.abortiveDraw
+        >> rule.liujumanguan
+        >> rule.notenDeclaration
+        >> rule.notenPenalty
+        >> rule.maxSimultaneousWinners
+        >> rule.dealerContinuationType
+        >> rule.bankruptcyEndAll
+        >> rule.lastRoundStop
+        >> rule.overtimeType
+        >> rule.yifa
+        >> rule.libaopai
+        >> rule.gangbaopai
+        >> rule.ganglibaopai
+        >> rule.gangbaopaiPostAddition
+        >> rule.lizhiWithoutTsumoBonus
+        >> rule.lizhiPostClosedGangPermissionLevel
+        >> rule.damanguanCombination
+        >> rule.doubleDamanguan
+        >> rule.countedDamanguan
+        >> rule.damanguanPao
+        >> rule.roundUpManguan;
+    return is;
 }

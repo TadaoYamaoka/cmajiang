@@ -26,3 +26,9 @@ bool He::find(const std::string& p) {
     return _find.find(p.substr(0, 1) + (p[1] == '0' ? '5' : p[1])) != _find.end();
 }
 
+void He::set(const std::string& paistr) {
+    static const std::regex re_pai{ R"([mpsz]\d_?\*?)" };
+    _pai.clear();
+    for (std::sregex_iterator it(paistr.begin(), paistr.end(), re_pai), end; it != end; ++it)
+        dapai(it->str());
+}

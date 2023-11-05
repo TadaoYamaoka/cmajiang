@@ -1,14 +1,16 @@
 ﻿#include "paipu.h"
 
 #include <cassert>
+#include <sstream>
 
 static const std::regex re_angang_or_jiagang{ R"(^[mpsz]\d\d\d\d$|[\+\=\-]\d$)" }; // 暗槓もしくは加槓
 
-PaipuPalyer::PaipuPalyer(const Game::Paipu& paipu) : _paipu{ paipu }, _game{ paipu.rule, false }, _round{ 0 }, _ply{ 0 }, _skip{ false } {
+PaipuReplay::PaipuReplay(const Game::Paipu& paipu) : _paipu{ paipu }, _game{ paipu.rule, false }, _round{ 0 }, _ply{ 0 }, _skip{ false } {
+    _game.kaiju();
     qipai();
 }
 
-void PaipuPalyer::qipai() {
+void PaipuReplay::qipai() {
     _game.set(_paipu.rounds[_round]);
     if (_game.status() == Game::Status::QIPAI) {
         _game.next();
@@ -21,7 +23,7 @@ void PaipuPalyer::qipai() {
         _skip = true;
 }
 
-void PaipuPalyer::next() {
+void PaipuReplay::next() {
     if (_skip) {
         _skip = false;
         _game.next();
@@ -116,5 +118,97 @@ void PaipuPalyer::next() {
             // 流局
             _game.next();
         }
+    }
+}
+
+std::ostream& operator<<(std::ostream& os, const Game::Model& model) {
+    os << model.qijia << " "
+        << model.zhuangfeng << " "
+        << model.jushu << " "
+        << model.changbang << " "
+        << model.lizhibang << " "
+        << model.defen << " "
+        << model.shan << " "
+        << model.shoupai << " "
+        << model.he << " "
+        << model.player_id << " "
+        << model.lunban;
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const Game::Reply& reply) {
+    os << (int)reply.msg << reply.arg;
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const Game::Paipu::Round& round) {
+    os << round.model << " ";
+    for (size_t i = 0; i < round.moves.size(); i++) {
+        if (i > 0)
+            os << ",";
+        os << round.moves[i];
+    }
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const Game::Paipu& paipu) {
+    os << paipu.rule << " ";
+    for (size_t i = 0; i < paipu.rounds.size(); i++) {
+        if (i > 0)
+            os << " ";
+        os << paipu.rounds[i];
+    }
+    os << "\n";
+    return os;
+}
+void load_model(std::istream& is, Game::Model& model, const Rule& rule) {
+    is >> model.qijia
+        >> model.zhuangfeng
+        >> model.jushu
+        >> model.changbang
+        >> model.lizhibang
+        >> model.defen;
+    {
+        std::string paistr;
+        is >> paistr;
+        model.shan.set(paistr, rule);
+        if (is.get() != ' ')
+            throw std::runtime_error("unexpected char");
+    }
+    for (size_t i = 0; i < 4; i++) {
+        std::string paistr;
+        std::getline(is, paistr, ' ');
+        model.shoupai[i].set(paistr);
+    }
+    for (size_t i = 0; i < 4; i++) {
+        std::string paistr;
+        std::getline(is, paistr, ' ');
+        model.he[i].set(paistr);
+    }
+    is >> model.player_id
+        >> model.lunban;
+}
+
+void load_round(std::istream& is, Game::Paipu::Round& round, const Rule& rule) {
+    load_model(is, round.model, rule);
+    std::string movesstr;
+    is >> movesstr;
+    std::istringstream ss(movesstr);
+    std::string move;
+    while (std::getline(ss, move, ',')) {
+        round.moves.emplace_back(Game::Reply{ (Game::Message)to_int(move[0]), move.substr(1) });
+    }
+}
+
+std::istream& operator>>(std::istream& is, Game::Paipu& paipu) {
+    std::string line;
+    if (!std::getline(is, line))
+        return is;
+
+    std::istringstream ss{ line };
+    ss >> paipu.rule;
+    while (ss.peek(), !ss.eof()) {
+        auto& round = paipu.rounds.emplace_back();
+        load_round(ss, round, paipu.rule);
     }
 }

@@ -6,6 +6,7 @@
 #include "game.h"
 #include "feature.h"
 #include "random.h"
+#include "paipu.h"
 #include "svg.h"
 
 #include <functional>
@@ -376,6 +377,7 @@ PYBIND11_MODULE(_cmajiang, m) {
     py::class_<Shan>(m, "Shan")
         .def(py::init<>())
         .def(py::init<const Rule&>())
+        .def("set", &Shan::set)
         .def_property("pai", [](Shan& shan) { return shan.pai(); }, [](const Shan& shan) { return shan.pai(); })
         .def_property_readonly("paishu", &Shan::paishu)
         .def_property_readonly("baopai", &Shan::baopai)
@@ -385,9 +387,11 @@ PYBIND11_MODULE(_cmajiang, m) {
         .def("gangzimo", &Shan::gangzimo)
         .def("kaigang", &Shan::kaigang)
         .def("close", &Shan::close)
+        .def_property_readonly("rule", &Shan::rule)
         ;
     py::class_<He>(m, "He")
         .def(py::init<>())
+        .def("set", &He::set)
         .def("dapai", &He::dapai)
         .def("fulou", &He::fulou)
         .def("find", &He::find)
@@ -447,14 +451,11 @@ PYBIND11_MODULE(_cmajiang, m) {
         .def(py::init<>())
         .def_readwrite("model", &Game::Paipu::Round::model)
         .def_readwrite("moves", &Game::Paipu::Round::moves)
-        .def_readwrite("defen", &Game::Paipu::Round::defen)
-        .def_readwrite("pingju", &Game::Paipu::Round::pingju)
         ;
     py::class_<Game::Paipu>(m, "Paipu")
         .def(py::init<>())
+        .def_readwrite("rule", &Game::Paipu::rule)
         .def_readwrite("rounds", &Game::Paipu::rounds)
-        .def_readwrite("rank", &Game::Paipu::rank)
-        .def_readwrite("point", &Game::Paipu::point)
         ;
     py::class_<Game>(m, "Game")
         .def(py::init<>())
@@ -523,10 +524,18 @@ PYBIND11_MODULE(_cmajiang, m) {
         .def_property_readonly("fenpei", &Game::fenpei)
         .def_property_readonly("lianzhuang", &Game::lianzhuang)
         .def_property_readonly("no_game", &Game::no_game)
-        .def_property_readonly("model", &Game::model)
+        .def_property_readonly("model", [](const Game& game) { return game.model(); })
         .def_property_readonly("rule", &Game::rule)
         .def_property_readonly("status", &Game::status)
         .def_property_readonly("paipu", &Game::paipu)
+        ;
+    py::class_<PaipuReplay>(m, "PaipuReplay")
+        .def(py::init<const Game::Paipu&>())
+        .def("next", &PaipuReplay::next)
+        .def_property_readonly("game", &PaipuReplay::game)
+        .def_property_readonly("round", &PaipuReplay::round)
+        .def_property_readonly("ply", &PaipuReplay::ply)
+        .def_property_readonly("status", &PaipuReplay::status)
         ;
     m.attr("N_CHANNELS_STATUS") = N_CHANNELS_STATUS;
     m.attr("N_CHANNELS_SHOUPAI") = N_CHANNELS_SHOUPAI;
@@ -584,6 +593,7 @@ PYBIND11_MODULE(_cmajiang, m) {
         auto data = static_cast<float*>(ndarray.request().ptr);
         game_private_features(game, lunban, reinterpret_cast<float(*)[9][4]>(data));
     });
+    m.def("set_seed", &set_seed);
     m.def("random_zhuangfeng", [](const int zhuangfeng, const Rule& rule) {
         return random_setup(rule, [zhuangfeng](std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, const Rule& rule, std::mt19937_64& mt) {
             setup_zhuangfeng(pai, rest, fulou, zhuangfeng, rule, mt);
