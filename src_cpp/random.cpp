@@ -1,20 +1,20 @@
 ﻿#include "random.h"
+#include "random.h"
 #include "xiangting.h"
 
 #include <set>
 #include <cassert>
 
-std::uniform_int_distribution<int> bool_dist(0, 1);
-std::uniform_int_distribution<int> dist4(0, 3);
 constexpr char suit[] = { 'm', 'p', 's', 'z'};
 constexpr char tajia[] = { '+', '=', '-' };
 
 // 牌山から順子を取り出す
 template <bool DUANYAOJIU = false, bool YAOJIU = false, bool LVYISE = false>
 bool pick_shunzi(std::vector<std::string>& pai, std::map<std::string, int>& rest, const Rule& rule, std::mt19937_64& mt) {
+    std::uniform_int_distribution<int> dist4(0, 3);
     constexpr int N = DUANYAOJIU ? 5 : 7;
     constexpr int M = N * 3;
-    static std::uniform_int_distribution<int> shunzi_dist(0, M - 1);
+    std::uniform_int_distribution<int> shunzi_dist(0, M - 1);
     const int start = shunzi_dist(mt);
     for (int i = 0; i < M; i++) {
         const int j = (start + i) % M;
@@ -45,7 +45,7 @@ template <>
 bool pick_shunzi<false, true>(std::vector<std::string>& pai, std::map<std::string, int>& rest, const Rule& rule, std::mt19937_64& mt) {
     constexpr int N = 2;
     constexpr int M = N * 3;
-    static std::uniform_int_distribution<int> shunzi_dist(0, M - 1);
+    std::uniform_int_distribution<int> shunzi_dist(0, M - 1);
     const int start = shunzi_dist(mt);
     for (int i = 0; i < M; i++) {
         const int j = (start + i) % M;
@@ -88,8 +88,9 @@ bool pick_shunzi<false, false, true>(std::vector<std::string>& pai, std::map<std
 
 // 数牌の種類指定
 bool pick_shunzi(const int s_i, std::vector<std::string>& pai, std::map<std::string, int>& rest, const Rule& rule, std::mt19937_64& mt) {
+    std::uniform_int_distribution<int> dist4(0, 3);
     constexpr int N = 7;
-    static std::uniform_int_distribution<int> shunzi_dist(0, N - 1);
+    std::uniform_int_distribution<int> shunzi_dist(0, N - 1);
     const int start = shunzi_dist(mt);
     for (int i = 0; i < N; i++) {
         const int n = (start + i) % N;
@@ -116,9 +117,10 @@ bool pick_shunzi(const int s_i, std::vector<std::string>& pai, std::map<std::str
 // 牌山から刻子を取り出す
 template <bool DUANYAOJIU = false, bool YAOJIU = false, bool ZIPAI = true, bool SANYUAN = false, bool LVYISE = false>
 bool pick_kezi(std::vector<std::string>& pai, std::map<std::string, int>& rest, const Rule& rule, std::mt19937_64& mt) {
+    std::uniform_int_distribution<int> dist4(0, 3);
     constexpr int N = DUANYAOJIU ? 7 : 9;
     constexpr int M = N * 3 + (DUANYAOJIU ? 0 : 7);
-    static std::uniform_int_distribution<int> kezi_dist(0, M - 1);
+    std::uniform_int_distribution<int> kezi_dist(0, M - 1);
     const int start = kezi_dist(mt);
     for (int i = 0; i < M; i++) {
         const int j = (start + i) % M;
@@ -151,7 +153,7 @@ template <>
 bool pick_kezi<false, true>(std::vector<std::string>& pai, std::map<std::string, int>& rest, const Rule& rule, std::mt19937_64& mt) {
     constexpr int N = 2;
     constexpr int M = N * 3 + 7;
-    static std::uniform_int_distribution<int> kezi_dist(0, M - 1);
+    std::uniform_int_distribution<int> kezi_dist(0, M - 1);
     const int start = kezi_dist(mt);
     for (int i = 0; i < M; i++) {
         const int j = (start + i) % M;
@@ -174,7 +176,7 @@ template <>
 bool pick_kezi<false, true, false>(std::vector<std::string>& pai, std::map<std::string, int>& rest, const Rule& rule, std::mt19937_64& mt) {
     constexpr int N = 2;
     constexpr int M = N * 3;
-    static std::uniform_int_distribution<int> kezi_dist(0, M - 1);
+    std::uniform_int_distribution<int> kezi_dist(0, M - 1);
     const int start = kezi_dist(mt);
     for (int i = 0; i < M; i++) {
         const int j = (start + i) % M;
@@ -196,7 +198,7 @@ bool pick_kezi<false, true, false>(std::vector<std::string>& pai, std::map<std::
 template <>
 bool pick_kezi<false, false, true, true>(std::vector<std::string>& pai, std::map<std::string, int>& rest, const Rule& rule, std::mt19937_64& mt) {
     constexpr int N = 7;
-    static std::uniform_int_distribution<int> kezi_dist(0, N - 1);
+    std::uniform_int_distribution<int> kezi_dist(0, N - 1);
     const int start = kezi_dist(mt);
     for (int i = 0; i < N; i++) {
         const int j = (start + i) % N;
@@ -217,7 +219,7 @@ bool pick_kezi<false, false, true, true>(std::vector<std::string>& pai, std::map
 template <>
 bool pick_kezi<false, false, false, true>(std::vector<std::string>& pai, std::map<std::string, int>& rest, const Rule& rule, std::mt19937_64& mt) {
     constexpr int N = 3;
-    static std::uniform_int_distribution<int> kezi_dist(0, N - 1);
+    std::uniform_int_distribution<int> kezi_dist(0, N - 1);
     const int start = kezi_dist(mt);
     for (int i = 0; i < N; i++) {
         const int j = (start + i) % N;
@@ -239,7 +241,7 @@ template <>
 bool pick_kezi<false, false, true, false, true>(std::vector<std::string>& pai, std::map<std::string, int>& rest, const Rule& rule, std::mt19937_64& mt) {
     static const std::string lvy[] = { "s2", "s3", "s4", "s6", "s8", "z6" };
     constexpr int N = 6;
-    static std::uniform_int_distribution<int> kezi_dist(0, N - 1);
+    std::uniform_int_distribution<int> kezi_dist(0, N - 1);
     const int start = kezi_dist(mt);
     for (int i = 0; i < N; i++) {
         const int n = (start + i) % N;
@@ -258,8 +260,9 @@ bool pick_kezi<false, false, true, false, true>(std::vector<std::string>& pai, s
 // 数牌の種類指定
 template <bool ZIPAI = true>
 bool pick_kezi(const int s_i, std::vector<std::string>& pai, std::map<std::string, int>& rest, const Rule& rule, std::mt19937_64& mt) {
+    std::uniform_int_distribution<int> dist4(0, 3);
     constexpr int N = 9 + (ZIPAI ? 7 : 0);
-    static std::uniform_int_distribution<int> kezi_dist(0, N - 1);
+    std::uniform_int_distribution<int> kezi_dist(0, N - 1);
     const int start = kezi_dist(mt);
     for (int i = 0; i < N; i++) {
         const int j = (start + i) % N;
@@ -289,9 +292,10 @@ bool pick_kezi(const int s_i, std::vector<std::string>& pai, std::map<std::strin
 // 牌山から雀頭を取り出す
 template <bool DUANYAOJIU = false, bool YAOJIU = false, bool ZIPAI = true, bool SANYUAN = false, bool LVYISE = false>
 bool pick_jiangpai(std::vector<std::string>& pai, std::map<std::string, int>& rest, const Rule& rule, std::mt19937_64& mt) {
+    std::uniform_int_distribution<int> dist4(0, 3);
     constexpr int N = DUANYAOJIU ? 7 : 9;
     constexpr int M = N * 3 + (DUANYAOJIU ? 0 : 7);
-    static std::uniform_int_distribution<int> jiangpai_dist(0, M - 1);
+    std::uniform_int_distribution<int> jiangpai_dist(0, M - 1);
     const int start = jiangpai_dist(mt);
     for (int i = 0; i < M; i++) {
         const int j = (start + i) % M;
@@ -322,7 +326,7 @@ template <>
 bool pick_jiangpai<false, true, true>(std::vector<std::string>& pai, std::map<std::string, int>& rest, const Rule& rule, std::mt19937_64& mt) {
     constexpr int N = 2;
     constexpr int M = N * 3 + 7;
-    static std::uniform_int_distribution<int> jiangpai_dist(0, M - 1);
+    std::uniform_int_distribution<int> jiangpai_dist(0, M - 1);
     const int start = jiangpai_dist(mt);
     for (int i = 0; i < M; i++) {
         const int j = (start + i) % M;
@@ -344,7 +348,7 @@ template <>
 bool pick_jiangpai<false, true, false>(std::vector<std::string>& pai, std::map<std::string, int>& rest, const Rule& rule, std::mt19937_64& mt) {
     constexpr int N = 2;
     constexpr int M = N * 3;
-    static std::uniform_int_distribution<int> jiangpai_dist(0, M - 1);
+    std::uniform_int_distribution<int> jiangpai_dist(0, M - 1);
     const int start = jiangpai_dist(mt);
     for (int i = 0; i < M; i++) {
         const int j = (start + i) % M;
@@ -365,7 +369,7 @@ bool pick_jiangpai<false, true, false>(std::vector<std::string>& pai, std::map<s
 template <>
 bool pick_jiangpai<false, false, true, true>(std::vector<std::string>& pai, std::map<std::string, int>& rest, const Rule& rule, std::mt19937_64& mt) {
     constexpr int N = 7;
-    static std::uniform_int_distribution<int> jiangpai_dist(0, N - 1);
+    std::uniform_int_distribution<int> jiangpai_dist(0, N - 1);
     const int start = jiangpai_dist(mt);
     for (int i = 0; i < N; i++) {
         const int j = (start + i) % N;
@@ -385,7 +389,7 @@ bool pick_jiangpai<false, false, true, true>(std::vector<std::string>& pai, std:
 template <>
 bool pick_jiangpai<false, false, false, true>(std::vector<std::string>& pai, std::map<std::string, int>& rest, const Rule& rule, std::mt19937_64& mt) {
     constexpr int N = 3;
-    static std::uniform_int_distribution<int> jiangpai_dist(0, N - 1);
+    std::uniform_int_distribution<int> jiangpai_dist(0, N - 1);
     const int start = jiangpai_dist(mt);
     for (int i = 0; i < N; i++) {
         const int j = (start + i) % N;
@@ -406,7 +410,7 @@ template <>
 bool pick_jiangpai<false, false, true, false, true>(std::vector<std::string>& pai, std::map<std::string, int>& rest, const Rule& rule, std::mt19937_64& mt) {
     static const std::string lvy[] = { "s2", "s3", "s4", "s6", "s8", "z6" };
     constexpr int N = 6;
-    static std::uniform_int_distribution<int> jiangpai_dist(0, N - 1);
+    std::uniform_int_distribution<int> jiangpai_dist(0, N - 1);
     const int start = jiangpai_dist(mt);
     for (int i = 0; i < N; i++) {
         const int n = (start + i) % N;
@@ -424,8 +428,9 @@ bool pick_jiangpai<false, false, true, false, true>(std::vector<std::string>& pa
 // 数牌の種類指定
 template <bool ZIPAI = true>
 bool pick_jiangpai(const int s_i, std::vector<std::string>& pai, std::map<std::string, int>& rest, const Rule& rule, std::mt19937_64& mt) {
+    std::uniform_int_distribution<int> dist4(0, 3);
     constexpr int N = 9 + (ZIPAI ? 7 : 0);
-    static std::uniform_int_distribution<int> jiangpai_dist(0, N - 1);
+    std::uniform_int_distribution<int> jiangpai_dist(0, N - 1);
     const int start = jiangpai_dist(mt);
     for (int i = 0; i < N; i++) {
         const int j = (start + i) % N;
@@ -453,6 +458,7 @@ bool pick_jiangpai(const int s_i, std::vector<std::string>& pai, std::map<std::s
 
 template <bool DUANYAOJIU = false, bool YAOJIU = false, bool ZIPAI = true, bool LVYISE = false, bool JIANGPAI = true>
 bool setup_hule(std::vector<std::string>& pai, std::map<std::string, int>& rest, const Rule& rule, std::mt19937_64& mt) {
+    std::uniform_int_distribution<int> bool_dist(0, 1);
     while (pai.size() < 12) {
         if (bool_dist(mt) == 0) {
             // 順子
@@ -470,7 +476,7 @@ bool setup_hule(std::vector<std::string>& pai, std::map<std::string, int>& rest,
 
 // チー
 std::string make_chi(const std::string& p1, const std::string& p2, const std::string& p3, std::mt19937_64& mt) {
-    static std::uniform_int_distribution<int> i_dist(0, 2);
+    std::uniform_int_distribution<int> i_dist(0, 2);
     const int i = i_dist(mt);
     switch (i_dist(mt)) {
     case 0:
@@ -485,9 +491,9 @@ std::string make_chi(const std::string& p1, const std::string& p2, const std::st
 // 槓
 template <bool ANGANG = false>
 std::string make_gang(const std::string& p1, const std::string& p2, const std::string& p3, const std::string& p, std::mt19937_64& mt) {
-    static std::uniform_int_distribution<int> tajia_dist(0, 2);
-    static std::uniform_int_distribution<int> angang_dist(0, 7);
-    static std::uniform_int_distribution<int> jiagang_dist(0, 7);
+    std::uniform_int_distribution<int> tajia_dist(0, 2);
+    std::uniform_int_distribution<int> angang_dist(0, 7);
+    std::uniform_int_distribution<int> jiagang_dist(0, 7);
 
     const int tajia_i = tajia_dist(mt);
     if (ANGANG && angang_dist(mt) == 0) // 暗槓
@@ -501,8 +507,9 @@ std::string make_gang(const std::string& p1, const std::string& p2, const std::s
 // ポン、槓
 template <bool GANG = true>
 std::string make_pong_gang(const std::string& p1, const std::string& p2, const std::string& p3, std::map<std::string, int>& rest, std::mt19937_64& mt) {
-    static std::uniform_int_distribution<int> tajia_dist(0, 2);
-    static std::uniform_int_distribution<int> gang_dist(0, 15);
+    std::uniform_int_distribution<int> dist4(0, 3);
+    std::uniform_int_distribution<int> tajia_dist(0, 2);
+    std::uniform_int_distribution<int> gang_dist(0, 15);
 
     if (GANG && gang_dist(mt) == 0) {
         auto p = p1[1] == '0' ? to_string(p1[0], 5) : p1;
@@ -522,7 +529,7 @@ std::string make_pong_gang(const std::string& p1, const std::string& p2, const s
 
 template <int MIN = 0>
 void make_fulou(std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, std::mt19937_64& mt) {
-    static std::uniform_int_distribution<int> n_fulou_dist(MIN, 4);
+    std::uniform_int_distribution<int> n_fulou_dist(MIN, 4);
     const int n_fulou = n_fulou_dist(mt);
     std::array<int, 4> menqian_i{ 0, 1, 2, 3 };
     std::shuffle(menqian_i.begin(), menqian_i.end(), mt);
@@ -541,7 +548,7 @@ void make_fulou(std::vector<std::string>& pai, std::map<std::string, int>& rest,
 
 template <>
 void make_fulou<0>(std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, std::mt19937_64& mt) {
-    static std::uniform_int_distribution<int> n_fulou_dist(0, 4);
+    std::uniform_int_distribution<int> n_fulou_dist(0, 4);
     const int n_fulou = n_fulou_dist(mt);
     if (n_fulou > 0) {
         std::array<int, 4> menqian_i{ 0, 1, 2, 3 };
@@ -586,7 +593,7 @@ bool setup_menfeng(std::vector<std::string>& pai, std::map<std::string, int>& re
 
 // 翻牌
 bool setup_fanpai(std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, const Rule& rule, std::mt19937_64& mt) {
-    static std::uniform_int_distribution<int> fanpai_dist(0, 2);
+    std::uniform_int_distribution<int> fanpai_dist(0, 2);
     int fanpai = fanpai_dist(mt);
     auto p = to_string('z', 5 + fanpai);
     if (rest[p] >= 3) {
@@ -601,6 +608,7 @@ bool setup_fanpai(std::vector<std::string>& pai, std::map<std::string, int>& res
 
 // 平和
 bool setup_pinghe(std::vector<std::string>& pai, std::map<std::string, int>& rest, const int zhuangfeng, const int l, const Rule& rule, std::mt19937_64& mt) {
+    std::uniform_int_distribution<int> dist4(0, 3);
     if (!pick_shunzi(pai, rest, rule, mt)) return false;
     if (!pick_shunzi(pai, rest, rule, mt)) return false;
     if (!pick_shunzi(pai, rest, rule, mt)) return false;
@@ -648,7 +656,8 @@ bool setup_duanyaojiu(std::vector<std::string>& pai, std::map<std::string, int>&
 
 // 盃口
 bool setup_beikou(std::vector<std::string>& pai, std::map<std::string, int>& rest, const Rule& rule, std::mt19937_64& mt) {
-    static std::uniform_int_distribution<int> shunzi_dist(0, 7 * 3 - 1);
+    std::uniform_int_distribution<int> dist4(0, 3);
+    std::uniform_int_distribution<int> shunzi_dist(0, 7 * 3 - 1);
     int start = shunzi_dist(mt);
     for (int i = 0; i < 7 * 3; i++) {
         int j = (start + i) % (7 * 3);
@@ -720,8 +729,9 @@ bool setup_yibeikou(std::vector<std::string>& pai, std::map<std::string, int>& r
 
 // 三色同順
 bool setup_sansetongshun(std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, const Rule& rule, std::mt19937_64& mt) {
-    static std::uniform_int_distribution<int> shunzi_dist(0, 7 - 1);
-    static std::uniform_int_distribution<int> suit_dist(0, 2);
+    std::uniform_int_distribution<int> dist4(0, 3);
+    std::uniform_int_distribution<int> shunzi_dist(0, 7 - 1);
+    std::uniform_int_distribution<int> suit_dist(0, 2);
     int start = shunzi_dist(mt);
     for (int i = 0; i < 7; i++) {
         int n = (start + i) % 7;
@@ -756,6 +766,7 @@ bool setup_sansetongshun(std::vector<std::string>& pai, std::map<std::string, in
 
 // 一気通貫
 bool setup_yiqitongguan(std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, const Rule& rule, std::mt19937_64& mt) {
+    std::uniform_int_distribution<int> dist4(0, 3);
     std::uniform_int_distribution<int> suit_dist(0, 2);
     int start = suit_dist(mt);
     for (int i = 0; i < 3; i++) {
@@ -788,6 +799,7 @@ bool setup_yiqitongguan(std::vector<std::string>& pai, std::map<std::string, int
 
 // 混全帯幺九
 bool setup_hunquandaiyaojiu(std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, const Rule& rule, std::mt19937_64& mt) {
+    std::uniform_int_distribution<int> bool_dist(0, 1);
     if (!pick_shunzi<false, true>(pai, rest, rule, mt)) return false;
     if (!pick_shunzi<false, true>(pai, rest, rule, mt)) return false;
     if (bool_dist(mt) == 0) {
@@ -840,7 +852,7 @@ bool setup_duiduihu(std::vector<std::string>& pai, std::map<std::string, int>& r
 
 // 三暗刻
 bool setup_sananke(std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, const Rule& rule, std::mt19937_64& mt) {
-    static std::uniform_int_distribution<int> shunzi_dist(0, 2);
+    std::uniform_int_distribution<int> shunzi_dist(0, 2);
     if (!pick_kezi(pai, rest, rule, mt)) return false;
     if (!pick_kezi(pai, rest, rule, mt)) return false;
     if (!pick_kezi(pai, rest, rule, mt)) return false;
@@ -863,7 +875,7 @@ bool setup_sananke(std::vector<std::string>& pai, std::map<std::string, int>& re
 
 // 三槓子
 bool setup_sangangzi(std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, const Rule& rule, std::mt19937_64& mt) {
-    static std::uniform_int_distribution<int> shunzi_dist(0, 2);
+    std::uniform_int_distribution<int> shunzi_dist(0, 2);
     if (!pick_kezi(pai, rest, rule, mt)) return false;
     if (!pick_kezi(pai, rest, rule, mt)) return false;
     if (!pick_kezi(pai, rest, rule, mt)) return false;
@@ -902,9 +914,10 @@ bool setup_sangangzi(std::vector<std::string>& pai, std::map<std::string, int>& 
 
 // 三色同刻
 bool setup_sansetongke(std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, const Rule& rule, std::mt19937_64& mt) {
+    std::uniform_int_distribution<int> dist4(0, 3);
     constexpr int N = 9;
-    static std::uniform_int_distribution<int> kezi_dist(0, N - 1);
-    static std::uniform_int_distribution<int> suit_dist(0, 2);
+    std::uniform_int_distribution<int> kezi_dist(0, N - 1);
+    std::uniform_int_distribution<int> suit_dist(0, 2);
     int start = kezi_dist(mt);
     for (int i = 0; i < N; i++) {
         int n = (start + i) % N;
@@ -961,6 +974,7 @@ bool setup_sansetongke(std::vector<std::string>& pai, std::map<std::string, int>
 
 // 混老頭
 bool setup_hunlaotou(std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, const Rule& rule, std::mt19937_64& mt) {
+    std::uniform_int_distribution<int> bool_dist(0, 1);
     if (!pick_kezi<false, true, false>(pai, rest, rule, mt)) return false;
     if (!pick_kezi<false, true>(pai, rest, rule, mt)) return false;
     if (!pick_kezi<false, true>(pai, rest, rule, mt)) return false;
@@ -978,6 +992,7 @@ bool setup_hunlaotou(std::vector<std::string>& pai, std::map<std::string, int>& 
 
 // 小三元
 bool setup_xiaosanyuan(std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, const Rule& rule, std::mt19937_64& mt) {
+    std::uniform_int_distribution<int> bool_dist(0, 1);
     if (!pick_kezi<false, false, false, true>(pai, rest, rule, mt)) return false;
     if (!pick_kezi<false, false, false, true>(pai, rest, rule, mt)) return false;
     rest["z5"] -= 4; rest["z6"] -= 4; rest["z7"] -= 4;
@@ -999,7 +1014,8 @@ bool setup_xiaosanyuan(std::vector<std::string>& pai, std::map<std::string, int>
 
 // 混一色
 bool setup_hunyise(std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, const Rule& rule, std::mt19937_64& mt) {
-    static std::uniform_int_distribution<int> suit_dist(0, 2);
+    std::uniform_int_distribution<int> bool_dist(0, 1);
+    std::uniform_int_distribution<int> suit_dist(0, 2);
     const int s_i = suit_dist(mt);
     const auto is_kezi_zipai = bool_dist(mt) == 0;
     int n_kezi = 0;
@@ -1059,7 +1075,8 @@ bool setup_erbeikou(std::vector<std::string>& pai, std::map<std::string, int>& r
 
 // 清一色
 bool setup_qingyise(std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, const Rule& rule, std::mt19937_64& mt) {
-    static std::uniform_int_distribution<int> suit_dist(0, 2);
+    std::uniform_int_distribution<int> bool_dist(0, 1);
+    std::uniform_int_distribution<int> suit_dist(0, 2);
     const int s_i = suit_dist(mt);
     int n_kezi = 0;
     while (pai.size() < 12) {
@@ -1084,7 +1101,7 @@ bool setup_qingyise(std::vector<std::string>& pai, std::map<std::string, int>& r
 
 // 国士無双
 bool setup_guoshiwushuang(std::vector<std::string>& pai, std::map<std::string, int>& rest, const Rule& rule, std::mt19937_64& mt) {
-    static std::uniform_int_distribution<int> guoshi_dist(0, 11);
+    std::uniform_int_distribution<int> guoshi_dist(0, 11);
     static const std::string guoshi[] = { "m1", "m9", "p1", "p9", "s1", "s9", "z1", "z2", "z3", "z4", "z5", "z6", "z7" };
     for (const auto& p : guoshi) {
         if (rest[p] < 1) return false;
@@ -1125,7 +1142,7 @@ bool setup_dasanyuan(std::vector<std::string>& pai, std::map<std::string, int>& 
 
 // 小四喜
 bool setup_xiaosixi(std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, const Rule& rule, std::mt19937_64& mt) {
-    static std::uniform_int_distribution<int> sixi_dist(0, 3);
+    std::uniform_int_distribution<int> sixi_dist(0, 3);
     static const std::string sixi[] = { "z1", "z2", "z3", "z4" };
     const auto sixi_i = sixi_dist(mt);
     for (int i = 0; i < 4; i++) {
@@ -1149,7 +1166,7 @@ bool setup_xiaosixi(std::vector<std::string>& pai, std::map<std::string, int>& r
 
 // 大四喜
 bool setup_dasixi(std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, const Rule& rule, std::mt19937_64& mt) {
-    static std::uniform_int_distribution<int> sixi_dist(0, 3);
+    std::uniform_int_distribution<int> sixi_dist(0, 3);
     static const std::string sixi[] = { "z1", "z2", "z3", "z4" };
     for (const auto& p : sixi) {
         if (rest[p] < 3) return false;
@@ -1220,8 +1237,8 @@ bool setup_sigangzi(std::vector<std::string>& pai, std::map<std::string, int>& r
 
 // 九蓮宝燈
 bool setup_jiulianbaodeng(std::vector<std::string>& pai, std::map<std::string, int>& rest, const Rule& rule, std::mt19937_64& mt) {
-    static std::uniform_int_distribution<int> suit_dist(0, 2);
-    static std::uniform_int_distribution<int> n_dist(1, 9);
+    std::uniform_int_distribution<int> suit_dist(0, 2);
+    std::uniform_int_distribution<int> n_dist(1, 9);
     const int s_i = suit_dist(mt);
     const char s = suit[s_i];
     for (const int i : { 1, 9 }) {
@@ -1247,7 +1264,7 @@ bool setup_jiulianbaodeng(std::vector<std::string>& pai, std::map<std::string, i
 
 // ランダムな役の手牌を作る
 bool make_hule(std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, const int zhuangfeng, const int l, const Rule& rule, std::mt19937_64& mt) {
-    static std::uniform_int_distribution<int> hupai_dist(0, 29);
+    std::uniform_int_distribution<int> hupai_dist(0, 29);
 
     switch (hupai_dist(mt)) {
     case 0:
@@ -1347,7 +1364,7 @@ bool make_hule(std::vector<std::string>& pai, std::map<std::string, int>& rest, 
 
 // 1枚捨てて聴牌にする
 void discard_one(std::vector<std::string>& pai, std::map<std::string, int>& rest, std::vector<std::string>& fulou, std::mt19937_64& mt) {
-    static std::uniform_int_distribution<int> dist14(0, 13);
+    std::uniform_int_distribution<int> dist14(0, 13);
     const int discard_i = dist14(mt);
     if (discard_i < pai.size()) {
         const auto& p = pai[discard_i];
@@ -1436,6 +1453,8 @@ void make_n_xiangting(std::vector<std::string>& pai, std::map<std::string, int>&
 
 // ランダムな役のN向聴の状態から開始するゲームを生成する
 void random_game_state(Game& game, const int n_xiangting, std::mt19937_64& mt) {
+    std::uniform_int_distribution<int> dist4(0, 3);
+    std::uniform_int_distribution<int> bool_dist(0, 1);
     std::map<std::string, int> rest{
         { "m1", 4 }, { "m2", 4 }, { "m3", 4 }, { "m4", 4 }, { "m5", 4 }, { "m6", 4 }, { "m7", 4 }, { "m8", 4 }, { "m9", 4 },
         { "p1", 4 }, { "p2", 4 }, { "p3", 4 }, { "p4", 4 }, { "p5", 4 }, { "p6", 4 }, { "p7", 4 }, { "p8", 4 }, { "p9", 4 },
