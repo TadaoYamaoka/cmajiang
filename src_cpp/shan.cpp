@@ -37,18 +37,33 @@ Shan::Shan(std::vector<std::string>& pai, const Rule& rule)
         _libaopai.emplace_back(_pai[9]);
 }
 
-void Shan::set(const std::string& paistr, const Rule& rule) {
+void Shan::set(const std::string& shanstr, const Rule& rule) {
     _rule = rule;
     _weikaigang = false;
     _closed = false;
-    _pai.clear();
-    for (size_t i = 0; i < paistr.size(); i += 2) {
-        _pai.emplace_back(paistr.substr(i, 2));
+    std::stringstream ss(shanstr);
+    {
+        std::string paistr;
+        std::getline(ss, paistr, ',');
+        _pai.clear();
+        for (size_t i = 0; i < paistr.size(); i += 2) {
+            _pai.emplace_back(paistr.substr(i, 2));
+        }
     }
-    _baopai.emplace_back(_pai[4]);
-    // 裏ドラあり
-    if (rule.libaopai)
-        _libaopai.emplace_back(_pai[9]);
+    {
+        std::string baopaistr;
+        std::getline(ss, baopaistr, ',');
+        for (size_t i = 0; i < baopaistr.size(); i += 2) {
+            _baopai.emplace_back(baopaistr.substr(i, 2));
+        }
+    }
+    {
+        std::string libaopaistr;
+        std::getline(ss, libaopaistr);
+        for (size_t i = 0; i < libaopaistr.size(); i += 2) {
+            _libaopai.emplace_back(libaopaistr.substr(i, 2));
+        }
+    }
 }
 
 // 自摸

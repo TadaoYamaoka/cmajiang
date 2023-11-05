@@ -25,7 +25,7 @@ public:
     Shan(const Rule& rule);
     Shan(std::vector<std::string>& pai, const Rule& rule = {});
 
-    void set(const std::string& paistr, const Rule& rule);
+    void set(const std::string& shanstr, const Rule& rule);
 
     std::vector<std::string>& pai() { return _pai; }
     const std::vector<std::string>& pai() const { return _pai; }
@@ -61,6 +61,8 @@ public:
     Shan& close() { _closed = true; return *this; }
     const Rule& rule() const { return _rule; }
 
+    friend std::ostream& operator<<(std::ostream& os, const Shan& shan);
+
 private:
     Rule _rule;
     std::vector<std::string> _pai;
@@ -71,7 +73,13 @@ private:
 };
 
 inline std::ostream& operator<<(std::ostream& os, const Shan& shan) {
-    for (const auto& p : shan.pai())
+    for (const auto& p : shan._pai)
+        os << p;
+    os << ",";
+    for (const auto& p : shan._baopai)
+        os << p;
+    os << ",";
+    for (const auto& p : shan._libaopai)
         os << p;
     return os;
 }
