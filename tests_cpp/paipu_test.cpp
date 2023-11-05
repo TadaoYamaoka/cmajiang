@@ -185,43 +185,54 @@ TEST(PaipuTest, random_stream) {
 }
 
 TEST(PaipuTest, stream_replay) {
-    std::mt19937_64 mt{ 0 };
-    set_seed(0);
+    const auto random_game = [](const size_t seed) {
+        std::mt19937_64 mt{ seed };
+        set_seed(seed);
 
-    Game game;
-    playout(game, mt, false);
+        Game game;
+        playout(game, mt, false);
 
-    std::stringstream ss;
-    ss << game.paipu();
+        std::stringstream ss;
+        ss << game.paipu();
 
-    Game::Paipu paipu;
-    ss >> paipu;
+        Game::Paipu paipu;
+        ss >> paipu;
 
-    PaipuReplay replay{ paipu };
-    while (replay.status() != Game::Status::JIEJI) {
-        replay.next();
+        PaipuReplay replay{ paipu };
+        while (replay.status() != Game::Status::JIEJI) {
+            replay.next();
+        }
+
+        EXPECT_EQ(game.point(), replay.game().point()) << seed;
+        };
+    for (size_t seed = 0; seed < 10; seed++) {
+        EXPECT_NO_THROW(random_game(seed)) << seed;
     }
-
-    EXPECT_EQ(game.point(), replay.game().point());
 }
 
 TEST(PaipuTest, random_stream_replay) {
-    std::mt19937_64 mt{ 0 };
-    set_seed(0);
+    const auto random_game = [](const size_t seed) {
+        std::mt19937_64 mt{ seed };
+        set_seed(seed);
 
-    Game game;
-    playout(game, mt, true);
+        Game game;
+        playout(game, mt, true);
 
-    std::stringstream ss;
-    ss << game.paipu();
+        std::stringstream ss;
+        ss << game.paipu();
 
-    Game::Paipu paipu;
-    ss >> paipu;
+        Game::Paipu paipu;
+        ss >> paipu;
 
-    PaipuReplay replay{ paipu };
-    while (replay.status() != Game::Status::JIEJI) {
-        replay.next();
+        PaipuReplay replay{ paipu };
+        while (replay.status() != Game::Status::JIEJI) {
+            replay.next();
+        }
+
+        EXPECT_EQ(game.point(), replay.game().point()) << seed;
+        };
+    for (size_t seed = 0; seed < 10; seed++) {
+        std::cerr << seed << std::endl;
+        EXPECT_NO_THROW(random_game(seed)) << seed;
     }
-
-    EXPECT_EQ(game.point(), replay.game().point());
 }

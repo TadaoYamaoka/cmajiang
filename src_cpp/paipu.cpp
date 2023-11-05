@@ -75,7 +75,10 @@ void PaipuReplay::next() {
                 _game.reply(_game.lunban_player_id(), move.msg, move.arg);
                 _game.next();
                 assert(find(_game.shoupai_(_game.lunban()).fulou_(), move.arg));
-                _game.next();
+                if (_paipu.rounds[_round].moves[_ply].msg != Game::Message::HULE || _paipu.rounds[_round].moves[_ply].arg.empty()) {
+                    // 槍槓以外
+                    _game.next();
+                }
             }
             else {
                 assert(_game.status() == Game::Status::DAPAI);
