@@ -352,7 +352,7 @@ PYBIND11_MODULE(_cmajiang, m) {
                     else if (manguan >= 1.5)   ss << u8"跳満 ";
                     else if (manguan >= 1)     ss << u8"満貫 ";
 
-                    ss << defen.defen << u8"点\n";
+                    ss << defen.defen << u8"点";
                     return ss.str();
                 }
             )
