@@ -454,8 +454,14 @@ PYBIND11_MODULE(_cmajiang, m) {
         ;
     py::class_<Game::Paipu>(m, "Paipu")
         .def(py::init<>())
+        .def(py::init<const std::string&>())
         .def_readwrite("rule", &Game::Paipu::rule)
         .def_readwrite("rounds", &Game::Paipu::rounds)
+        .def("__repr__", [](const Game::Paipu& paipu) {
+            std::stringstream ss;
+            ss << paipu;
+            return ss.str();
+        })
         ;
     py::class_<Game>(m, "Game")
         .def(py::init<>())

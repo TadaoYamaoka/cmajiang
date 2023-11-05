@@ -211,4 +211,5 @@ std::istream& operator>>(std::istream& is, Game::Paipu& paipu) {
         auto& round = paipu.rounds.emplace_back();
         load_round(ss, round, paipu.rule);
     }
+    return is;
 }

@@ -78,6 +78,13 @@ public:
             std::vector<Reply> moves;
         };
         std::vector<Round> rounds;
+
+        Paipu() {}
+        Paipu(const std::string& paipu_str) {
+            extern std::istream& operator>>(std::istream & is, Game::Paipu & paipu);
+            std::stringstream ss(paipu_str);
+            ss >> *this;
+        }
     };
 
     Game(const Rule& rule, const bool paipu = true);
