@@ -749,26 +749,26 @@ void Game::reply_pingju() {
 }
 
 // 打牌取得
-std::vector<std::string> Game::get_dapai() {
+std::vector<std::string> Game::get_dapai() const {
     return Game::_get_dapai(_rule, _model.shoupai[_model.lunban]);
 }
 
 // 吃面子取得
-std::vector<std::string> Game::get_chi_mianzi(const int l) {
+std::vector<std::string> Game::get_chi_mianzi(const int l) const {
     const auto d = "_+=-"[(4 + _model.lunban - l) % 4];
     return Game::_get_chi_mianzi(_rule, _model.shoupai[l],
         _dapai + d, _model.shan.paishu());
 }
 
 // 碰(ポン)面子取得
-std::vector<std::string> Game::get_peng_mianzi(const int l) {
+std::vector<std::string> Game::get_peng_mianzi(const int l) const {
     const auto d = "_+=-"[(4 + _model.lunban - l) % 4];
     return Game::_get_peng_mianzi(_rule, _model.shoupai[l],
         _dapai + d, _model.shan.paishu());
 }
 
 // 杠(槓)面子取得
-std::vector<std::string> Game::get_gang_mianzi(const int l) {
+std::vector<std::string> Game::get_gang_mianzi(const int l) const {
     if (l < 0) {
         return Game::_get_gang_mianzi(_rule, _model.shoupai[_model.lunban],
             {}, _model.shan.paishu(),
@@ -783,14 +783,14 @@ std::vector<std::string> Game::get_gang_mianzi(const int l) {
 }
 
 // 立直許可
-std::pair<bool, std::vector<std::string>> Game::allow_lizhi(const std::string& p) {
+std::pair<bool, std::vector<std::string>> Game::allow_lizhi(const std::string& p) const {
     return Game::_allow_lizhi(_rule, _model.shoupai[_model.lunban],
         p, _model.shan.paishu(),
         _model.defen[_model.player_id[_model.lunban]]);
 }
 
 // 和了可能
-bool Game::allow_hule(const int l) {
+bool Game::allow_hule(const int l) const {
     if (l < 0) {
         const auto hupai = _model.shoupai[_model.lunban].lizhi()
             || _status == Status::GANGZIMO
@@ -815,7 +815,7 @@ bool Game::allow_hule(const int l) {
 }
 
 // 流局可能
-bool Game::allow_pingju() {
+bool Game::allow_pingju() const {
     return Game::_allow_pingju(_rule, _model.shoupai[_model.lunban],
         _diyizimo);
 }

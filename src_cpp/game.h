@@ -154,20 +154,20 @@ public:
     void reply_pingju();
 
     // 打牌取得
-    std::vector<std::string> get_dapai();
+    std::vector<std::string> get_dapai() const;
     // 吃(チー)面子取得
-    std::vector<std::string> get_chi_mianzi(const int l);
+    std::vector<std::string> get_chi_mianzi(const int l) const;
     // 碰(ポン)面子取得
-    std::vector<std::string> get_peng_mianzi(const int l);
+    std::vector<std::string> get_peng_mianzi(const int l) const;
     // 杠(槓)面子取得
-    std::vector<std::string> get_gang_mianzi(const int l = -1);
+    std::vector<std::string> get_gang_mianzi(const int l = -1) const;
 
     // 立直可能
-    std::pair<bool, std::vector<std::string>> allow_lizhi(const std::string& p = {});
+    std::pair<bool, std::vector<std::string>> allow_lizhi(const std::string& p = {}) const;
     // 和了可能
-    bool allow_hule(const int l = -1);
+    bool allow_hule(const int l = -1) const;
     // 流局可能
-    bool allow_pingju();
+    bool allow_pingju() const;
 
     // 打牌取得
     static std::vector<std::string> _get_dapai(const Rule& rule, const Shoupai& shoupai);
