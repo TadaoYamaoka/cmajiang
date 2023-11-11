@@ -506,7 +506,7 @@ std::string make_gang(const std::string& p1, const std::string& p2, const std::s
 
 // ポン、槓
 template <bool GANG = true>
-std::string make_pong_gang(const std::string& p1, const std::string& p2, const std::string& p3, std::map<std::string, int>& rest, std::mt19937_64& mt) {
+std::string make_peng_gang(const std::string& p1, const std::string& p2, const std::string& p3, std::map<std::string, int>& rest, std::mt19937_64& mt) {
     std::uniform_int_distribution<int> dist4(0, 3);
     std::uniform_int_distribution<int> tajia_dist(0, 2);
     std::uniform_int_distribution<int> gang_dist(0, 15);
@@ -539,7 +539,7 @@ void make_fulou(std::vector<std::string>& pai, std::map<std::string, int>& rest,
         if (pai[j] != pai[j + 1])
             fulou.emplace_back(make_chi(pai[j], pai[j + 1], pai[j + 2], mt));
         else
-            fulou.emplace_back(make_pong_gang(pai[j], pai[j + 1], pai[j + 2], rest, mt));
+            fulou.emplace_back(make_peng_gang(pai[j], pai[j + 1], pai[j + 2], rest, mt));
         pai.erase(pai.begin() + j + 2);
         pai.erase(pai.begin() + j + 1);
         pai.erase(pai.begin() + j);
@@ -559,7 +559,7 @@ void make_fulou<0>(std::vector<std::string>& pai, std::map<std::string, int>& re
             if (pai[j] != pai[j + 1])
                 fulou.emplace_back(make_chi(pai[j], pai[j + 1], pai[j + 2], mt));
             else
-                fulou.emplace_back(make_pong_gang(pai[j], pai[j + 1], pai[j + 2], rest, mt));
+                fulou.emplace_back(make_peng_gang(pai[j], pai[j + 1], pai[j + 2], rest, mt));
             pai.erase(pai.begin() + j, pai.begin() + j + 3);
         }
     }
@@ -864,7 +864,7 @@ bool setup_sananke(std::vector<std::string>& pai, std::map<std::string, int>& re
     }
     else {
         if (!pick_kezi(pai, rest, rule, mt)) return false;
-        fulou.emplace_back(make_pong_gang(pai[9], pai[10], pai[11], rest, mt));
+        fulou.emplace_back(make_peng_gang(pai[9], pai[10], pai[11], rest, mt));
     }
     if (!pick_jiangpai(pai, rest, rule, mt)) return false;
     if (fulou.size() > 0) {
@@ -897,7 +897,7 @@ bool setup_sangangzi(std::vector<std::string>& pai, std::map<std::string, int>& 
         }
         else {
             if (!pick_kezi(pai, rest, rule, mt)) return false;
-            fulou.emplace_back(make_pong_gang<false>(pai[9], pai[10], pai[11], rest, mt));
+            fulou.emplace_back(make_peng_gang<false>(pai[9], pai[10], pai[11], rest, mt));
         }
         if (!pick_jiangpai(pai, rest, rule, mt)) return false;
         if (fulou.size() > 0) {
