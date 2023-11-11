@@ -591,13 +591,13 @@ PYBIND11_MODULE(_cmajiang, m) {
         auto data = static_cast<float*>(ndarray.request().ptr);
         shan_features(shan, reinterpret_cast<float(*)[9][4]>(data));
     });
-    m.def("game_public_features", [](const Game& game, const int lunban, py::array_t<float> ndarray) {
+    m.def("public_features", [](const Game& game, const int lunban, py::array_t<float> ndarray) {
         auto data = static_cast<float*>(ndarray.request().ptr);
-        game_public_features(game, lunban, reinterpret_cast<float(*)[9][4]>(data));
+        public_features(game, lunban, reinterpret_cast<float(*)[9][4]>(data));
     });
-    m.def("game_private_features", [](const Game& game, const int lunban, py::array_t<float> ndarray) {
+    m.def("private_features", [](const Game& game, const int lunban, py::array_t<float> ndarray) {
         auto data = static_cast<float*>(ndarray.request().ptr);
-        game_private_features(game, lunban, reinterpret_cast<float(*)[9][4]>(data));
+        private_features(game, lunban, reinterpret_cast<float(*)[9][4]>(data));
     });
     m.def("set_seed", &set_seed);
     m.def("random_zhuangfeng", [](const int zhuangfeng, const Rule& rule) {

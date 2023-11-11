@@ -162,7 +162,7 @@ TEST(FeatureTest, game_features) {
         EXPECT_EQ(0, game.lunban());
 
         std::array<std::array<std::array<float, 4>, 9>, N_CHANNELS_PUBLIC> data{};
-        game_public_features(game, 0, (float(*)[9][4])(data.data()));
+        public_features(game, 0, (float(*)[9][4])(data.data()));
 
         std::array<std::array<std::array<float, 4>, 9>, N_CHANNELS_PUBLIC> expected{};
         size_t index = 0;
@@ -207,7 +207,7 @@ TEST(FeatureTest, game_features) {
     {
         // 非公開情報
         std::array<std::array<std::array<float, 4>, 9>, N_CHANNELS_PRIVATE> data{};
-        game_private_features(game, 0, (float(*)[9][4])(data.data()));
+        private_features(game, 0, (float(*)[9][4])(data.data()));
 
         std::array<std::array<std::array<float, 4>, 9>, N_CHANNELS_PRIVATE> expected{};
         size_t index = 0;
@@ -237,7 +237,7 @@ TEST(FeatureTest, game_features) {
 
         // 南家の特徴量
         std::array<std::array<std::array<float, 4>, 9>, N_CHANNELS_PUBLIC> data{};
-        game_public_features(game, 1, (float(*)[9][4])(data.data()));
+        public_features(game, 1, (float(*)[9][4])(data.data()));
 
         std::array<std::array<std::array<float, 4>, 9>, N_CHANNELS_PUBLIC> expected{};
         size_t index = 0;
@@ -283,7 +283,7 @@ TEST(FeatureTest, game_features) {
     {
         // 非公開情報
         std::array<std::array<std::array<float, 4>, 9>, N_CHANNELS_PRIVATE> data{};
-        game_private_features(game, 1, (float(*)[9][4])(data.data()));
+        private_features(game, 1, (float(*)[9][4])(data.data()));
 
         std::array<std::array<std::array<float, 4>, 9>, N_CHANNELS_PRIVATE> expected{};
         size_t index = 0;
@@ -314,7 +314,7 @@ TEST(FeatureTest, game_features) {
 
         // 南家の特徴量
         std::array<std::array<std::array<float, 4>, 9>, N_CHANNELS_PUBLIC> data{};
-        game_public_features(game, 1, (float(*)[9][4])(data.data()));
+        public_features(game, 1, (float(*)[9][4])(data.data()));
 
         std::array<std::array<std::array<float, 4>, 9>, N_CHANNELS_PUBLIC> expected{};
         size_t index = 0;
@@ -362,7 +362,7 @@ TEST(FeatureTest, game_features) {
     {
         // 非公開情報
         std::array<std::array<std::array<float, 4>, 9>, N_CHANNELS_PRIVATE> data{};
-        game_private_features(game, 1, (float(*)[9][4])(data.data()));
+        private_features(game, 1, (float(*)[9][4])(data.data()));
 
         std::array<std::array<std::array<float, 4>, 9>, N_CHANNELS_PRIVATE> expected{};
         size_t index = 0;
@@ -396,7 +396,7 @@ TEST(FeatureTest, game_features) {
 
         // 西家の特徴量
         std::array<std::array<std::array<float, 4>, 9>, N_CHANNELS_PUBLIC> data{};
-        game_public_features(game, 2, (float(*)[9][4])(data.data()));
+        public_features(game, 2, (float(*)[9][4])(data.data()));
 
         std::array<std::array<std::array<float, 4>, 9>, N_CHANNELS_PUBLIC> expected{};
         size_t index = 0;
@@ -451,7 +451,7 @@ TEST(FeatureTest, game_features) {
     {
         // 非公開情報
         std::array<std::array<std::array<float, 4>, 9>, N_CHANNELS_PRIVATE> data{};
-        game_private_features(game, 2, (float(*)[9][4])(data.data()));
+        private_features(game, 2, (float(*)[9][4])(data.data()));
 
         std::array<std::array<std::array<float, 4>, 9>, N_CHANNELS_PRIVATE> expected{};
         size_t index = 0;
@@ -486,7 +486,7 @@ TEST(FeatureTest, game_features) {
 
         // 北家の特徴量
         std::array<std::array<std::array<float, 4>, 9>, N_CHANNELS_PUBLIC> data{};
-        game_public_features(game, 3, (float(*)[9][4])(data.data()));
+        public_features(game, 3, (float(*)[9][4])(data.data()));
 
         std::array<std::array<std::array<float, 4>, 9>, N_CHANNELS_PUBLIC> expected{};
         size_t index = 0;
@@ -544,7 +544,7 @@ TEST(FeatureTest, game_features) {
     {
         // 非公開情報
         std::array<std::array<std::array<float, 4>, 9>, N_CHANNELS_PRIVATE> data{};
-        game_private_features(game, 3, (float(*)[9][4])(data.data()));
+        private_features(game, 3, (float(*)[9][4])(data.data()));
 
         std::array<std::array<std::array<float, 4>, 9>, N_CHANNELS_PRIVATE> expected{};
         size_t index = 0;
