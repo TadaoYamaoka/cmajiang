@@ -42,7 +42,8 @@ std::vector<std::string> __tingpai(const Shoupai& shoupai) {
 
 Rule create_rule(
     const int startingPoints,
-    const std::array<std::string, 4>& rankPoints,
+    const std::array<float, 4>& rankPoints,
+    const bool roundRankPoints,
     const bool doubleWindTileScore,
     const std::array<int, 3>& hongpai,
     const bool canduan,
@@ -73,6 +74,7 @@ Rule create_rule(
     return Rule{
         startingPoints,
         rankPoints,
+        roundRankPoints,
         doubleWindTileScore,
         hongpai,
         canduan,
@@ -167,7 +169,8 @@ PYBIND11_MODULE(_cmajiang, m) {
         .def(py::init<>())
         .def(py::init(&create_rule),
             py::arg("startingPoints") = 25000,
-            py::arg("rankPoints") = std::array<std::string, 4>{ "20.0", "10.0", "-10.0", "-20.0" },
+            py::arg("rankPoints") = std::array<float, 4>{ 20, 10, -10, -20 },
+            py::arg("roundRankPoints") = false,
             py::arg("doubleWindTileScore") = false,
             py::arg("hongpai") = std::array<int, 3>{ 1, 1, 1 },
             py::arg("canduan") = true,
@@ -533,7 +536,7 @@ PYBIND11_MODULE(_cmajiang, m) {
         .def_property_readonly("model", [](const Game& game) { return game.model(); })
         .def_property_readonly("rule", &Game::rule)
         .def_property_readonly("status", &Game::status)
-        .def_property_readonly("paipu", &Game::paipu)
+        .def_property_readonly("paipu", [](const Game& game) { return game.paipu(); })
         ;
     py::class_<PaipuReplay>(m, "PaipuReplay")
         .def(py::init<const Game::Paipu&>())
