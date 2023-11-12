@@ -114,6 +114,7 @@ std::istream& operator>>(std::istream& is, std::array<T, 3>& arr) {
 inline std::ostream& operator<<(std::ostream& os, const Rule& rule) {
     os << rule.startingPoints << " "
         << rule.rankPoints << " "
+        << rule.roundRankPoints << " "
         << rule.doubleWindTileScore << " "
         << rule.hongpai << " "
         << rule.canduan << " "
@@ -146,6 +147,7 @@ inline std::ostream& operator<<(std::ostream& os, const Rule& rule) {
 inline std::istream& operator>>(std::istream& is, Rule& rule) {
     is >> rule.startingPoints
         >> rule.rankPoints
+        >> rule.roundRankPoints
         >> rule.doubleWindTileScore
         >> rule.hongpai
         >> rule.canduan
