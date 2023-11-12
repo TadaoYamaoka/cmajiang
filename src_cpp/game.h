@@ -252,6 +252,7 @@ public:
     const Status status() const { return _status; }
 
     const Paipu& paipu() const { return *_paipu; }
+    Paipu& paipu() { return *_paipu; }
 
 private:
     Rule _rule;

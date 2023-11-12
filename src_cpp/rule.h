@@ -8,7 +8,9 @@ struct Rule {
     // 配給原点
     int startingPoints = 25000;
     // 順位点
-    std::array<std::string, 4> rankPoints = { "20.0", "10.0", "-10.0", "-20.0" };
+    std::array<float, 4> rankPoints = { 20, 10, -10, -20 };
+    // 順位点四捨五入
+    bool roundRankPoints = false;
     // 連風牌は2符
     bool doubleWindTileScore = false;
 

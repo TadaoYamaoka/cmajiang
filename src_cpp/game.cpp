@@ -10,7 +10,6 @@ static const std::regex re_fulou{ R"(^[mpsz]\d{4})" };
 static const std::regex re_gangzimo{ R"(^[mpsz]\d{4}$)" };
 static const std::regex re_pingju1{ R"(^z)" };
 static const std::regex re_pingju2{ R"(^[mps][19])" };
-static const std::regex re_jieju{ R"(\.\d$)" };
 static const std::regex re_reply_zimo{ R"(\*$)" };
 static const std::regex re_reply_dapai1{ R"(^[mpsz](\d)\1\1\1)" };
 static const std::regex re_reply_dapai2{ R"(^[mpsz](\d)\1\1)" };
@@ -521,12 +520,11 @@ void Game::jieju() {
         _rank[paiming[i]] = i + 1;
     }
 
-    const bool round = !find_if(_rule.rankPoints/*順位点*/, [](const auto& p) { return std::regex_search(p, re_jieju); });
     for (int i = 1; i < 4; i++) {
         int id = paiming[i];
         _point[id] = (defen[id] - 30000) / 1000.0f
-            + std::stof(_rule.rankPoints/*順位点*/[i]);
-        if (round) _point[id] = std::round(_point[id]);
+            + _rule.rankPoints/*順位点*/[i];
+        if (_rule.roundRankPoints) _point[id] = std::round(_point[id]);
         _point[paiming[0]] -= _point[id];
     }
 
