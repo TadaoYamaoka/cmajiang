@@ -562,6 +562,7 @@ PYBIND11_MODULE(_cmajiang, m) {
     m.attr("N_CHANNELS_SHAN") = N_CHANNELS_SHAN;
     m.attr("N_CHANNELS_PUBLIC") = N_CHANNELS_PUBLIC;
     m.attr("N_CHANNELS_PRIVATE") = N_CHANNELS_PRIVATE;
+    m.attr("N_ACTIONS") = N_ACTIONS;
     m.def("status_featuers", [](const Game& game, const int lunban, py::array_t<float> ndarray) {
         auto data = static_cast<float*>(ndarray.request().ptr);
         status_featuers(game, lunban, reinterpret_cast<float(*)[9][4]>(data));
