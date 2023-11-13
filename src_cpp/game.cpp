@@ -33,8 +33,7 @@ T filter(const T& v, F f) {
 }
 
 
-Game::Game(const Rule& rule, const bool paipu) : _rule{ rule }, _paipu{} {
-    _model.defen = { _rule.startingPoints, _rule.startingPoints, _rule.startingPoints, _rule.startingPoints };
+Game::Game(const Rule& rule, const bool paipu) : _rule{ rule }, _paipu{}, _status{ Status::NONE } {
     if (paipu) {
         _paipu = std::make_unique<Paipu>();
         _paipu->rule = rule;
@@ -154,6 +153,9 @@ void Game::next() {
 
 // 开局
 void Game::kaiju(const int qijia) {
+    _model = {};
+    _model.defen = { _rule.startingPoints, _rule.startingPoints, _rule.startingPoints, _rule.startingPoints };
+
     // 起家
     std::uniform_int_distribution<int> dist(0, 3);
     _model.qijia = (qijia < 0) ? dist(engine) : qijia;
