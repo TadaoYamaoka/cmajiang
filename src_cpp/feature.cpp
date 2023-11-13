@@ -3,10 +3,6 @@
 
 #include <cassert>
 
-inline void fill_channel(float(*data)[9][4], const float val) {
-    std::fill(reinterpret_cast<float*>(data), reinterpret_cast<float*>(data + 1), val);
-}
-
 int replace_honpai(std::string& m) {
     int n_hongpai = 0;
     for (size_t i = 1; i < m.size(); i++) {
@@ -19,7 +15,7 @@ int replace_honpai(std::string& m) {
 }
 
 // 状態の特徴量
-void status_featuers(const Game& game, const int lunban, float(*data)[9][4]) {
+void status_featuers(const Game& game, const int lunban, channel_t* data) {
     // 打牌、副露x3他家
     const auto status = game.status();
     switch (status)
@@ -44,7 +40,7 @@ void status_featuers(const Game& game, const int lunban, float(*data)[9][4]) {
 }
 
 // 手牌の特徴量
-void shoupai_features(const Shoupai& shoupai, float(*data)[9][4]) {
+void shoupai_features(const Shoupai& shoupai, channel_t* data) {
     // 手牌(牌種+赤牌) 自摸牌は含めない
     const auto& zimo = shoupai.zimo_();
     int suit = 0;
@@ -74,7 +70,7 @@ void shoupai_features(const Shoupai& shoupai, float(*data)[9][4]) {
 }
 
 // 副露の特徴量
-void fulou_features(const Shoupai& shoupai, float(*data)[9][4]) {
+void fulou_features(const Shoupai& shoupai, channel_t* data) {
     // 副露 順子 3(牌種)
     // 副露 刻子 4(牌種)
     // 副露 暗槓 4(牌種)
@@ -114,7 +110,7 @@ void fulou_features(const Shoupai& shoupai, float(*data)[9][4]) {
 }
 
 // 牌の特徴量
-void pai_features(const std::string& pai, float(*data)[9][4]) {
+void pai_features(const std::string& pai, channel_t* data) {
     // 牌種4+赤牌3
     const auto s = pai[0];
     const int suit = index_of(s);
@@ -127,7 +123,7 @@ void pai_features(const std::string& pai, float(*data)[9][4]) {
 }
 
 // 河の特徴量
-void he_features(const He& he, float(*data)[9][4]) {
+void he_features(const He& he, channel_t* data) {
     int pai_count[4][9]{};
     int lizhi_count[4][9]{};
     bool lizhi = false;
@@ -153,7 +149,7 @@ void he_features(const He& he, float(*data)[9][4]) {
 }
 
 // 他家の直前の捨て牌の特徴量
-void tajiadapai_features(const Game& game, const int lunban, float(*data)[9][4]) {
+void tajiadapai_features(const Game& game, const int lunban, channel_t* data) {
     // 他家の通った捨て牌をロンするとフリテンになるため必要な特徴量
     for (int i = 1; i < 4; i++) {
         int l = (lunban + i) % 4;
@@ -173,7 +169,7 @@ void tajiadapai_features(const Game& game, const int lunban, float(*data)[9][4])
 }
 
 // ドラの特徴量
-void baopai_features(const std::vector<std::string>& baopai, float(*data)[9][4]) {
+void baopai_features(const std::vector<std::string>& baopai, channel_t* data) {
     int pai_count[4][9]{};
     for (const auto& p : baopai) {
         // 表示牌ではない現物のドラ
@@ -189,7 +185,7 @@ void baopai_features(const std::vector<std::string>& baopai, float(*data)[9][4])
     }
 }
 
-void game_public_features(const Game& game, const int lunban, float (*data)[9][4]) {
+void public_features(const Game& game, const int lunban, channel_t* data) {
     // 状態
     status_featuers(game, lunban, data);
     data += N_CHANNELS_STATUS;
@@ -262,7 +258,7 @@ void game_public_features(const Game& game, const int lunban, float (*data)[9][4
 
 
 // 残り牌の特徴量
-void shan_features(const Shan& shan, float(*data)[9][4]) {
+void shan_features(const Shan& shan, channel_t* data) {
     int pai_count[4][9]{};
     const auto& shan_pai = shan.pai();
     for (auto itr = shan_pai.cbegin() + 14; itr != shan_pai.cend(); ++itr) {
@@ -278,7 +274,7 @@ void shan_features(const Shan& shan, float(*data)[9][4]) {
     }
 }
 
-void game_private_features(const Game& game, const int lunban, float(*data)[9][4]) {
+void private_features(const Game& game, const int lunban, channel_t* data) {
     // 他家の手牌
     for (int i = 1; i < 4; i++) {
         int l = (lunban + i) % 4;
