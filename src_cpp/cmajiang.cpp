@@ -467,8 +467,10 @@ PYBIND11_MODULE(_cmajiang, m) {
         })
         ;
     py::class_<Game>(m, "Game")
-        .def(py::init<>())
-        .def(py::init<const Rule&>())
+        .def(py::init<const Rule&, bool>(),
+            py::arg("rule") = Rule{},
+            py::arg("paipu") = false
+        )
         .def("reply", &Game::reply, py::arg("id"), py::arg("msg"), py::arg("arg") = std::string{})
         .def("next", &Game::next)
         .def_property_readonly("lunban_player_id", &Game::lunban_player_id)

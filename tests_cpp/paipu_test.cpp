@@ -98,7 +98,7 @@ TEST(PaipuTest, replay) {
         std::mt19937_64 mt{ seed };
         set_seed(seed);
 
-        Game game;
+        Game game{ {}, true };
         playout(game, mt, false);
 
         const auto& paipu = game.paipu();
@@ -118,7 +118,7 @@ TEST(PaipuTest, random_replay) {
         std::mt19937_64 mt{ seed };
         set_seed(seed);
 
-        Game game;
+        Game game{ {}, true };
         playout(game, mt, true);
 
         const auto& paipu = game.paipu();
@@ -139,7 +139,7 @@ TEST(PaipuTest, stream) {
         std::mt19937_64 mt{ seed };
         set_seed(seed);
 
-        Game game;
+        Game game{ {}, true };
         playout(game, mt, false);
 
         std::stringstream ss1;
@@ -164,7 +164,7 @@ TEST(PaipuTest, random_stream) {
         std::mt19937_64 mt{ seed };
         set_seed(seed);
 
-        Game game;
+        Game game{ {}, true };
         playout(game, mt, true);
 
         std::stringstream ss1;
@@ -189,7 +189,7 @@ TEST(PaipuTest, stream_replay) {
         std::mt19937_64 mt{ seed };
         set_seed(seed);
 
-        Game game;
+        Game game{ {}, true };
         playout(game, mt, false);
 
         std::stringstream ss;
@@ -215,7 +215,7 @@ TEST(PaipuTest, random_stream_replay) {
         std::mt19937_64 mt{ seed };
         set_seed(seed);
 
-        Game game;
+        Game game{ {}, true };
         playout(game, mt, true);
 
         std::stringstream ss;

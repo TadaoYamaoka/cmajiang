@@ -109,6 +109,17 @@ inline int index_of(const char s) {
     }
 }
 
+inline int replace_honpai(std::string& m) {
+    int n_hongpai = 0;
+    for (size_t i = 1; i < m.size(); i++) {
+        if (m[i] == '0') {
+            m[i] = '5';
+            n_hongpai++;
+        }
+    }
+    return n_hongpai;
+}
+
 inline void fill_channel(channel_t* data, const float val) {
     std::fill(reinterpret_cast<float*>(data), reinterpret_cast<float*>(data + 1), val);
 }

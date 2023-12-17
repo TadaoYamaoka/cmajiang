@@ -87,8 +87,8 @@ public:
         }
     };
 
-    Game(const Rule& rule, const bool paipu = true);
-    Game() : Game(Rule{}, true) {};
+    Game(const Rule& rule, const bool paipu = false);
+    Game() : Game(Rule{}, false) {};
 
     void set(const std::array<Shoupai, 4>& shoupai, const std::array<He, 4>& he, const Shan& shan, const int lunban);
     void set(const Paipu::Round& round);

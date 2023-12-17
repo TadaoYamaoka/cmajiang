@@ -3,17 +3,6 @@
 
 #include <cassert>
 
-int replace_honpai(std::string& m) {
-    int n_hongpai = 0;
-    for (size_t i = 1; i < m.size(); i++) {
-        if (m[i] == '0') {
-            m[i] = '5';
-            n_hongpai++;
-        }
-    }
-    return n_hongpai;
-}
-
 // 状態の特徴量
 void status_featuers(const Game& game, const int lunban, channel_t* data) {
     // 打牌、副露x3他家
