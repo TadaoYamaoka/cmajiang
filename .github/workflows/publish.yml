@@ -1,0 +1,66 @@
+name: Build and publish
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  deploy-windows:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v5
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install build dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install setuptools wheel twine pybind11
+      - name: Build source distribution
+        if: matrix.python-version == '3.9'
+        run: python setup.py sdist
+      - name: Build wheel
+        run: python setup.py bdist_wheel
+      - name: Publish source distribution
+        if: matrix.python-version == '3.9'
+        env:
+          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        run: twine upload dist/*.tar.gz
+      - name: Publish wheel
+        env:
+          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        run: twine upload dist/*.whl
+
+  deploy-manylinux:
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        python-version: ["cp39-cp39", "cp310-cp310", "cp311-cp311", "cp312-cp312", "cp313-cp313", "cp314-cp314"]
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v5
+      - name: Install Twine
+        run: |
+          python -m pip install --upgrade pip
+          pip install twine
+      - name: Build
+        run: |
+          export PYTHON_BIN="/opt/python/${{ matrix.python-version }}/bin"
+          docker run --rm -v $(pwd):/work \
+            -w /work quay.io/pypa/manylinux_2_28_x86_64 \
+            /bin/sh -c "\
+              $PYTHON_BIN/pip install setuptools wheel pybind11 && \
+              $PYTHON_BIN/python setup.py bdist_wheel && \
+              cd dist && auditwheel repair *.whl"
+      - name: Publish
+        env:
+          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        run: twine upload dist/wheelhouse/*
