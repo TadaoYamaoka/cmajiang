@@ -29,14 +29,16 @@ jobs:
       - name: Publish source distribution
         if: matrix.python-version == '3.9'
         env:
-          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+          TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-        run: twine upload dist/*.tar.gz
+          TWINE_NON_INTERACTIVE: "1"
+        run: twine upload --skip-existing dist/*.tar.gz
       - name: Publish wheel
         env:
-          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+          TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-        run: twine upload dist/*.whl
+          TWINE_NON_INTERACTIVE: "1"
+        run: twine upload --skip-existing dist/*.whl
 
   deploy-manylinux:
     runs-on: ubuntu-22.04
@@ -61,6 +63,7 @@ jobs:
               cd dist && auditwheel repair *.whl"
       - name: Publish
         env:
-          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+          TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-        run: twine upload dist/wheelhouse/*
+          TWINE_NON_INTERACTIVE: "1"
+        run: twine upload --skip-existing dist/wheelhouse/*
