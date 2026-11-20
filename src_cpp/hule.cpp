@@ -1,4 +1,4 @@
-﻿#include "hule.h"
+#include "hule.h"
 
 #include <cmath>
 #include <numeric>
@@ -714,7 +714,7 @@ Defen get_defen(int fu, std::vector<Hupai>& hupai, const std::string& rongpai, c
     if (hupai.size() == 0) return {};
 
     const auto menfeng = param.menfeng;
-    int fanshu{}, damanguan{}, defen{}, base{}, baojia{}, defen2{}, base2{}, baojia2{};
+    int fanshu{}, damanguan{}, defen{}, base{}, baojia{}, defen2{}, base2{}, baojia2{ -1 };
 
     if (hupai[0].fanshu < 0) {
         fu = 0;
@@ -745,7 +745,7 @@ Defen get_defen(int fu, std::vector<Hupai>& hupai, const std::string& rongpai, c
     const auto chang = param.jicun.changbang;
     const auto lizhi = param.jicun.lizhibang;
 
-    if (baojia2) {
+    if (baojia2 >= 0) {
         if (!rongpai.empty()) base2 = base2 / 2;
         base = base - base2;
         defen2 = base2 * (menfeng == 0 ? 6 : 4);
