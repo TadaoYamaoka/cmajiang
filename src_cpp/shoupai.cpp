@@ -1,4 +1,4 @@
-﻿#include "shoupai.h"
+#include "shoupai.h"
 
 #include <string_view>
 #include <algorithm>
@@ -164,7 +164,7 @@ Shoupai::Shoupai(const std::string& paistr) :
     if (qipai.size() > resize) {
         qipai.erase(qipai.begin() + resize, qipai.end());
     }
-    std::string zimo = (qipai.size() + 1) % 3 == 0 ? qipai.back() : std::string{};
+    std::string zimo = qipai.size() + fulou_count * 3 == 14 ? qipai.back() : std::string{};
     _set(qipai);
 
     for (auto& m : fulou) {
